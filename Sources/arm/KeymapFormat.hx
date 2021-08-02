@@ -7,6 +7,7 @@ typedef TKeymap = {
 	public var action_zoom: String;
 	public var rotate_light: String;
 	public var rotate_envmap: String;
+	public var set_clone_source: String;
 	public var brush_radius: String;
 	public var brush_radius_decrease: String;
 	public var brush_radius_increase: String;
@@ -39,9 +40,6 @@ typedef TKeymap = {
 	public var view_zoom_in: String;
 	public var view_zoom_out: String;
 	public var view_distract_free: String;
-	public var tool_eraser: String;
-	public var tool_picker: String;
-	public var toggle_2d_view: String;
 	public var toggle_node_editor: String;
 	public var toggle_browser: String;
 	public var node_search: String;

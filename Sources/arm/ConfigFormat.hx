@@ -35,12 +35,11 @@ typedef TConfig = {
 	@:optional var undo_steps: Null<Int>; // Number of undo steps to preserve
 	@:optional var pressure_radius: Null<Bool>; // Pen pressure controls
 	@:optional var pressure_sensitivity: Null<Float>;
-	@:optional var node_preview: Null<Bool>;
 	@:optional var camera_speed: Null<Float>;
 	@:optional var zoom_direction: Null<Int>;
 	@:optional var displace_strength: Null<Float>;
-	@:optional var show_asset_names: Null<Bool>;
 	@:optional var layout: Array<Int>;
+	@:optional var workspace: Null<Int>;
 	@:optional var layer_res: Null<Int>;
 	@:optional var server: String;
 }

@@ -5,12 +5,10 @@ import iron.data.SceneFormat;
 
 typedef TProjectFormat = {
 	@:optional public var version: String;
-	@:optional public var material_nodes: Array<TNodeCanvas>;
+	@:optional public var material: TNodeCanvas;
 	@:optional public var material_groups: Array<TNodeCanvas>;
-	@:optional public var material_icons: Array<haxe.io.Bytes>;
 	@:optional public var assets: Array<String>; // texture_assets
-	@:optional public var mesh_datas: Array<TMeshData>;
-	@:optional public var mesh_assets: Array<String>;
+	@:optional public var mesh_data: TMeshData;
 	@:optional public var is_bgra: Null<Bool>; // Swapped red and blue channels for layer textures
 	@:optional public var packed_assets: Array<TPackedAsset>;
 	@:optional public var envmap: String; // Asset name

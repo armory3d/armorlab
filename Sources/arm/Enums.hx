@@ -2,8 +2,14 @@ package arm;
 
 @:enum abstract WorkspaceTool(Int) from Int to Int {
 	var ToolEraser = 0;
-	var ToolPicker = 1;
-	var ToolGizmo = 2;
+	var ToolClone = 1;
+	var ToolBlur = 2;
+	var ToolPicker = 3;
+}
+
+@:enum abstract SpaceType(Int) from Int to Int {
+	var Space3D = 0;
+	var Space2D = 1;
 }
 
 @:enum abstract ViewportMode(Int) from Int to Int {
@@ -15,12 +21,7 @@ package arm;
 	var ViewMetallic = 5;
 	var ViewOpacity = 6;
 	var ViewHeight = 7;
-	var ViewTexCoord = 8;
-	var ViewObjectNormal = 9;
-	var ViewMaterialID = 10;
-	var ViewObjectID = 11;
-	var ViewMask = 12;
-	var ViewPathTrace = 13;
+	var ViewPathTrace = 8;
 }
 
 @:enum abstract RenderMode(Int) from Int to Int {
@@ -47,12 +48,6 @@ package arm;
 	var CameraOrthographic = 1;
 }
 
-@:enum abstract TextureBits(Int) from Int to Int {
-	var Bits8 = 0;
-	var Bits16 = 1;
-	var Bits32 = 2;
-}
-
 @:enum abstract TextureRes(Int) from Int to Int {
 	var Res128 = 0;
 	var Res256 = 1;
@@ -64,13 +59,9 @@ package arm;
 	var Res16384 = 7;
 }
 
-@:enum abstract TextureLdrFormat(Int) from Int to Int {
+@:enum abstract TextureFormatLdr(Int) from Int to Int {
 	var FormatPng = 0;
 	var FormatJpg = 1;
-}
-
-@:enum abstract TextureHdrFormat(Int) from Int to Int {
-	var FormatExr = 0;
 }
 
 @:enum abstract MenuCategory(Int) from Int to Int {
@@ -97,13 +88,8 @@ package arm;
 }
 
 @:enum abstract LayoutSize(Int) from Int to Int {
-	var LayoutSidebarW = 0;
-	var LayoutSidebarH0 = 1;
-	var LayoutSidebarH1 = 2;
-	var LayoutSidebarH2 = 3;
-	var LayoutNodesW = 4;
-	var LayoutNodesH = 5;
-	var LayoutStatusH = 6;
+	var LayoutNodesW = 0;
+	var LayoutStatusH = 1;
 }
 
 @:enum abstract ZoomDirection(Int) from Int to Int {
