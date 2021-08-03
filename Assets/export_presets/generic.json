@@ -4,6 +4,6 @@
 		{ "name": "nor", "channels": ["nor_r", "nor_g", "nor_b", "1.0"], "color_space": "linear" },
 		{ "name": "occ", "channels": ["occ", "occ", "occ", "1.0"], "color_space": "linear" },
 		{ "name": "rough", "channels": ["rough", "rough", "rough", "1.0"], "color_space": "linear" },
-		{ "name": "metal", "channels": ["metal", "metal", "metal", "1.0"], "color_space": "linear" }
+		{ "name": "height", "channels": ["height", "height", "height", "1.0"], "color_space": "linear" }
 	]
 }

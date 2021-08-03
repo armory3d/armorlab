@@ -21,11 +21,15 @@ import arm.ProjectFormat;
 class Layers {
 
 	public static var pipeCopy: PipelineState;
+	public static var pipeCopyR: PipelineState;
+	public static var pipeCopyG: PipelineState;
+	public static var pipeCopyB: PipelineState;
+	public static var pipeCopyA: PipelineState;
+	public static var pipeCopyATex: TextureUnit;
 	public static var pipeCopy8: PipelineState;
 	public static var pipeCopy128: PipelineState;
 	public static var pipeCopyBGRA: PipelineState;
 	public static var pipeCopyRGB: PipelineState = null;
-	public static var pipeInvert8: PipelineState;
 	public static var tempImage: Image = null;
 	public static var expa: Image = null;
 	public static var expb: Image = null;
@@ -49,7 +53,6 @@ class Layers {
 	}
 
 	public static function makePipe() {
-
 		pipeCopy = new PipelineState();
 		pipeCopy.vertexShader = kha.Shaders.getVertex("layer_view.vert");
 		pipeCopy.fragmentShader = kha.Shaders.getFragment("layer_copy.frag");
@@ -99,17 +102,44 @@ class Layers {
 		pipeCopy128 = pipeCopy;
 		#end
 
-		pipeInvert8 = new PipelineState();
-		pipeInvert8.vertexShader = kha.Shaders.getVertex("layer_view.vert");
-		pipeInvert8.fragmentShader = kha.Shaders.getFragment("layer_invert.frag");
+		pipeCopyR = new PipelineState();
+		pipeCopyR.vertexShader = kha.Shaders.getVertex("layer_view.vert");
+		pipeCopyR.fragmentShader = kha.Shaders.getFragment("layer_copy.frag");
 		var vs = new VertexStructure();
 		vs.add("pos", VertexData.Float3);
 		vs.add("tex", VertexData.Float2);
 		vs.add("col", VertexData.Float4);
-		pipeInvert8.inputLayout = [vs];
-		pipeCopy8.colorAttachmentCount = 1;
-		pipeCopy8.colorAttachments[0] = TextureFormat.L8;
-		pipeInvert8.compile();
+		pipeCopyR.inputLayout = [vs];
+		pipeCopyR.colorWriteMasksGreen = [false];
+		pipeCopyR.colorWriteMasksBlue = [false];
+		pipeCopyR.colorWriteMasksAlpha = [false];
+		pipeCopyR.compile();
+
+		pipeCopyG = new PipelineState();
+		pipeCopyG.vertexShader = kha.Shaders.getVertex("layer_view.vert");
+		pipeCopyG.fragmentShader = kha.Shaders.getFragment("layer_copy.frag");
+		var vs = new VertexStructure();
+		vs.add("pos", VertexData.Float3);
+		vs.add("tex", VertexData.Float2);
+		vs.add("col", VertexData.Float4);
+		pipeCopyG.inputLayout = [vs];
+		pipeCopyG.colorWriteMasksRed = [false];
+		pipeCopyG.colorWriteMasksBlue = [false];
+		pipeCopyG.colorWriteMasksAlpha = [false];
+		pipeCopyG.compile();
+
+		pipeCopyB = new PipelineState();
+		pipeCopyB.vertexShader = kha.Shaders.getVertex("layer_view.vert");
+		pipeCopyB.fragmentShader = kha.Shaders.getFragment("layer_copy.frag");
+		var vs = new VertexStructure();
+		vs.add("pos", VertexData.Float3);
+		vs.add("tex", VertexData.Float2);
+		vs.add("col", VertexData.Float4);
+		pipeCopyB.inputLayout = [vs];
+		pipeCopyB.colorWriteMasksRed = [false];
+		pipeCopyB.colorWriteMasksGreen = [false];
+		pipeCopyB.colorWriteMasksAlpha = [false];
+		pipeCopyB.compile();
 	}
 
 	public static function makePipeCopyRGB() {
@@ -123,6 +153,20 @@ class Layers {
 		pipeCopyRGB.inputLayout = [vs];
 		pipeCopyRGB.colorWriteMasksAlpha = [false];
 		pipeCopyRGB.compile();
+	}
+
+	public static function makePipeCopyA() {
+		pipeCopyA = new PipelineState();
+		pipeCopyA.vertexShader = kha.Shaders.getVertex("layer_copy_rrrr.vert");
+		pipeCopyA.fragmentShader = kha.Shaders.getFragment("layer_copy_rrrr.frag");
+		var vs = new VertexStructure();
+		vs.add("pos", VertexData.Float2);
+		pipeCopyA.inputLayout = [vs];
+		pipeCopyA.colorWriteMasksRed = [false];
+		pipeCopyA.colorWriteMasksGreen = [false];
+		pipeCopyA.colorWriteMasksBlue = [false];
+		pipeCopyA.compile();
+		pipeCopyATex = pipeCopyA.getTextureUnit("tex");
 	}
 
 	public static function makeCursorPipe() {

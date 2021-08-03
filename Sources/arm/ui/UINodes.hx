@@ -582,23 +582,60 @@ class UINodes {
 				ui._y = wh - ui.ELEMENT_H() * 1.2;
 				ui._w = Std.int(ui.ELEMENT_W() * 1.4);
 				if (ui.button(tr("Run"))) {
-
 					iron.App.notifyOnInit(function() {
-
 						arm.node.Brush.parse(Project.canvas, false);
 
-						var texbase = @:privateAccess arm.node.brush.BrushOutputNode.inst.get(0);
-						// var texocc = @:privateAccess arm.node.brush.BrushOutputNode.inst.get(1);
-						// var texrough = @:privateAccess arm.node.brush.BrushOutputNode.inst.get(2);
-						// // var texmetal = @:privateAccess arm.node.brush.BrushOutputNode.inst.get(3);
-						// var texnor = @:privateAccess arm.node.brush.BrushOutputNode.inst.get(4);
-						// var texheight = @:privateAccess arm.node.brush.BrushOutputNode.inst.get(5);
+						var texbase = @:privateAccess arm.node.brush.BrushOutputNode.inst.get(ChannelBaseColor);
+						var texocc = @:privateAccess arm.node.brush.BrushOutputNode.inst.get(ChannelOcclusion);
+						var texrough = @:privateAccess arm.node.brush.BrushOutputNode.inst.get(ChannelRoughness);
+						var texnor = @:privateAccess arm.node.brush.BrushOutputNode.inst.get(ChannelNormalMap);
+						var texheight = @:privateAccess arm.node.brush.BrushOutputNode.inst.get(ChannelHeight);
 
-						// Update texpaint
-						var texpaint = iron.RenderPath.active.renderTargets.get("texpaint").image;
-						texpaint.g2.begin(false);
-						texpaint.g2.drawImage(texbase, 0, 0);
-						texpaint.g2.end();
+						if (texbase != null) {
+							var texpaint = iron.RenderPath.active.renderTargets.get("texpaint").image;
+							texpaint.g2.begin(false);
+							texpaint.g2.drawImage(texbase, 0, 0);
+							texpaint.g2.end();
+						}
+
+						if (texnor != null) {
+							var texpaint_nor = iron.RenderPath.active.renderTargets.get("texpaint_nor").image;
+							texpaint_nor.g2.begin(false);
+							texpaint_nor.g2.drawImage(texnor, 0, 0);
+							texpaint_nor.g2.end();
+						}
+
+						if (Layers.pipeCopy == null) Layers.makePipe();
+						if (Layers.pipeCopyA == null) Layers.makePipeCopyA();
+						if (iron.data.ConstData.screenAlignedVB == null) iron.data.ConstData.createScreenAlignedData();
+
+						var texpaint_pack = iron.RenderPath.active.renderTargets.get("texpaint_pack").image;
+
+						if (texocc != null) {
+							texpaint_pack.g2.begin(false);
+							texpaint_pack.g2.pipeline = Layers.pipeCopyR;
+							texpaint_pack.g2.drawImage(texocc, 0, 0);
+							texpaint_pack.g2.pipeline = null;
+							texpaint_pack.g2.end();
+						}
+
+						if (texrough != null) {
+							texpaint_pack.g2.begin(false);
+							texpaint_pack.g2.pipeline = Layers.pipeCopyG;
+							texpaint_pack.g2.drawImage(texrough, 0, 0);
+							texpaint_pack.g2.pipeline = null;
+							texpaint_pack.g2.end();
+						}
+
+						if (texheight != null) {
+							texpaint_pack.g4.begin();
+							texpaint_pack.g4.setPipeline(Layers.pipeCopyA);
+							texpaint_pack.g4.setTexture(Layers.pipeCopyATex, texheight);
+							texpaint_pack.g4.setVertexBuffer(iron.data.ConstData.screenAlignedVB);
+							texpaint_pack.g4.setIndexBuffer(iron.data.ConstData.screenAlignedIB);
+							texpaint_pack.g4.drawIndexedVertices();
+							texpaint_pack.g4.end();
+						}
 					});
 				}
 			}

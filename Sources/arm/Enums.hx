@@ -24,6 +24,15 @@ package arm;
 	var ViewPathTrace = 8;
 }
 
+@:enum abstract ChannelType(Int) from Int to Int {
+	var ChannelBaseColor = 0;
+	var ChannelOcclusion = 1;
+	var ChannelRoughness = 2;
+	var ChannelMetallic = 3;
+	var ChannelNormalMap = 4;
+	var ChannelHeight = 5;
+}
+
 @:enum abstract RenderMode(Int) from Int to Int {
 	var RenderDeferred = 0;
 	var RenderForward = 1;

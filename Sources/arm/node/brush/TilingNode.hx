@@ -3,13 +3,23 @@ package arm.node.brush;
 @:keep
 class TilingNode extends LogicNode {
 
+	static var image: kha.Image = null;
+
 	public function new(tree: LogicTree) {
 		super(tree);
+
+		image = kha.Image.createRenderTarget(2048, 2048);
 	}
 
 	override function get(from: Int): Dynamic {
-		// texsynthInpaint(true);
+		var source = inputs[0].get();
+		if (!Std.isOfType(source, kha.Image)) return null;
 
-		return null;
+		image.g2.begin(false);
+		image.g2.drawScaledImage(source, 0, 0, 2048, 2048);
+		image.g2.end();
+
+		var result = InpaintNode.texsynthInpaint(image, true);
+		return result;
 	}
 }

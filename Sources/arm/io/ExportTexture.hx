@@ -32,9 +32,6 @@ class ExportTexture {
 		var ext = formatType == FormatPng ? ".png" : ".jpg";
 		if (f.endsWith(ext)) f = f.substr(0, f.length - 4);
 
-		if (Layers.pipeCopy == null) Layers.makePipe();
-		if (iron.data.ConstData.screenAlignedVB == null) iron.data.ConstData.createScreenAlignedData();
-
 		var texpaint = arm.node.brush.BrushOutputNode.inst.texpaint;
 		var texpaint_nor = arm.node.brush.BrushOutputNode.inst.texpaint_nor;
 		var texpaint_pack = arm.node.brush.BrushOutputNode.inst.texpaint_pack;
@@ -113,6 +110,7 @@ class ExportTexture {
 		if (type == 2 && off == 0) format = 3; // RRR1
 		if (type == 2 && off == 1) format = 4; // GGG1
 		if (type == 2 && off == 2) format = 5; // BBB1
+		if (type == 2 && off == 3) format = 6; // AAA1
 		if (Context.formatType == FormatPng) {
 			Krom.writePng(file, pixels.getData(), resX, resY, format);
 		}

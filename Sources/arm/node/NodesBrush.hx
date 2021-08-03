@@ -65,8 +65,8 @@ class NodesBrush {
 			},
 			{
 				id: 0,
-				name: _tr("Photo to Base"),
-				type: "PhotoToBaseNode",
+				name: _tr("Photo to PBR"),
+				type: "PhotoToPBRNode",
 				x: 0,
 				y: 0,
 				color: 0xff4982a0,
@@ -84,123 +84,47 @@ class NodesBrush {
 					{
 						id: 0,
 						node_id: 0,
-						name: _tr("Color"),
+						name: _tr("Base Color"),
 						type: "VECTOR",
 						color: 0xffc7c729,
 						default_value: f32([0.0, 0.0, 0.0, 1.0])
-					}
-				],
-				buttons: []
-			},
-			{
-				id: 0,
-				name: _tr("Photo to Occlusion"),
-				type: "PhotoToOcclusionNode",
-				x: 0,
-				y: 0,
-				color: 0xff4982a0,
-				inputs: [
+					},
 					{
 						id: 0,
 						node_id: 0,
-						name: _tr("Color"),
-						type: "VECTOR",
-						color: 0xffc7c729,
-						default_value: f32([0.0, 0.0, 0.0])
-					}
-				],
-				outputs: [
-					{
-						id: 0,
-						node_id: 0,
-						name: _tr("Value"),
+						name: _tr("Occlusion"),
 						type: "VALUE",
 						color: 0xffa1a1a1,
 						default_value: 1.0
-					}
-				],
-				buttons: []
-			},
-			{
-				id: 0,
-				name: _tr("Photo to Roughness"),
-				type: "PhotoToRoughnessNode",
-				x: 0,
-				y: 0,
-				color: 0xff4982a0,
-				inputs: [
+					},
 					{
 						id: 0,
 						node_id: 0,
-						name: _tr("Color"),
-						type: "VECTOR",
-						color: 0xffc7c729,
-						default_value: f32([0.0, 0.0, 0.0])
-					}
-				],
-				outputs: [
-					{
-						id: 0,
-						node_id: 0,
-						name: _tr("Value"),
+						name: _tr("Roughness"),
 						type: "VALUE",
 						color: 0xffa1a1a1,
 						default_value: 1.0
-					}
-				],
-				buttons: []
-			},
-			{
-				id: 0,
-				name: _tr("Photo to Normal Map"),
-				type: "PhotoToNormalMapNode",
-				x: 0,
-				y: 0,
-				color: 0xff4982a0,
-				inputs: [
+					},
 					{
 						id: 0,
 						node_id: 0,
-						name: _tr("Color"),
-						type: "VECTOR",
-						color: 0xffc7c729,
-						default_value: f32([0.0, 0.0, 0.0])
-					}
-				],
-				outputs: [
+						name: _tr("Metallic"),
+						type: "VALUE",
+						color: 0xffa1a1a1,
+						default_value: 0.0
+					},
 					{
 						id: 0,
 						node_id: 0,
-						name: _tr("Color"),
+						name: _tr("Normal Map"),
 						type: "VECTOR",
 						color: 0xffc7c729,
 						default_value: f32([0.0, 0.0, 0.0, 1.0])
-					}
-				],
-				buttons: []
-			},
-			{
-				id: 0,
-				name: _tr("Photo to Height"),
-				type: "PhotoToHeightNode",
-				x: 0,
-				y: 0,
-				color: 0xff4982a0,
-				inputs: [
+					},
 					{
 						id: 0,
 						node_id: 0,
-						name: _tr("Color"),
-						type: "VECTOR",
-						color: 0xffc7c729,
-						default_value: f32([0.0, 0.0, 0.0])
-					}
-				],
-				outputs: [
-					{
-						id: 0,
-						node_id: 0,
-						name: _tr("Value"),
+						name: _tr("Height"),
 						type: "VALUE",
 						color: 0xffa1a1a1,
 						default_value: 1.0
