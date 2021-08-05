@@ -349,7 +349,8 @@ class UISidebar {
 
 				if (Context.brushTime == 0 &&
 					!App.isDragging &&
-					!App.isResizing) { // Paint started
+					!App.isResizing &&
+					!App.isComboSelected()) { // Paint started
 
 					// Draw line
 					if (Operator.shortcut(Config.keymap.brush_ruler + "+" + Config.keymap.action_paint, ShortcutDown)) {

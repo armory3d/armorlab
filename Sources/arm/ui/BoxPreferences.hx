@@ -23,7 +23,7 @@ class BoxPreferences {
 	public static var presetHandle: Handle;
 	static var locales: Array<String> = null;
 	static var themes: Array<String> = null;
-	static var worldColor = kha.Color.fromValue(0xff030303);
+	static var worldColor = kha.Color.fromValue(0xff020202);
 
 	@:access(zui.Zui)
 	public static function show() {
@@ -176,11 +176,10 @@ class BoxPreferences {
 				ui.text("", 0, h.color);
 				if (ui.isHovered && ui.inputReleased) {
 					UIMenu.draw(function(ui) {
-						ui.fill(0, 0, ui._w / ui.SCALE(), ui.t.ELEMENT_H * 9, ui.t.SEPARATOR_COL);
 						ui.changed = false;
 						zui.Ext.colorWheel(ui, h, false, null, false);
 						if (ui.changed) UIMenu.keepOpen = true;
-					}, 3);
+					}, 10);
 				}
 				var val = untyped h.color;
 				if (val < 0) val += untyped 4294967296;
@@ -217,11 +216,10 @@ class BoxPreferences {
 						if (ui.isHovered && ui.inputReleased) {
 							h.color = untyped theme[key];
 							UIMenu.draw(function(ui) {
-								ui.fill(0, 0, ui._w / ui.SCALE(), ui.t.ELEMENT_H * 9, ui.t.SEPARATOR_COL);
 								ui.changed = false;
 								untyped theme[key] = zui.Ext.colorWheel(ui, h, false, null, false);
 								if (ui.changed) UIMenu.keepOpen = true;
-							}, 3);
+							}, 10);
 						}
 					}
 

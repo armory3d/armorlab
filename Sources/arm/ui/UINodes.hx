@@ -289,11 +289,13 @@ class UINodes {
 	public static function getCanvasControl(ui: Zui): zui.Nodes.CanvasControl {
 		var pan = ui.inputDownR || Operator.shortcut(Config.keymap.action_pan, ShortcutDown);
 		var zoomDelta = Operator.shortcut(Config.keymap.action_zoom, ShortcutDown) ? getZoomDelta(ui) / 100.0 : 0.0;
-		return {
+		var control = {
 			panX: pan ? ui.inputDX : 0.0,
 			panY: pan ? ui.inputDY : 0.0,
 			zoom: ui.inputWheelDelta != 0.0 ? -ui.inputWheelDelta / 10 : zoomDelta
-		}
+		};
+		if (App.isComboSelected()) control.zoom = 0.0;
+		return control;
 	}
 
 	static function getZoomDelta(ui: Zui): Float {
@@ -654,7 +656,7 @@ class UINodes {
 
 			var cats = NodesBrush.categories;
 			for (i in 0...cats.length) {
-				if ((ui.button(tr(cats[i]), Left)) || (ui.isHovered && drawMenu)) {
+				if ((ui.button(tr(cats[i]), Left) && !arm.App.isComboSelected()) || (ui.isHovered && drawMenu)) {
 					addNodeButton = true;
 					menuCategory = i;
 					popupX = wx + ui._x;

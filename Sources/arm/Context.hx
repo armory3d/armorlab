@@ -208,7 +208,9 @@ class Context {
 			Context.paintVec.y > 0 &&
 			Context.paintVec.y < 1 &&
 			!arm.App.isDragging &&
-			!arm.App.isResizing) { // Header combos are in use
+			!arm.App.isResizing &&
+			!arm.App.isScrolling() &&
+			!arm.App.isComboSelected()) {
 
 			var down = iron.system.Input.getMouse().down() || iron.system.Input.getPen().down();
 
