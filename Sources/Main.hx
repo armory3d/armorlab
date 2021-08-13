@@ -44,7 +44,6 @@ class Main {
 			"font13.bin",
 			"ltc_mag.arm",
 			"ltc_mat.arm",
-			"default_material.arm",
 			"default_brush.arm",
 			"World_irradiance.arm",
 			"World_radiance.k",
