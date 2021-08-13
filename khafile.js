@@ -29,7 +29,7 @@ project.addAssets("Assets/locale/*", { destination: "data/locale/{name}" });
 project.addAssets("Assets/licenses/**", { destination: "data/licenses/{name}" });
 project.addAssets("Assets/plugins/*", { destination: "data/plugins/{name}" });
 project.addAssets("Assets/meshes/*", { destination: "data/meshes/{name}" });
-project.addAssets("Assets/models/*", { destination: "data/models/{name}" });
+project.addAssets("Assets/models/*.onnx", { destination: "data/models/{name}" });
 project.addAssets("Libraries/armorbase/Assets/licenses/**", { destination: "data/licenses/{name}" });
 project.addAssets("Libraries/armorbase/Assets/themes/*.json", { destination: "data/themes/{name}" });
 if (metal) {
@@ -61,6 +61,7 @@ else if (ios) {
 else if (process.platform === "win32") {
 	project.addDefine("krom_windows");
 	project.addDefine("kha_windows");
+	project.addAssets("armorcore/Libraries/onnx/win32/onnxruntime.dll", { destination: "{name}" });
 }
 else if (process.platform === "linux") {
 	project.addDefine("krom_linux");
