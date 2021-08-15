@@ -326,9 +326,6 @@ class App {
 
 		handleDropPaths();
 
-		if (UIBox.show) UIBox.update();
-		if (UIMenu.show) UIMenu.update();
-
 		var isPicker = Context.tool == ToolPicker;
 		if (Zui.alwaysRedrawWindow && Context.ddirty < 0) Context.ddirty = 0;
 	}

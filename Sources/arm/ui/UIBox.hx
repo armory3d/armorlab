@@ -22,6 +22,31 @@ class UIBox {
 	static var copyable = false;
 
 	public static function render(g: kha.graphics2.Graphics) {
+		if (!UIMenu.show) {
+			var mouse = Input.getMouse();
+			var kb = Input.getKeyboard();
+			var ui = App.uiBox;
+			var inUse = ui.comboSelectedHandle != null;
+			var isEscape = kb.started("escape");
+			if (draws > 2 && (ui.inputReleased || isEscape) && !inUse && !ui.isTyping) {
+				var appw = System.windowWidth();
+				var apph = System.windowHeight();
+				var mw = Std.int(modalW * ui.SCALE());
+				var mh = Std.int(modalH * ui.SCALE());
+				var left = (appw / 2 - mw / 2) + hwnd.dragX;
+				var right = (appw / 2 + mw / 2) + hwnd.dragX;
+				var top = (apph / 2 - mh / 2) + hwnd.dragY;
+				var bottom = (apph / 2 + mh / 2) + hwnd.dragY;
+				var mx = mouse.x;
+				var my = mouse.y;
+				if ((clickToHide && (mx < left || mx > right || my < top || my > bottom)) || isEscape) {
+					if (modalOnHide != null) modalOnHide();
+					show = false;
+					App.redrawUI();
+				}
+			}
+		}
+
 		g.end();
 
 		var ui = App.uiBox;
@@ -48,6 +73,7 @@ class UIBox {
 						App.redrawUI();
 					}
 				}
+				windowBorder(ui);
 			}
 			ui.end();
 		}
@@ -56,45 +82,14 @@ class UIBox {
 			if (ui.window(hwnd, left, top, mw, mh, true)) {
 				ui._y += 10;
 				boxCommands(ui);
+				windowBorder(ui);
 			}
 			ui.end();
 		}
 
 		g.begin(false);
 
-		// Border
-		g.color = ui.t.SEPARATOR_COL;
-		g.fillRect(left + hwnd.dragX, top + hwnd.dragY, 1, ui._windowH);
-		g.fillRect(left + hwnd.dragX + ui._windowW - 1, top + hwnd.dragY, 1, ui._windowH);
-		g.fillRect(left + hwnd.dragX, top + hwnd.dragY + ui._windowH - 1, ui._windowW, 1);
-
 		draws++;
-	}
-
-	public static function update() {
-		if (UIMenu.show) return;
-		var mouse = Input.getMouse();
-		var kb = Input.getKeyboard();
-		var ui = App.uiBox;
-		var inUse = ui.comboSelectedHandle != null;
-		var isEscape = kb.started("escape");
-		if (draws > 2 && (ui.inputReleased || isEscape) && !inUse && !ui.isTyping) {
-			var appw = System.windowWidth();
-			var apph = System.windowHeight();
-			var mw = Std.int(modalW * ui.SCALE());
-			var mh = Std.int(modalH * ui.SCALE());
-			var left = (appw / 2 - mw / 2) + hwnd.dragX;
-			var right = (appw / 2 + mw / 2) + hwnd.dragX;
-			var top = (apph / 2 - mh / 2) + hwnd.dragY;
-			var bottom = (apph / 2 + mh / 2) + hwnd.dragY;
-			var mx = mouse.x;
-			var my = mouse.y;
-			if ((clickToHide && (mx < left || mx > right || my < top || my > bottom)) || isEscape) {
-				if (modalOnHide != null) modalOnHide();
-				show = false;
-				App.redrawUI();
-			}
-		}
 	}
 
 	public static function showMessage(title: String, text: String, copyable = false) {
@@ -122,5 +117,17 @@ class UIBox {
 		show = true;
 		draws = 0;
 		clickToHide = true;
+	}
+
+	static function windowBorder(ui: Zui) {
+		if (ui.scissor) {
+			ui.scissor = false;
+			ui.g.disableScissor();
+		}
+		// Border
+		ui.g.color = ui.t.SEPARATOR_COL;
+		ui.g.fillRect(0, 0, 1, ui._windowH);
+		ui.g.fillRect(0 + ui._windowW - 1, 0, 1, ui._windowH);
+		ui.g.fillRect(0, 0 + ui._windowH - 1, ui._windowW, 1);
 	}
 }
