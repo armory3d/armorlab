@@ -32,6 +32,7 @@ class UIStatus {
 			ui.g.fillRect(ui._windowW - 1, 0, 1, ui._windowH);
 
 			TabBrowser.draw();
+			TabPlugins.draw();
 			TabScript.draw();
 			TabConsole.draw();
 

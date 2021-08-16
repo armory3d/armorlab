@@ -13,4 +13,15 @@ class ArmBridge {
 	public static var Res = arm.Res;
 	public static var Path = arm.sys.Path;
 	public static var File = arm.sys.File;
+	public static var NodesBrush = arm.node.NodesBrush;
+	public static var Brush = arm.node.Brush;
+	public static var BrushOutputNode = arm.node.brush.BrushOutputNode;
+}
+
+@:keep
+class KeepLab {
+	public static function keep() {
+		var a = App.uiBox.panel;
+		return [a];
+	}
 }
