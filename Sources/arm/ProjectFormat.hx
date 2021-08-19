@@ -9,6 +9,7 @@ typedef TProjectFormat = {
 	@:optional public var material_groups: Array<TNodeCanvas>;
 	@:optional public var assets: Array<String>; // texture_assets
 	@:optional public var mesh_data: TMeshData;
+	@:optional public var mesh_icon: haxe.io.Bytes;
 	@:optional public var is_bgra: Null<Bool>; // Swapped red and blue channels for layer textures
 	@:optional public var packed_assets: Array<TPackedAsset>;
 	@:optional public var envmap: String; // Asset name
