@@ -65,6 +65,9 @@ class BoxPreferences {
 					Config.raw.zoom_direction = zoomDirectionHandle.position;
 				}
 
+				Config.raw.wrap_mouse = ui.check(Id.handle({selected: Config.raw.wrap_mouse}), tr("Wrap Mouse"));
+				if (ui.isHovered) ui.tooltip(tr("Wrap mouse around view boundaries during camera control"));
+
 				// ui.text("Node Editor");
 				// var gridSnap = ui.check(Id.handle({selected: false}), "Grid Snap");
 

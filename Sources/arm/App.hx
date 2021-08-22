@@ -499,6 +499,7 @@ class App {
 		raw.camera_speed = 1.0;
 		raw.zoom_direction = ZoomVertical;
 		raw.displace_strength = 0.0;
+		raw.wrap_mouse = false;
 		raw.workspace = 0;
 		raw.layer_res = Res2048;
 	}
