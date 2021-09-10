@@ -38,6 +38,7 @@ class App {
 	public static var isDragging = false;
 	public static var isResizing = false;
 	public static var dragFile: String = null;
+	public static var dragFileIcon: Image = null;
 	public static var dragTint = 0xffffffff;
 	public static var dragSize = -1;
 	public static var dragRect: TRect = null;
@@ -97,7 +98,11 @@ class App {
 				@:privateAccess Input.getKeyboard().upListener(kha.input.KeyCode.Alt);
 				@:privateAccess Input.getKeyboard().upListener(kha.input.KeyCode.Win);
 			},
-			function() {} // Shutdown
+			function() { // Shutdown
+				#if (krom_android || krom_ios)
+				Project.projectSave();
+				#end
+			}
 		);
 
 		Krom.setSaveAndQuitCallback(saveAndQuitCallback);
@@ -319,6 +324,7 @@ class App {
 					ImportAsset.run(dragFile, dropX, dropY);
 				}
 				dragFile = null;
+				dragFileIcon = null;
 			}
 			Krom.setMouseCursor(0); // Arrow
 			isDragging = false;
@@ -352,6 +358,7 @@ class App {
 		dragSize = -1;
 		dragRect = null;
 		if (dragFile != null) {
+			if (dragFileIcon != null) return dragFileIcon;
 			var icons = Res.get("icons.k");
 			dragRect = dragFile.indexOf(".") > 0 ? Res.tile50(icons, 3, 1) : Res.tile50(icons, 2, 1);
 			dragTint = uiBox.t.HIGHLIGHT_COL;

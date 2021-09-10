@@ -35,7 +35,12 @@ class UIMenubar {
 			var defaultToolbarW = 36;
 			ui._w = Std.int(defaultToolbarW * ui.SCALE());
 			if (iconButton(ui, 0, 2)) BoxPreferences.show();
-			if (iconButton(ui, 0, 3)) BoxProjects.show();
+			if (iconButton(ui, 0, 3)) {
+				#if (krom_android || krom_ios)
+				Project.projectSave();
+				#end
+				BoxProjects.show();
+			}
 			if (iconButton(ui, 4, 2)) Project.importAsset();
 			if (iconButton(ui, 5, 2)) BoxExport.showTextures();
 			if (UIMenu.show && UIMenu.menuCategory == MenuViewport) ui.fill(0, 2, 32 + 4, 32, ui.t.HIGHLIGHT_COL);

@@ -95,8 +95,16 @@ class Project {
 
 	public static function projectSave(saveAndQuit = false) {
 		if (filepath == "") {
+			#if krom_ios
+			var documentDirectory = Krom.saveDialog("", "");
+			documentDirectory = documentDirectory.substr(0, documentDirectory.length - 8); // Strip /'untitled'
+			filepath = documentDirectory + "/project" + Config.raw.recent_projects.length + ".arm";
+			#elseif krom_android
+			filepath = Krom.savePath() + "/project" + Config.raw.recent_projects.length + ".arm";
+			#else
 			projectSaveAs();
 			return;
+			#end
 		}
 		var filename = Project.filepath.substring(Project.filepath.lastIndexOf(Path.sep) + 1, Project.filepath.length - 4);
 		Window.get(0).title = filename + " - " + Main.title;

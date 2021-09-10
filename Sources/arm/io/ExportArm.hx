@@ -53,24 +53,36 @@ class ExportArm {
 		};
 
 		#if (krom_android || krom_ios)
-		var tex = iron.RenderPath.active.renderTargets.get("tex").image;
+		var tex = iron.RenderPath.active.renderTargets.get(Context.renderMode == RenderForward ? "buf" : "tex").image;
 		var mesh_icon = kha.Image.createRenderTarget(256, 256);
 		var r = App.w() / App.h();
 		mesh_icon.g2.begin(false);
+		#if kha_opengl
+		mesh_icon.g2.drawScaledImage(tex, -(256 * r - 256) / 2, 256, 256 * r, -256);
+		#else
 		mesh_icon.g2.drawScaledImage(tex, -(256 * r - 256) / 2, 0, 256 * r, 256);
+		#end
 		mesh_icon.g2.end();
+		#if kha_metal
+		// Flush command list
+		mesh_icon.g2.begin(false);
+		mesh_icon.g2.end();
+		#end
 		var mesh_icon_pixels = mesh_icon.getPixels();
 		for (i in 0...256 * 256 * 4) {
 			mesh_icon_pixels.set(i, Std.int(Math.pow(mesh_icon_pixels.get(i) / 255, 1.0 / 2.2) * 255));
 		}
+		#if (kha_metal || kha_vulkan)
+		bgraSwap(mesh_icon_pixels);
+		#end
 		App.notifyOnNextFrame(function() {
 			mesh_icon.unload();
 		});
-		// Project.raw.mesh_icon =
+		// Project.raw.mesh_icons =
 		// 	#if (kha_metal || kha_vulkan)
-		// 	Lz4.encode(bgraSwap(mesh_icon_pixels);
+		// 	[Lz4.encode(bgraSwap(mesh_icon_pixels)];
 		// 	#else
-		// 	Lz4.encode(mesh_icon_pixels);
+		// 	[Lz4.encode(mesh_icon_pixels)];
 		// 	#end
 		Krom.writePng(Project.filepath.substr(0, Project.filepath.length - 4) + "_icon.png", mesh_icon_pixels.getData(), 256, 256, 0);
 		#end
@@ -79,9 +91,14 @@ class ExportArm {
 		Krom.fileSaveBytes(Project.filepath, bytes.getData(), bytes.length + 1);
 
 		// Save to recent
+		#if krom_ios
+		var recent_path = Project.filepath.substr(Project.filepath.lastIndexOf("/") + 1);
+		#else
+		var recent_path = Project.filepath;
+		#end
 		var recent = Config.raw.recent_projects;
-		recent.remove(Project.filepath);
-		recent.unshift(Project.filepath);
+		recent.remove(recent_path);
+		recent.unshift(recent_path);
 		Config.save();
 
 		Console.info("Project saved.");

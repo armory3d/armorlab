@@ -33,9 +33,14 @@ class ImportArm {
 			Window.get(0).title = UIFiles.filename + " - " + Main.title;
 
 			// Save to recent
+			#if krom_ios
+			var recent_path = path.substr(path.lastIndexOf("/") + 1);
+			#else
+			var recent_path = path;
+			#end
 			var recent = Config.raw.recent_projects;
-			recent.remove(path);
-			recent.unshift(path);
+			recent.remove(recent_path);
+			recent.unshift(recent_path);
 			Config.save();
 
 			Project.raw = project;
