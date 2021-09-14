@@ -130,6 +130,8 @@ class Context {
 	static var lockStartY = 0.0;
 	static var registered = false;
 
+	public static function layerFilterUsed(): Bool { return true; } ////
+
 	public static function selectTool(i: Int) {
 		tool = i;
 		MakeMaterial.parsePaintMaterial();

@@ -43,4 +43,7 @@ typedef TConfig = {
 	@:optional var workspace: Null<Int>;
 	@:optional var layer_res: Null<Int>;
 	@:optional var server: String;
+
+	@:optional var brush_live: Null<Bool>; ////
+	@:optional var brush_3d: Null<Bool>; ////
 }

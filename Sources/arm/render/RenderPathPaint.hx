@@ -17,6 +17,7 @@ import arm.Enums;
 class RenderPathPaint {
 
 	static var path: RenderPath;
+	public static var liveLayerDrawn = 0; ////
 
 	public static function init(_path: RenderPath) {
 		path = _path;
