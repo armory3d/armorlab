@@ -626,14 +626,14 @@ class UINodes {
 						if (texbase != null) {
 							var texpaint = iron.RenderPath.active.renderTargets.get("texpaint").image;
 							texpaint.g2.begin(false);
-							texpaint.g2.drawImage(texbase, 0, 0);
+							texpaint.g2.drawScaledImage(texbase, 0, 0, 2048, 2048);
 							texpaint.g2.end();
 						}
 
 						if (texnor != null) {
 							var texpaint_nor = iron.RenderPath.active.renderTargets.get("texpaint_nor").image;
 							texpaint_nor.g2.begin(false);
-							texpaint_nor.g2.drawImage(texnor, 0, 0);
+							texpaint_nor.g2.drawScaledImage(texnor, 0, 0, 2048, 2048);
 							texpaint_nor.g2.end();
 						}
 
@@ -646,7 +646,7 @@ class UINodes {
 						if (texocc != null) {
 							texpaint_pack.g2.begin(false);
 							texpaint_pack.g2.pipeline = Layers.pipeCopyR;
-							texpaint_pack.g2.drawImage(texocc, 0, 0);
+							texpaint_pack.g2.drawScaledImage(texocc, 0, 0, 2048, 2048);
 							texpaint_pack.g2.pipeline = null;
 							texpaint_pack.g2.end();
 						}
@@ -654,7 +654,7 @@ class UINodes {
 						if (texrough != null) {
 							texpaint_pack.g2.begin(false);
 							texpaint_pack.g2.pipeline = Layers.pipeCopyG;
-							texpaint_pack.g2.drawImage(texrough, 0, 0);
+							texpaint_pack.g2.drawScaledImage(texrough, 0, 0, 2048, 2048);
 							texpaint_pack.g2.pipeline = null;
 							texpaint_pack.g2.end();
 						}
@@ -667,6 +667,9 @@ class UINodes {
 							texpaint_pack.g4.setIndexBuffer(iron.data.ConstData.screenAlignedIB);
 							texpaint_pack.g4.drawIndexedVertices();
 							texpaint_pack.g4.end();
+
+							arm.util.MeshUtil.applyDisplacement();
+							arm.util.MeshUtil.calcNormals();
 						}
 					});
 				}

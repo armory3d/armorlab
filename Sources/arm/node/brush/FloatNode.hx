@@ -4,6 +4,7 @@ package arm.node.brush;
 class FloatNode extends LogicNode {
 
 	public var value: Float;
+	var image: kha.Image = null;
 
 	public function new(tree: LogicTree, value = 0.0) {
 		super(tree);
@@ -12,7 +13,14 @@ class FloatNode extends LogicNode {
 
 	override function get(from: Int): Dynamic {
 		if (inputs.length > 0) return inputs[0].get();
-		return value;
+		if (image != null) image.unload();
+		var b = haxe.io.Bytes.alloc(4);
+		b.setFloat(0, value);
+		b.setFloat(4, value);
+		b.setFloat(8, value);
+		b.setFloat(12, 1.0);
+		image = kha.Image.fromBytes(b, 1, 1, kha.graphics4.TextureFormat.RGBA128);
+		return image;
 	}
 
 	override function set(value: Dynamic) {

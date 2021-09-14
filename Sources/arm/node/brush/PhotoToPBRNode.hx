@@ -5,16 +5,20 @@ import arm.Enums;
 @:keep
 class PhotoToPBRNode extends LogicNode {
 
+	static var temp: kha.Image = null;
 	static var images: Array<kha.Image> = null;
 	static var modelNames = ["base", "occlusion", "roughness", "metallic", "normal", "height"];
 
 	public function new(tree: LogicTree) {
 		super(tree);
 
+		if (temp == null) {
+			temp = kha.Image.createRenderTarget(2048, 2048);
+		}
 		if (images == null) {
 			images = [];
 			for (i in 0...modelNames.length) {
-				images.push(kha.Image.createRenderTarget(2048, 2048));
+				images.push(kha.Image.create(2048, 2048));
 			}
 		}
 	}
@@ -23,11 +27,11 @@ class PhotoToPBRNode extends LogicNode {
 		var source = inputs[0].get();
 		if (!Std.isOfType(source, kha.Image)) return null;
 
-		images[from].g2.begin(false);
-		images[from].g2.drawScaledImage(source, 0, 0, 2048, 2048);
-		images[from].g2.end();
+		temp.g2.begin(false);
+		temp.g2.drawScaledImage(source, 0, 0, 2048, 2048);
+		temp.g2.end();
 
-		var bytes_img = untyped images[from].getPixels().b.buffer;
+		var bytes_img = untyped temp.getPixels().b.buffer;
 		var u8 = new js.lib.Uint8Array(untyped bytes_img);
 		var f32 = new js.lib.Float32Array(3 * 2176 * 2176);
 		for (i in 0...(2176 * 2176)) {
@@ -57,6 +61,10 @@ class PhotoToPBRNode extends LogicNode {
 				bytes.set(i * 4 + 3, 255);
 			}
 
+			var old = images[from];
+			App.notifyOnNextFrame(function() {
+				old.unload();
+			});
 			images[from] = kha.Image.fromBytes(bytes, 2048, 2048);
 		});
 

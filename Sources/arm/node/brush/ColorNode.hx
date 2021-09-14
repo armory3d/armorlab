@@ -6,6 +6,7 @@ import iron.math.Vec4;
 class ColorNode extends LogicNode {
 
 	var value = new Vec4();
+	var image: kha.Image = null;
 
 	public function new(tree: LogicTree, r = 0.8, g = 0.8, b = 0.8, a = 1.0) {
 		super(tree);
@@ -15,7 +16,14 @@ class ColorNode extends LogicNode {
 
 	override function get(from: Int): Dynamic {
 		if (inputs.length > 0) return inputs[0].get();
-		return value;
+		if (image != null) image.unload();
+		var b = haxe.io.Bytes.alloc(16);
+		b.setFloat(0, value.x);
+		b.setFloat(4, value.y);
+		b.setFloat(8, value.z);
+		b.setFloat(12, value.w);
+		image = kha.Image.fromBytes(b, 1, 1, kha.graphics4.TextureFormat.RGBA128);
+		return image;
 	}
 
 	override function set(value: Dynamic) {
