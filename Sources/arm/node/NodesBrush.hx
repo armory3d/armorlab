@@ -35,7 +35,7 @@ class NodesBrush {
 						id: 0,
 						node_id: 0,
 						name: _tr("Color"),
-						type: "VECTOR",
+						type: "RGBA",
 						color: 0xffc7c729,
 						default_value: f32([0.0, 0.0, 0.0, 1.0])
 					},
@@ -75,9 +75,9 @@ class NodesBrush {
 						id: 0,
 						node_id: 0,
 						name: _tr("Color"),
-						type: "VECTOR",
+						type: "RGBA",
 						color: 0xffc7c729,
-						default_value: f32([0.0, 0.0, 0.0])
+						default_value: f32([0.0, 0.0, 0.0, 1.0])
 					}
 				],
 				outputs: [
@@ -85,7 +85,7 @@ class NodesBrush {
 						id: 0,
 						node_id: 0,
 						name: _tr("Color"),
-						type: "VECTOR",
+						type: "RGBA",
 						color: 0xffc7c729,
 						default_value: f32([0.0, 0.0, 0.0, 1.0])
 					}
@@ -104,9 +104,9 @@ class NodesBrush {
 						id: 0,
 						node_id: 0,
 						name: _tr("Color"),
-						type: "VECTOR",
+						type: "RGBA",
 						color: 0xffc7c729,
-						default_value: f32([0.0, 0.0, 0.0])
+						default_value: f32([0.0, 0.0, 0.0, 1.0])
 					}
 				],
 				outputs: [
@@ -114,7 +114,7 @@ class NodesBrush {
 						id: 0,
 						node_id: 0,
 						name: _tr("Base Color"),
-						type: "VECTOR",
+						type: "RGBA",
 						color: 0xffc7c729,
 						default_value: f32([0.0, 0.0, 0.0, 1.0])
 					},
@@ -174,9 +174,9 @@ class NodesBrush {
 						id: 0,
 						node_id: 0,
 						name: _tr("Color"),
-						type: "VECTOR",
+						type: "RGBA",
 						color: 0xffc7c729,
-						default_value: f32([0.0, 0.0, 0.0])
+						default_value: f32([0.0, 0.0, 0.0, 1.0])
 					}
 				],
 				outputs: [
@@ -184,7 +184,7 @@ class NodesBrush {
 						id: 0,
 						node_id: 0,
 						name: _tr("Color"),
-						type: "VECTOR",
+						type: "RGBA",
 						color: 0xffc7c729,
 						default_value: f32([0.0, 0.0, 0.0, 1.0])
 					}
