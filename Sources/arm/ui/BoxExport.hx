@@ -38,9 +38,9 @@ class BoxExport {
 
 			ui.combo(App.resHandle, ["128", "256", "512", "1K", "2K", "4K", "8K", "16K"], tr("Resolution"), true);
 			if (App.resHandle.changed) {
-				// #if (kha_direct3d12 || kha_vulkan)
-				// arm.render.RenderPathRaytrace.ready = false;
-				// #end
+				#if (kha_direct3d12 || kha_vulkan)
+				arm.render.RenderPathRaytrace.ready = false;
+				#end
 			}
 
 			ui.row([0.5, 0.5]);

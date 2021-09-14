@@ -263,4 +263,11 @@ class Layers {
 			expc = rt.image;
 		}
 	}
+
+	public static function flatten(heightToNormal = false): Dynamic {
+		var texpaint = arm.node.brush.BrushOutputNode.inst.texpaint;
+		var texpaint_nor = arm.node.brush.BrushOutputNode.inst.texpaint_nor;
+		var texpaint_pack = arm.node.brush.BrushOutputNode.inst.texpaint_pack;
+		return { texpaint: texpaint, texpaint_nor: texpaint_nor, texpaint_pack: texpaint_pack };
+	}
 }

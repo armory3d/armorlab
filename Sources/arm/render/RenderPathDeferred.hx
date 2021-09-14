@@ -204,8 +204,7 @@ class RenderPathDeferred {
 
 		#if (kha_direct3d12 || kha_vulkan)
 		if (Context.viewportMode == ViewPathTrace) {
-			var useLiveLayer = arm.ui.UIHeader.inst.worktab.position == SpaceMaterial;
-			RenderPathRaytrace.draw(useLiveLayer);
+			RenderPathRaytrace.draw(false);
 			return;
 		}
 		#end

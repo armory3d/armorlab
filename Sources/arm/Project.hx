@@ -188,8 +188,8 @@ class Project {
 			var raw: TMeshData = null;
 			if (Context.projectType == ModelSphere || Context.projectType == ModelTessellatedPlane) {
 				var mesh: Dynamic = Context.projectType == ModelSphere ?
-					new arm.geom.Sphere(1, 512, 256) :
-					new arm.geom.Plane(1, 1, 512, 512);
+					new arm.geom.Sphere(1, 512, 256, false, 4) :
+					new arm.geom.Plane(1, 1, 512, 512, 2);
 				raw = {
 					name: "Tessellated",
 					vertex_arrays: [
@@ -267,6 +267,10 @@ class Project {
 			Scene.active.world.probe.irradiance = Context.defaultIrradiance;
 			Scene.active.world.probe.raw.strength = 4.0;
 		});
+
+		#if (kha_direct3d12 || kha_vulkan)
+		arm.render.RenderPathRaytrace.ready = false;
+		#end
 	}
 
 	public static function importAsset(filters: String = null, hdrAsEnvmap = true) {
