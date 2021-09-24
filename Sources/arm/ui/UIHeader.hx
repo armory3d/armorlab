@@ -51,7 +51,7 @@ class UIHeader {
 				// 		ui.changed = false;
 				// 		zui.Ext.colorWheel(ui, h, false, null, false);
 				// 		if (ui.changed) UIMenu.keepOpen = true;
-				// 	}, 3);
+				// 	}, 10);
 				// }
 
 				// ui.text(tr("Base") + ' ($baseRPicked,$baseGPicked,$baseBPicked)');
