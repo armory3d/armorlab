@@ -20,11 +20,21 @@ class TabConsole {
 		if (ui.tab(UIStatus.inst.statustab, title, false, color) && statush > UIStatus.defaultStatusH * ui.SCALE()) {
 
 			ui.beginSticky();
+			#if (krom_windows || krom_linux || krom_darwin)
+			ui.row([1 / 14, 1 / 14, 1 / 14]); // Copy
+			#else
 			ui.row([1 / 14, 1 / 14]);
+			#end
 
 			if (ui.button(tr("Clear"))) {
 				Console.lastTraces = [];
 			}
+			#if (krom_windows || krom_linux || krom_darwin)
+			if (ui.button(tr("Copy"))) {
+				var str = Console.lastTraces.join("\n");
+				Krom.copyToClipboard(str);
+			}
+			#end
 			if (ui.button(tr("Export"))) {
 				var str = Console.lastTraces.join("\n");
 				UIFiles.show("txt", true, false, function(path: String) {

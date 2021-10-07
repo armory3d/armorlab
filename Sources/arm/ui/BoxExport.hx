@@ -21,7 +21,10 @@ class BoxExport {
 	public static function showTextures() {
 		UIBox.showCustom(function(ui: Zui) {
 
-			if (files == null) fetchPresets();
+			if (files == null) {
+				fetchPresets();
+				hpreset.position = files.indexOf("generic");
+			}
 			if (preset == null) {
 				parsePreset();
 				@:privateAccess hpreset.children = null;
@@ -52,6 +55,10 @@ class BoxExport {
 			ui.combo(hpreset, files, tr("Preset"), true);
 			if (hpreset.changed) preset = null;
 
+			var layersDestinationHandle = Id.handle();
+			layersDestinationHandle.position = Context.layersDestination;
+			Context.layersDestination = ui.combo(layersDestinationHandle, [tr("Disk"), tr("Packed")], tr("Destination"), true);
+
 			@:privateAccess ui.endElement();
 
 			ui.row([0.5, 0.5]);
@@ -60,14 +67,23 @@ class BoxExport {
 			}
 			if (ui.button(tr("Export"))) {
 				UIBox.show = false;
-				var filters = Context.formatType == FormatPng ? "png" : "jpg";
-				UIFiles.show(filters, true, false, function(path: String) {
-					Context.textureExportPath = path;
+				if (Context.layersDestination == DestinationPacked) {
+					Context.textureExportPath = "/";
 					function _init() {
-						ExportTexture.run(path);
+						ExportTexture.run(Context.textureExportPath);
 					}
 					iron.App.notifyOnInit(_init);
-				});
+				}
+				else {
+					var filters = Context.formatType == FormatPng ? "png" : "jpg";
+					UIFiles.show(filters, true, false, function(path: String) {
+						Context.textureExportPath = path;
+						function _init() {
+							ExportTexture.run(Context.textureExportPath);
+						}
+						iron.App.notifyOnInit(_init);
+					});
+				}
 			}
 			if (ui.isHovered) ui.tooltip(tr("Export texture files") + ' (${Config.keymap.file_export_textures})');
 		}

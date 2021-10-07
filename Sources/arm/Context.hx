@@ -52,6 +52,7 @@ class Context {
 
 	public static var formatType = FormatPng;
 	public static var formatQuality = 100.0;
+	public static var layersDestination = DestinationDisk;
 
 	public static var selectTime = 0.0;
 	#if (kha_direct3d12 || kha_vulkan)
