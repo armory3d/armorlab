@@ -25,6 +25,7 @@ class Context {
 	public static var material: Dynamic; ////
 	public static var paintObject: MeshObject;
 	public static var mergedObject: MeshObject = null;
+	public static var texture: TAsset = null;
 	public static var tool = ToolEraser;
 
 	public static var ddirty = 0; // depth
@@ -34,6 +35,8 @@ class Context {
 	public static var nodePreviewSocket = 0;
 
 	public static var viewIndexLast = -1;
+
+	public static var swatch: TSwatchColor;
 
 	public static var defaultIrradiance: kha.arrays.Float32Array = null;
 	public static var defaultRadiance: Image = null;
@@ -132,6 +135,15 @@ class Context {
 	static var registered = false;
 
 	public static function layerFilterUsed(): Bool { return true; } ////
+
+	public static function setSwatch(s: TSwatchColor) {
+		swatch = s;
+		App.notifyOnNextFrame(function() {
+			// MakeMaterial.parsePaintMaterial();
+			// RenderUtil.makeMaterialPreview();
+			// UISidebar.inst.hwnd1.redraws = 2;
+		});
+	}
 
 	public static function selectTool(i: Int) {
 		tool = i;

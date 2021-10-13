@@ -68,11 +68,13 @@ class UIMenu {
 						ImportAsset.run(path);
 					});
 				}
+				if (menuButton(ui, tr("Import Swatches..."))) Project.importAsset("arm");
 				if (menuButton(ui, tr("Reimport Textures"), Config.keymap.file_reimport_textures)) Project.reimportTextures();
 				menuSeparator(ui);
 				if (menuButton(ui, tr("Export Textures..."), Config.keymap.file_export_textures_as)) {
 					BoxExport.showTextures();
 				}
+				if (menuButton(ui, tr("Export Swatches..."))) Project.exportSwatches();
 
 				menuSeparator(ui);
 				if (menuButton(ui, tr("Exit"))) System.stop();
@@ -171,6 +173,20 @@ class UIMenu {
 				}
 				else {
 					Scene.active.world.envmap = Context.emptyEnvmap;
+				}
+
+				menuSeparator(ui);
+
+				var modeHandle = Id.handle();
+				// modeHandle.position = Context.viewportObject;
+				var modes = [
+					tr("Cube"),
+					tr("Plane"),
+					tr("Sphere")
+				];
+				for (i in 0...modes.length) {
+					menuFill(ui);
+					ui.radio(modeHandle, i, modes[i]);
 				}
 
 				if (ui.changed) keepOpen = true;

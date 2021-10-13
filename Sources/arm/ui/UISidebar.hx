@@ -62,6 +62,11 @@ class UISidebar {
 
 		arm.node.Brush.parse(Project.canvas, false);
 
+		if (Project.raw.swatches == null) {
+			Project.setDefaultSwatches();
+			Context.swatch = Project.raw.swatches[0];
+		}
+
 		if (Context.emptyEnvmap == null) {
 			var b = Bytes.alloc(4);
 			b.set(0, 2);

@@ -240,6 +240,9 @@ class Project {
 			Project.canvas = iron.system.ArmPack.decode(Project.defaultCanvas.toBytes());
 			Project.canvas.name = "Brush 1";
 
+			Project.setDefaultSwatches();
+			Context.swatch = Project.raw.swatches[0];
+
 			History.reset();
 
 			MakeMaterial.parsePaintMaterial();
@@ -277,6 +280,12 @@ class Project {
 		if (filters == null) filters = Path.textureFormats.join(",") + "," + Path.meshFormats.join(",");
 		UIFiles.show(filters, false, true, function(path: String) {
 			ImportAsset.run(path, -1.0, -1.0, true, hdrAsEnvmap);
+		});
+	}
+
+	public static function importSwatches() {
+		UIFiles.show("arm", false, false, function(path: String) {
+			ImportArm.runSwatches(path);
 		});
 	}
 
@@ -320,6 +329,26 @@ class Project {
 	public static function packedAssetExists(packed_assets: Array<TPackedAsset>, name: String): Bool {
 		for (pa in packed_assets) if (pa.name == name) return true;
 		return false;
+	}
+
+	public static function exportSwatches() {
+		UIFiles.show("arm", true, false, function(path: String) {
+			var f = UIFiles.filename;
+			if (f == "") f = tr("untitled");
+			ExportArm.runSwatches(path + Path.sep + f);
+		});
+	}
+
+	public static function makeSwatch(base = 0xffffffff): TSwatchColor {
+		return { base: base, opacity: 1.0, occlusion: 1.0, roughness: 0.0, metallic: 0.0, normal: 0xff8080ff, emission: 0.0, height: 0.0, subsurface: 0.0 };
+	}
+
+	public static function setDefaultSwatches() {
+		// 32-Color Palette by Andrew Kensler
+		// http://eastfarthing.com/blog/2016-05-06-palette/
+		Project.raw.swatches = [];
+		var colors = [0xffffffff, 0xff000000, 0xffd6a090, 0xffa12c32, 0xfffa2f7a, 0xfffb9fda, 0xffe61cf7, 0xff992f7c, 0xff47011f, 0xff051155, 0xff4f02ec, 0xff2d69cb, 0xff00a6ee, 0xff6febff, 0xff08a29a, 0xff2a666a, 0xff063619, 0xff4a4957, 0xff8e7ba4, 0xffb7c0ff, 0xffacbe9c, 0xff827c70, 0xff5a3b1c, 0xffae6507, 0xfff7aa30, 0xfff4ea5c, 0xff9b9500, 0xff566204, 0xff11963b, 0xff51e113, 0xff08fdcc];
+		for (c in colors) Project.raw.swatches.push(Project.makeSwatch(c));
 	}
 
 	public static function getMaterialGroupByName(groupName: String): TNodeGroup {

@@ -16,7 +16,8 @@ class TabTextures {
 	@:access(zui.Zui)
 	public static function draw() {
 		var ui = UISidebar.inst.ui;
-		if (ui.tab(UIStatus.inst.statustab, tr("Textures"))) {
+		var statush = Config.raw.layout[LayoutStatusH];
+		if (ui.tab(UIStatus.inst.statustab, tr("Textures")) && statush > UIStatus.defaultStatusH * ui.SCALE()) {
 
 			ui.beginSticky();
 			ui.row([1 / 14]);
@@ -61,10 +62,25 @@ class TabTextures {
 							var mouse = Input.getMouse();
 							App.dragOffX = -(mouse.x - uix - ui._windowX - 3);
 							App.dragOffY = -(mouse.y - uiy - ui._windowY + 1);
-							// App.dragAsset = asset;
-							// Context.texture = asset;
+							App.dragAsset = asset;
+							Context.texture = asset;
 
 							Context.selectTime = Time.time();
+						}
+
+						if (asset == Context.texture) {
+							var _uix = ui._x;
+							var _uiy = ui._y;
+							ui._x = uix;
+							ui._y = uiy;
+							var off = i % 2 == 1 ? 1 : 0;
+							var w = 50;
+							ui.fill(0,               0, w + 3,       2, ui.t.HIGHLIGHT_COL);
+							ui.fill(0,     w - off + 2, w + 3, 2 + off, ui.t.HIGHLIGHT_COL);
+							ui.fill(0,               0,     2,   w + 3, ui.t.HIGHLIGHT_COL);
+							ui.fill(w + 2,           0,     2,   w + 4, ui.t.HIGHLIGHT_COL);
+							ui._x = _uix;
+							ui._y = _uiy;
 						}
 
 						if (ui.isHovered) {

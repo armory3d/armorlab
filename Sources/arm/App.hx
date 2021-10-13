@@ -19,6 +19,7 @@ import arm.ui.UIFiles;
 import arm.ui.UIHeader;
 import arm.ui.UIStatus;
 import arm.ui.UIMenubar;
+import arm.ui.TabSwatches;
 import arm.ui.BoxExport;
 import arm.io.ImportAsset;
 import arm.io.ExportTexture;
@@ -37,6 +38,8 @@ class App {
 	public static var uiEnabled = true;
 	public static var isDragging = false;
 	public static var isResizing = false;
+	public static var dragAsset: TAsset = null;
+	public static var dragSwatch: TSwatchColor = null;
 	public static var dragFile: String = null;
 	public static var dragFileIcon: Image = null;
 	public static var dragTint = 0xffffffff;
@@ -301,7 +304,7 @@ class App {
 			Krom.setMouseCursor(0); // Arrow
 		}
 
-		var hasDrag = dragFile != null;
+		var hasDrag = dragAsset != null || dragFile != null || dragSwatch != null;
 		if (hasDrag && (mouse.movementX != 0 || mouse.movementY != 0)) {
 			isDragging = true;
 		}
@@ -313,7 +316,25 @@ class App {
 			var inNodes = UINodes.inst.show &&
 						  mx > UINodes.inst.wx && mx < UINodes.inst.wx + UINodes.inst.ww &&
 						  my > UINodes.inst.wy && my < UINodes.inst.wy + UINodes.inst.wh;
-			if (dragFile != null) {
+			if (dragAsset != null) {
+				if (inNodes) { // Create image texture
+					UINodes.inst.acceptAssetDrag(Project.assets.indexOf(dragAsset));
+				}
+				else if (inViewport) {
+					if (dragAsset.file.toLowerCase().endsWith(".hdr")) {
+						var image = Project.getImage(dragAsset);
+						arm.io.ImportEnvmap.run(dragAsset.file, image);
+					}
+				}
+				dragAsset = null;
+			}
+			else if (dragSwatch != null) {
+				if (inNodes) { // Create RGB node
+					UINodes.inst.acceptSwatchDrag(Project.raw.swatches.indexOf(dragSwatch));
+				}
+				dragSwatch = null;
+			}
+			else if (dragFile != null) {
 				var statush = Config.raw.layout[LayoutStatusH];
 				var inBrowser =
 					mx > iron.App.x() && mx < iron.App.x() + System.windowWidth() &&
@@ -357,6 +378,14 @@ class App {
 		dragTint = 0xffffffff;
 		dragSize = -1;
 		dragRect = null;
+		if (dragAsset != null) {
+			return Project.getImage(dragAsset);
+		}
+		if (dragSwatch != null) {
+			dragTint = dragSwatch.base;
+			dragSize = 26;
+			return TabSwatches.empty;
+		}
 		if (dragFile != null) {
 			if (dragFileIcon != null) return dragFileIcon;
 			var icons = Res.get("icons.k");

@@ -33,6 +33,7 @@ class UIStatus {
 
 			TabBrowser.draw();
 			TabTextures.draw();
+			TabSwatches.draw();
 			TabPlugins.draw();
 			TabScript.draw();
 			TabConsole.draw();

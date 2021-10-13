@@ -45,6 +45,7 @@ class ImportTexture {
 			Project.assets.push(asset);
 			Project.assetNames.push(name);
 			Project.assetMap.set(asset.id, image);
+			Console.info(tr("Texture imported:") + " " + name);
 
 			// Set as envmap
 			if (hdrAsEnvmap && path.toLowerCase().endsWith(".hdr")) {

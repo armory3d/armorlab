@@ -828,6 +828,15 @@ class UINodes {
 		getNodes().nodesSelected = [n];
 	}
 
+	public function acceptSwatchDrag(index: Int) {
+		// pushUndo();
+		// var g = groupStack.length > 0 ? groupStack[groupStack.length - 1] : null;
+		// var n = NodesMaterial.createNode("RGB", g);
+		// var color = Project.raw.swatches[index].base;
+		// n.outputs[0].default_value = [color.R, color.G, color.B, color.A];
+		// getNodes().nodesSelected = [n];
+	}
+
 	public static function makeNode(n: TNode, nodes: Nodes, canvas: TNodeCanvas): TNode {
 		var node: TNode = Json.parse(Json.stringify(n));
 		node.id = nodes.getNodeId(canvas.nodes);

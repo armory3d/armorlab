@@ -39,6 +39,7 @@ class ExportArm {
 			material_groups: mgroups,
 			mesh_data: Project.paintObjects[0].data.raw,
 			assets: texture_files,
+			swatches: Project.raw.swatches,
 			packed_assets: packed_assets,
 			envmap: Project.raw.envmap != null ? (sameDrive ? Path.toRelative(Project.filepath, Project.raw.envmap) : Project.raw.envmap) : null,
 			envmap_strength: iron.Scene.active.world.probe.raw.strength,
@@ -194,6 +195,16 @@ class ExportArm {
 		App.notifyOnNextFrame(function() {
 			for (image in tempImages) image.unload();
 		});
+	}
+
+	public static function runSwatches(path: String) {
+		if (!path.endsWith(".arm")) path += ".arm";
+		var raw = {
+			version: Main.version,
+			swatches: Project.raw.swatches
+		};
+		var bytes = ArmPack.encode(raw);
+		Krom.fileSaveBytes(path, bytes.getData(), bytes.length + 1);
 	}
 
 	static function vec3f32(v: iron.math.Vec4): kha.arrays.Float32Array {

@@ -16,6 +16,7 @@ import iron.Scene;
 import iron.RenderPath;
 import arm.ProjectFormat;
 import arm.ui.UIFiles;
+import arm.ui.UIStatus;
 import arm.sys.Path;
 import arm.sys.File;
 import arm.Viewport;
@@ -26,6 +27,14 @@ class ImportArm {
 	public static function runProject(path: String) {
 		Data.getBlob(path, function(b: Blob) {
 			var project: TProjectFormat = ArmPack.decode(b.toBytes());
+
+			// if (project.version != null && project.layer_datas == null) {
+			// 	// Import as swatches
+			// 	else if (project.swatches != null) {
+			// 		runSwatchesFromProject(project, path);
+			// 	}
+			// 	return;
+			// }
 
 			Project.projectNew(true);
 			Project.filepath = path;
@@ -111,6 +120,22 @@ class ImportArm {
 
 			Data.deleteBlob(path);
 		});
+	}
+
+	public static function runSwatches(path: String) {
+		Data.getBlob(path, function(b: Blob) {
+			var project: TProjectFormat = ArmPack.decode(b.toBytes());
+			if (project.version == null) { Data.deleteBlob(path); return; }
+			runSwatchesFromProject(project, path);
+		});
+	}
+
+	public static function runSwatchesFromProject(project: TProjectFormat, path: String) {
+		for (s in project.swatches) {
+			Project.raw.swatches.push(s);
+		}
+		UIStatus.inst.statusHandle.redraws = 2;
+		Data.deleteBlob(path);
 	}
 
 	static function makePink(abs: String) {
