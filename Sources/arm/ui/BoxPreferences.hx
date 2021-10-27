@@ -29,6 +29,10 @@ class BoxPreferences {
 	public static function show() {
 
 		UIBox.showCustom(function(ui: Zui) {
+			#if arm_touchui
+			alignToLeftSide();
+			#end
+
 			if (ui.tab(htab, tr("Interface"), true)) {
 
 				if (locales == null) {
@@ -50,9 +54,6 @@ class BoxPreferences {
 					if (hscale.value == null || Math.isNaN(hscale.value)) hscale.value = 1.0;
 					Config.raw.window_scale = hscale.value;
 					setScale();
-					#if arm_touchui
-					alignToLeftSide();
-					#end
 				}
 				Context.hscaleWasChanged = hscale.changed;
 
@@ -261,7 +262,11 @@ class BoxPreferences {
 				}
 
 				var layerResHandle = Id.handle({position: Config.raw.layer_res});
+				#if (krom_android || krom_ios)
+				ui.combo(layerResHandle, ["128", "256", "512", "1K", "2K", "4K"], tr("Default Layer Resolution"), true);
+				#else
 				ui.combo(layerResHandle, ["128", "256", "512", "1K", "2K", "4K", "8K"], tr("Default Layer Resolution"), true);
+				#end
 				if (layerResHandle.changed) {
 					Config.raw.layer_res = layerResHandle.position;
 				}
@@ -508,10 +513,6 @@ plugin.drawUI = function(ui) {
 				}
 			}
 		}, 600, 400, function() { Config.save(); });
-
-		#if arm_touchui
-		alignToLeftSide();
-		#end
 	}
 
 	#if arm_touchui

@@ -31,7 +31,11 @@ class ExportArm {
 
 		var texture_files = assetsToFiles(Project.filepath, Project.assets);
 		var packed_assets = Project.raw.packed_assets == null || Project.raw.packed_assets.length == 0 ? null : Project.raw.packed_assets;
+		#if krom_ios
+		var sameDrive = false;
+		#else
 		var sameDrive = Project.raw.envmap != null ? Project.filepath.charAt(0) == Project.raw.envmap.charAt(0) : true;
+		#end
 
 		Project.raw = {
 			version: Main.version,
@@ -138,7 +142,11 @@ class ExportArm {
 		var texture_files: Array<String> = [];
 		for (a in assets) {
 			// Convert image path from absolute to relative
+			#if krom_ios
+			var sameDrive = false;
+			#else
 			var sameDrive = projectPath.charAt(0) == a.file.charAt(0);
+			#end
 			if (sameDrive) {
 				texture_files.push(Path.toRelative(projectPath, a.file));
 			}
@@ -154,7 +162,11 @@ class ExportArm {
 		if (Project.raw.packed_assets != null) {
 			for (pa in Project.raw.packed_assets) {
 				// Convert path from absolute to relative
+				#if krom_ios
+				var sameDrive = false;
+				#else
 				var sameDrive = projectPath.charAt(0) == pa.name.charAt(0);
+				#end
 				pa.name = sameDrive ? Path.toRelative(projectPath, pa.name) : pa.name;
 				for (tf in texture_files) {
 					if (pa.name == tf) {

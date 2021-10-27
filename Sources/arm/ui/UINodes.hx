@@ -44,6 +44,7 @@ class UINodes {
 	var lastCanvas: TNodeCanvas = null;
 	var lastNodeSelected: TNode = null;
 	var releaseLink = false;
+	var isNodeMenuOperation = false;
 
 	public var grid: Image = null;
 	public var hwnd = Id.handle();
@@ -232,24 +233,42 @@ class UINodes {
 									selected.type == "BrushOutputNode";
 					uiMenu.enabled = !protected;
 					if (menuButton(uiMenu, tr("Cut"), "ctrl+x")) {
-						Zui.isCopy = true;
-						Zui.isCut = true;
+						App.notifyOnNextFrame(function() {
+							hwnd.redraws = 2;
+							Zui.isCopy = true;
+							Zui.isCut = true;
+							isNodeMenuOperation = true;
+						});
 					}
 					if (menuButton(uiMenu, tr("Copy"), "ctrl+c")) {
-						Zui.isCopy = true;
+						App.notifyOnNextFrame(function() {
+							Zui.isCopy = true;
+							isNodeMenuOperation = true;
+						});
 					}
 					uiMenu.enabled = Nodes.clipboard != "";
 					if (menuButton(uiMenu, tr("Paste"), "ctrl+v")) {
-						Zui.isPaste = true;
+						App.notifyOnNextFrame(function() {
+							hwnd.redraws = 2;
+							Zui.isPaste = true;
+							isNodeMenuOperation = true;
+						});
 					}
 					uiMenu.enabled = !protected;
 					if (menuButton(uiMenu, tr("Delete"), "delete")) {
-						ui.isDeleteDown = true;
-						App.notifyOnNextFrame(function() { ui.isDeleteDown = false; });
+						App.notifyOnNextFrame(function() {
+							hwnd.redraws = 2;
+							ui.isDeleteDown = true;
+							isNodeMenuOperation = true;
+						});
 					}
 					if (menuButton(uiMenu, tr("Duplicate"))) {
-						Zui.isCopy = true;
-						Zui.isPaste = true;
+						App.notifyOnNextFrame(function() {
+							hwnd.redraws = 2;
+							Zui.isCopy = true;
+							Zui.isPaste = true;
+							isNodeMenuOperation = true;
+						});
 					}
 					uiMenu.enabled = true;
 				}, 5);
@@ -561,6 +580,9 @@ class UINodes {
 			ui.windowBorderBottom = Config.raw.layout[LayoutStatusH];
 			nodes.nodeCanvas(ui, c);
 			ui.inputEnabled = _inputEnabled;
+			if (isNodeMenuOperation) {
+				Zui.isCopy = Zui.isCut = Zui.isPaste = ui.isDeleteDown = false;
+			}
 
 			// Remove nodes with unknown id for this canvas type
 			if (Zui.isPaste) {
@@ -615,6 +637,7 @@ class UINodes {
 				ui._w = Std.int(ui.ELEMENT_W() * 1.4);
 				if (ui.button(tr("Run"))) {
 					iron.App.notifyOnInit(function() {
+						var timer = iron.system.Time.realTime();
 						arm.node.Brush.parse(Project.canvas, false);
 
 						var texbase = @:privateAccess arm.node.brush.BrushOutputNode.inst.get(ChannelBaseColor);
@@ -668,9 +691,15 @@ class UINodes {
 							texpaint_pack.g4.drawIndexedVertices();
 							texpaint_pack.g4.end();
 
-							arm.util.MeshUtil.applyDisplacement();
-							arm.util.MeshUtil.calcNormals();
+							// arm.util.MeshUtil.applyDisplacement();
+							// arm.util.MeshUtil.calcNormals();
 						}
+
+						#if (kha_direct3d12 || kha_vulkan)
+						arm.render.RenderPathRaytrace.ready = false;
+						#end
+
+						trace("Model run in " + (iron.system.Time.realTime() - timer));
 					});
 				}
 			}

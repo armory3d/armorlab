@@ -20,14 +20,23 @@ class ExportTexture {
 
 	public static function run(path: String) {
 		runLayers(path, [arm.node.brush.BrushOutputNode.inst]);
-		Console.info("Textures exported.");
+		#if krom_ios
+		Console.info(tr("Textures exported.") + " ('Files/On My iPad/" + Main.title + "')");
+		#else
+		Console.info(tr("Textures exported."));
+		#end
+		@:privateAccess UIFiles.lastPath = "";
 	}
 
 	static function runLayers(path: String, layers: Array<Dynamic>, objectName = "") {
 		var textureSizeX = Config.getTextureResX();
 		var textureSizeY = Config.getTextureResY();
 		var formatQuality = Context.formatQuality;
+		#if (krom_android || krom_ios)
+		var f = kha.Window.get(0).title;
+		#else
 		var f = UIFiles.filename;
+		#end
 		if (f == "") f = tr("untitled");
 		var formatType = Context.formatType;
 		var ext = formatType == FormatPng ? ".png" : ".jpg";

@@ -38,8 +38,11 @@ class BoxExport {
 
 	static function tabExportTextures(ui: Zui, title: String) {
 		if (ui.tab(htab, title)) {
-
+			#if (krom_android || krom_ios)
+			ui.combo(App.resHandle, ["128", "256", "512", "1K", "2K", "4K"], tr("Resolution"), true);
+			#else
 			ui.combo(App.resHandle, ["128", "256", "512", "1K", "2K", "4K", "8K", "16K"], tr("Resolution"), true);
+			#end
 			if (App.resHandle.changed) {
 				#if (kha_direct3d12 || kha_vulkan)
 				arm.render.RenderPathRaytrace.ready = false;
