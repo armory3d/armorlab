@@ -61,7 +61,7 @@ else if (ios) {
 else if (process.platform === "win32") {
 	project.addDefine("krom_windows");
 	project.addDefine("kha_windows");
-	project.addAssets("armorcore/Libraries/onnx/win32/onnxruntime.dll", { destination: "{name}" });
+	project.addAssets("armorcore/Libraries/onnx/win32/*.dll", { destination: "{name}" });
 }
 else if (process.platform === "linux") {
 	project.addDefine("krom_linux");
