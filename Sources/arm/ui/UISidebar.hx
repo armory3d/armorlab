@@ -337,11 +337,6 @@ class UISidebar {
 				   Operator.shortcut(Config.keymap.brush_ruler + "+" + Config.keymap.action_paint, ShortcutDown) ||
 				   (Input.getPen().down() && !kb.down("alt"));
 
-		#if krom_ios
-		// No hover on iPad, decals are painted by pen release
-		if (decal) down = Input.getMouse().released() || Input.getPen().released();
-		#end
-
 		if (down) {
 			var mx = mouse.viewX;
 			var my = mouse.viewY;

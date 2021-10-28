@@ -65,6 +65,7 @@ class BoxProjects {
 
 					for (j in 0...num) {
 						var imgw = Std.int(128 * ui.SCALE());
+						var i = j + row * num;
 						if (i >= recent_projects.length) {
 							@:privateAccess ui.endElement(imgw);
 							if (show_asset_names) @:privateAccess ui.endElement(0);
