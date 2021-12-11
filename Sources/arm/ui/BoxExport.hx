@@ -81,10 +81,20 @@ class BoxExport {
 					var filters = Context.formatType == FormatPng ? "png" : "jpg";
 					UIFiles.show(filters, true, false, function(path: String) {
 						Context.textureExportPath = path;
-						function _init() {
-							ExportTexture.run(Context.textureExportPath);
+						function doExport() {
+							function _init() {
+								ExportTexture.run(Context.textureExportPath);
+							}
+							iron.App.notifyOnInit(_init);
 						}
-						iron.App.notifyOnInit(_init);
+						#if (krom_android || krom_ios)
+						arm.App.notifyOnNextFrame(function() {
+							Console.toast(tr("Exporting textures"));
+							arm.App.notifyOnNextFrame(doExport);
+						});
+						#else
+						doExport();
+						#end
 					});
 				}
 			}

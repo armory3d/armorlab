@@ -337,6 +337,15 @@ class UISidebar {
 				   Operator.shortcut(Config.keymap.brush_ruler + "+" + Config.keymap.action_paint, ShortcutDown) ||
 				   (Input.getPen().down() && !kb.down("alt"));
 
+		#if (krom_android || krom_ios)
+		if (Input.getPen().down()) {
+			Context.penPaintingOnly = true;
+		}
+		else if (Context.penPaintingOnly) {
+			down = false;
+		}
+		#end
+
 		if (down) {
 			var mx = mouse.viewX;
 			var my = mouse.viewY;

@@ -22,7 +22,7 @@ class MakePaint {
 			cull_mode: "none",
 			vertex_elements: [{name: "pos", data: "short4norm"}, {name: "nor", data: "short2norm"}, {name: "tex", data: "short2norm"}],
 			color_attachments:
-				Context.tool == ToolPicker ? ["RGBA32", "RGBA32", "RGBA32"] :
+				Context.tool == ToolPicker ? ["RGBA32", "RGBA32", "RGBA32", "RGBA32"] :
 					["RGBA32", "RGBA32", "RGBA32", "R8"]
 		});
 
@@ -52,15 +52,14 @@ class MakePaint {
 			frag.write('vec2 texCoordInp = texelFetch(gbuffer2, ivec2(inpLocal.x * gbufferSizeLocal.x, (1.0 - inpLocal.y) * gbufferSizeLocal.y), 0).ba;');
 			#end
 
-			frag.add_out('vec4 fragColor[3]');
+			frag.add_out('vec4 fragColor[4]');
 			frag.add_uniform('sampler2D texpaint');
 			frag.add_uniform('sampler2D texpaint_nor');
 			frag.add_uniform('sampler2D texpaint_pack');
 			frag.write('fragColor[0] = textureLod(texpaint, texCoordInp, 0.0);');
 			frag.write('fragColor[1] = textureLod(texpaint_nor, texCoordInp, 0.0);');
 			frag.write('fragColor[2] = textureLod(texpaint_pack, texCoordInp, 0.0);');
-			frag.write('fragColor[0].a = texCoordInp.x;');
-			frag.write('fragColor[2].a = texCoordInp.y;');
+			frag.write('fragColor[3].rg = texCoordInp.xy;');
 			con_paint.data.shader_from_source = true;
 			con_paint.data.vertex_shader = vert.get();
 			con_paint.data.fragment_shader = frag.get();

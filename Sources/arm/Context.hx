@@ -121,6 +121,9 @@ class Context {
 	public static var textureExportPath = "";
 	public static var lastStatusPosition = 0;
 	public static var cameraControls = ControlsOrbit;
+	#if (krom_android || krom_ios)
+	public static var penPaintingOnly = false; // Reject painting with finger when using pen
+	#end
 
 	static var coords = new Vec4();
 	static var startX = 0.0;

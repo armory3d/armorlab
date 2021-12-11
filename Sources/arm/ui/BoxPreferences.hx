@@ -275,7 +275,11 @@ class BoxPreferences {
 				Config.raw.server = ui.textInput(serverHandle, tr("Cloud Server"));
 			}
 
+			#if krom_ios
+			if (ui.tab(htab, tr("Pencil"), true)) {
+			#else
 			if (ui.tab(htab, tr("Pen"), true)) {
+			#end
 				ui.text(tr("Pressure controls"));
 				Config.raw.pressure_radius = ui.check(Id.handle({selected: Config.raw.pressure_radius}), tr("Brush Radius"));
 				Config.raw.pressure_sensitivity = ui.slider(Id.handle({value: Config.raw.pressure_sensitivity}), tr("Sensitivity"), 0.0, 2.0, true);
