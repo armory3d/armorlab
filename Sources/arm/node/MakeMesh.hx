@@ -105,6 +105,8 @@ class MakeMesh {
 
 		frag.write('metallic = mix(metallic, texpaint_pack_sample.b, texpaint_opac);');
 
+		frag.write('height = texpaint_pack_sample.a * texpaint_opac;');
+
 		// if (l.paintHeight && MakeMaterial.heightUsed) {
 		// 	var assign = l.paintHeightBlend ? "+=" : "=";
 		// 	frag.write('height $assign texpaint_pack_sample.a * texpaint_opac;');
