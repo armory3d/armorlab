@@ -636,8 +636,12 @@ class UINodes {
 				ui._y = wh - ui.ELEMENT_H() * 1.2;
 				ui._w = Std.int(ui.ELEMENT_W() * 1.4);
 				if (ui.button(tr("Run"))) {
+					Console.toast(tr("Processing"));
 					iron.App.notifyOnInit(function() {
+						#if arm_debug
 						var timer = iron.system.Time.realTime();
+						#end
+
 						arm.node.Brush.parse(Project.canvas, false);
 
 						var texbase = @:privateAccess arm.node.brush.BrushOutputNode.inst.get(ChannelBaseColor);
@@ -695,11 +699,15 @@ class UINodes {
 							// arm.util.MeshUtil.calcNormals();
 						}
 
+						Context.ddirty = 2;
+
 						#if (kha_direct3d12 || kha_vulkan)
 						arm.render.RenderPathRaytrace.ready = false;
 						#end
 
+						#if arm_debug
 						trace("Model run in " + (iron.system.Time.realTime() - timer));
+						#end
 					});
 				}
 			}
