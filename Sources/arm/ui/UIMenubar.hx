@@ -5,6 +5,8 @@ import zui.Zui;
 import zui.Id;
 import zui.Ext;
 import iron.RenderPath;
+import iron.Scene;
+import iron.object.MeshObject;
 import arm.node.MakeMaterial;
 import arm.render.RenderPathPaint;
 import arm.Enums;
@@ -17,6 +19,9 @@ class UIMenubar {
 	public var workspaceHandle = new Handle({layout: Horizontal});
 	public var menuHandle = new Handle({layout: Horizontal});
 	public var menubarw = defaultMenubarW;
+
+	static var _meshes: Array<MeshObject> = null;
+	static var _savedCamera = iron.math.Mat4.identity();
 
 	public function new() {
 		inst = this;
@@ -86,6 +91,27 @@ class UIMenubar {
 				UIHeader.inst.headerHandle.redraws = 2;
 
 				Context.mainObject().skip_context = null;
+
+				if (UIHeader.inst.worktab.position == Space3D) {
+					if (_meshes != null) {
+						Scene.active.meshes = _meshes;
+						Scene.active.camera.transform.setMatrix(_savedCamera);
+					}
+				}
+				else { // Space2D
+					var plane: MeshObject = cast Scene.active.getChild(".Plane");
+					plane.transform.scale.set(1, 1, 1);
+					plane.transform.rot.fromEuler(-Math.PI / 2, 0, 0);
+					plane.transform.buildMatrix();
+					plane.visible = true;
+					_meshes = Scene.active.meshes;
+					Scene.active.meshes = [plane];
+
+					_savedCamera.setFrom(Scene.active.camera.transform.local);
+					var m = iron.math.Mat4.identity();
+					m.translate(0, 0, 1.5);
+					Scene.active.camera.transform.setMatrix(m);
+				}
 			}
 		}
 	}
