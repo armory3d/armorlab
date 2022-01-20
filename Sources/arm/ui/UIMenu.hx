@@ -10,6 +10,7 @@ import zui.Ext;
 import iron.Scene;
 import iron.RenderPath;
 import iron.system.Input;
+import iron.object.MeshObject;
 import arm.Viewport;
 import arm.sys.BuildMacros;
 import arm.sys.Path;
@@ -217,11 +218,19 @@ class UIMenu {
 				var modes = [
 					tr("Cube"),
 					tr("Plane"),
-					tr("Sphere")
+					tr("Sphere"),
+					tr("Cylinder")
 				];
 				for (i in 0...modes.length) {
 					menuFill(ui);
 					ui.radio(modeHandle, i, modes[i]);
+					if (modeHandle.changed) {
+						var meshes = [".Cube", ".Plane", ".Sphere", ".Cylinder"];
+						var mo: MeshObject = cast Scene.active.getChild(meshes[modeHandle.position]);
+						mo.visible = true;
+						Scene.active.meshes = [mo];
+						Context.ddirty = 2;
+					}
 				}
 
 				if (ui.changed) keepOpen = true;
