@@ -59,7 +59,7 @@ class Layers {
 		var vs = new VertexStructure();
 		vs.add("pos", VertexData.Float3);
 		vs.add("tex", VertexData.Float2);
-		vs.add("col", VertexData.Float4);
+		vs.add("col", VertexData.UInt8_4X_Normalized);
 		pipeCopy.inputLayout = [vs];
 		pipeCopy.compile();
 
@@ -69,7 +69,7 @@ class Layers {
 		var vs = new VertexStructure();
 		vs.add("pos", VertexData.Float3);
 		vs.add("tex", VertexData.Float2);
-		vs.add("col", VertexData.Float4);
+		vs.add("col", VertexData.UInt8_4X_Normalized);
 		pipeCopyBGRA.inputLayout = [vs];
 		pipeCopyBGRA.compile();
 
@@ -80,7 +80,7 @@ class Layers {
 		var vs = new VertexStructure();
 		vs.add("pos", VertexData.Float3);
 		vs.add("tex", VertexData.Float2);
-		vs.add("col", VertexData.Float4);
+		vs.add("col", VertexData.UInt8_4X_Normalized);
 		pipeCopy8.inputLayout = [vs];
 		pipeCopy8.colorAttachmentCount = 1;
 		pipeCopy8.colorAttachments[0] = TextureFormat.L8;
@@ -92,7 +92,7 @@ class Layers {
 		var vs = new VertexStructure();
 		vs.add("pos", VertexData.Float3);
 		vs.add("tex", VertexData.Float2);
-		vs.add("col", VertexData.Float4);
+		vs.add("col", VertexData.UInt8_4X_Normalized);
 		pipeCopy128.inputLayout = [vs];
 		pipeCopy128.colorAttachmentCount = 1;
 		pipeCopy128.colorAttachments[0] = TextureFormat.RGBA128;
@@ -108,7 +108,7 @@ class Layers {
 		var vs = new VertexStructure();
 		vs.add("pos", VertexData.Float3);
 		vs.add("tex", VertexData.Float2);
-		vs.add("col", VertexData.Float4);
+		vs.add("col", VertexData.UInt8_4X_Normalized);
 		pipeCopyR.inputLayout = [vs];
 		pipeCopyR.colorWriteMasksGreen = [false];
 		pipeCopyR.colorWriteMasksBlue = [false];
@@ -121,7 +121,7 @@ class Layers {
 		var vs = new VertexStructure();
 		vs.add("pos", VertexData.Float3);
 		vs.add("tex", VertexData.Float2);
-		vs.add("col", VertexData.Float4);
+		vs.add("col", VertexData.UInt8_4X_Normalized);
 		pipeCopyG.inputLayout = [vs];
 		pipeCopyG.colorWriteMasksRed = [false];
 		pipeCopyG.colorWriteMasksBlue = [false];
@@ -134,7 +134,7 @@ class Layers {
 		var vs = new VertexStructure();
 		vs.add("pos", VertexData.Float3);
 		vs.add("tex", VertexData.Float2);
-		vs.add("col", VertexData.Float4);
+		vs.add("col", VertexData.UInt8_4X_Normalized);
 		pipeCopyB.inputLayout = [vs];
 		pipeCopyB.colorWriteMasksRed = [false];
 		pipeCopyB.colorWriteMasksGreen = [false];
@@ -149,7 +149,7 @@ class Layers {
 		var vs = new VertexStructure();
 		vs.add("pos", VertexData.Float3);
 		vs.add("tex", VertexData.Float2);
-		vs.add("col", VertexData.Float4);
+		vs.add("col", VertexData.UInt8_4X_Normalized);
 		pipeCopyRGB.inputLayout = [vs];
 		pipeCopyRGB.colorWriteMasksAlpha = [false];
 		pipeCopyRGB.compile();
