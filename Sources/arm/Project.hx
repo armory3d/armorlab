@@ -130,33 +130,33 @@ class Project {
 	}
 
 	public static function projectNewBox() {
-		UIBox.showCustom(function(ui: Zui) {
-			if (ui.tab(Id.handle(), tr("New Project"))) {
-				if (meshList == null) {
-					meshList = File.readDirectory(Path.data() + Path.sep + "meshes");
-					for (i in 0...meshList.length) meshList[i] = meshList[i].substr(0, meshList[i].length - 4); // Trim .arm
-					meshList.unshift("plane");
-					meshList.unshift("sphere");
-					meshList.unshift("rounded_cube");
-				}
+		// UIBox.showCustom(function(ui: Zui) {
+		// 	if (ui.tab(Id.handle(), tr("New Project"))) {
+		// 		if (meshList == null) {
+		// 			meshList = File.readDirectory(Path.data() + Path.sep + "meshes");
+		// 			for (i in 0...meshList.length) meshList[i] = meshList[i].substr(0, meshList[i].length - 4); // Trim .arm
+		// 			meshList.unshift("plane");
+		// 			meshList.unshift("sphere");
+		// 			meshList.unshift("rounded_cube");
+		// 		}
 
-				ui.row([0.5, 0.5]);
-				Context.projectType = ui.combo(Id.handle({position: Context.projectType}), meshList, tr("Template"), true);
-				Context.projectAspectRatio = ui.combo(Id.handle({position: Context.projectAspectRatio}), ["1:1", "2:1", "1:2"], tr("Aspect Ratio"), true);
+		// 		ui.row([0.5, 0.5]);
+		// 		Context.projectType = ui.combo(Id.handle({position: Context.projectType}), meshList, tr("Template"), true);
+		// 		Context.projectAspectRatio = ui.combo(Id.handle({position: Context.projectAspectRatio}), ["1:1", "2:1", "1:2"], tr("Aspect Ratio"), true);
 
-				@:privateAccess ui.endElement();
-				ui.row([0.5, 0.5]);
-				if (ui.button(tr("Cancel"))) {
-					UIBox.show = false;
-				}
-				if (ui.button(tr("OK")) || ui.isReturnDown) {
+		// 		@:privateAccess ui.endElement();
+		// 		ui.row([0.5, 0.5]);
+		// 		if (ui.button(tr("Cancel"))) {
+		// 			UIBox.show = false;
+		// 		}
+		// 		if (ui.button(tr("OK")) || ui.isReturnDown) {
 					Project.projectNew();
 					Viewport.scaleToBounds();
-					UIBox.show = false;
+		// 			UIBox.show = false;
 					App.redrawUI();
-				}
-			}
-		});
+		// 		}
+		// 	}
+		// });
 	}
 
 	public static function projectNew(resetLayers = true) {
