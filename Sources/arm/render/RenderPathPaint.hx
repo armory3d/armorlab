@@ -11,6 +11,7 @@ import iron.Scene;
 import arm.Viewport;
 import arm.ui.UIHeader;
 import arm.ui.UISidebar;
+import arm.ui.UINodes;
 import arm.node.MakeMaterial;
 import arm.Enums;
 
@@ -262,10 +263,35 @@ class RenderPathPaint {
 	}
 
 	public static function bindLayers() {
-		var l = arm.node.brush.BrushOutputNode.inst;
-		path.bindTarget("texpaint", "texpaint");
-		path.bindTarget("texpaint_nor", "texpaint_nor");
-		path.bindTarget("texpaint_pack", "texpaint_pack");
+		var image: kha.Image = null;
+		if (UINodes.inst.getNodes().nodesSelected.length > 0) {
+			var node = UINodes.inst.getNodes().nodesSelected[0];
+			var brushNode = arm.node.Brush.getBrushNode(node);
+			if (brushNode != null) {
+				image = brushNode.getImage();
+			}
+		}
+		if (image != null) {
+			if (path.renderTargets.get("texpaint_node") == null) {
+				var t = new RenderTargetRaw();
+				t.name = "texpaint_node";
+				t.width = 2048;
+				t.height = 2048;
+				t.format = "RGBA32";
+				var rt = new RenderTarget(t);
+				path.renderTargets.set(t.name, rt);
+			}
+			path.renderTargets.get("texpaint_node").image = image;
+			path.bindTarget("texpaint_node", "texpaint");
+			path.bindTarget("texpaint_nor", "texpaint_nor");
+			path.bindTarget("texpaint_pack", "texpaint_pack");
+		}
+		else {
+			// var l = arm.node.brush.BrushOutputNode.inst;
+			path.bindTarget("texpaint", "texpaint");
+			path.bindTarget("texpaint_nor", "texpaint_nor");
+			path.bindTarget("texpaint_pack", "texpaint_pack");
+		}
 	}
 
 	public static function unbindLayers() {

@@ -532,6 +532,11 @@ class UINodes {
 		if (nodes.nodesSelected.length > 0 && nodes.nodesSelected[0] != lastNodeSelected) {
 			lastNodeSelected = nodes.nodesSelected[0];
 			Context.nodePreviewSocket = 0;
+			Context.ddirty = 2; // Show selected node texture in viewport
+		}
+		else if (lastNodeSelected != null) {
+			lastNodeSelected = null;
+			Context.ddirty = 2;
 		}
 
 		// Remove dragged link when mouse is released out of the node viewport

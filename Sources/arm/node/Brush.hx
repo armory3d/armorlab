@@ -48,6 +48,10 @@ class Brush {
 		return res;
 	}
 
+	public static function getBrushNode(node: TNode): LogicNode {
+		return nodeMap.get(node_name(node));
+	}
+
 	static function safesrc(s:String):String {
 		return StringTools.replace(s, " ", "");
 	}

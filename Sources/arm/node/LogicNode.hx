@@ -48,6 +48,10 @@ class LogicNode {
 
 	@:allow(arm.node.LogicNodeInput)
 	function set(value: Dynamic) {}
+
+	public function getImage(): kha.Image {
+		return null;
+	}
 }
 
 class LogicNodeInput {

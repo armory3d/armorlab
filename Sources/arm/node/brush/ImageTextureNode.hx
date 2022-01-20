@@ -15,4 +15,8 @@ class ImageTextureNode extends LogicNode {
 		var asset = Project.assets[index];
 		return Project.getImage(asset);
 	}
+
+	override public function getImage(): kha.Image {
+		return get(0);
+	}
 }

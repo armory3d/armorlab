@@ -4,6 +4,7 @@ package arm.node.brush;
 class TilingNode extends LogicNode {
 
 	static var image: kha.Image = null;
+	var result: kha.Image = null;
 
 	public function new(tree: LogicTree) {
 		super(tree);
@@ -19,7 +20,11 @@ class TilingNode extends LogicNode {
 		image.g2.drawScaledImage(source, 0, 0, 2048, 2048);
 		image.g2.end();
 
-		var result = InpaintNode.texsynthInpaint(image, true);
+		result = InpaintNode.texsynthInpaint(image, true);
+		return result;
+	}
+
+	override public function getImage(): kha.Image {
 		return result;
 	}
 }
