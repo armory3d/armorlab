@@ -9,7 +9,9 @@ class TilingNode extends LogicNode {
 	public function new(tree: LogicTree) {
 		super(tree);
 
-		image = kha.Image.createRenderTarget(2048, 2048);
+		if (image == null) {
+			image = kha.Image.createRenderTarget(2048, 2048);
+		}
 	}
 
 	override function get(from: Int): Dynamic {

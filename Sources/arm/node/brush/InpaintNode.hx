@@ -4,11 +4,16 @@ package arm.node.brush;
 class InpaintNode extends LogicNode {
 
 	static var image: kha.Image = null;
+	var result: kha.Image = null;
+	var mask: kha.Image = null;
 
 	public function new(tree: LogicTree) {
 		super(tree);
 
-		image = kha.Image.createRenderTarget(2048, 2048);
+		if (image == null) {
+			image = kha.Image.createRenderTarget(2048, 2048);
+		}
+		mask = kha.Image.createRenderTarget(2048, 2048, kha.graphics4.TextureFormat.L8);
 	}
 
 	override function get(from: Int): Dynamic {
@@ -19,8 +24,12 @@ class InpaintNode extends LogicNode {
 		image.g2.drawScaledImage(source, 0, 0, 2048, 2048);
 		image.g2.end();
 
-		var result = texsynthInpaint(image, false);
+		result = texsynthInpaint(image, false);
 		return result;
+	}
+
+	override public function getImage(): kha.Image {
+		return image;
 	}
 
 	public static function texsynthInpaint(image: kha.Image, tiling: Bool): kha.Image {
