@@ -88,6 +88,7 @@ class Context {
 
 	public static var brushRadius = 0.5;
 	public static var brushRadiusHandle = new Handle({value: 0.5});
+	public static var brushScale = 1.0;
 
 	public static var blurDirectional = false;
 	public static var showCompass = true;

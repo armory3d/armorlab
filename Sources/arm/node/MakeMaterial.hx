@@ -44,6 +44,7 @@ class MakeMaterial {
 		if (!Context.textureFilter) {
 			scon.overrideContext.filter = "point";
 		}
+		scon.overrideContext.addressing = "repeat";
 		m.shader.raw.contexts.push(scon.raw);
 		m.shader.contexts.push(scon);
 

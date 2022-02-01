@@ -75,6 +75,12 @@ class UIHeader {
 
 				Context.brushRadius = ui.slider(Context.brushRadiusHandle, tr("Radius"), 0.01, 2.0, true);
 
+				var brushScaleHandle = Id.handle({value: Context.brushScale});
+				Context.brushScale = ui.slider(brushScaleHandle, tr("UV Scale"), 0.01, 5.0, true);
+				if (brushScaleHandle.changed) {
+					MakeMaterial.parseMeshMaterial();
+				}
+
 				// if (Context.tool != ToolEraser) {
 				// 	var brushBlendingHandle = Id.handle({value: Context.brushBlending});
 				// 	Context.brushBlending = ui.combo(brushBlendingHandle, [

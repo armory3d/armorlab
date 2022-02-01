@@ -42,7 +42,8 @@ class MakeMesh {
 		}
 
 		vert.write('gl_Position = mul(vec4(wposition.xyz, 1.0), VP);');
-		vert.write('texCoord = tex;');
+		var brushScale = Context.brushScale;
+		vert.write('texCoord = tex * $brushScale;');
 		if (MakeMaterial.heightUsed && displaceStrength > 0) {
 			vert.add_uniform('mat4 invW', '_inverseWorldMatrix');
 			vert.write('prevwvpposition = mul(mul(vec4(wposition, 1.0), invW), prevWVP);');
