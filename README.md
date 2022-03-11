@@ -21,7 +21,7 @@ node armorcore/make -g direct3d11
 cd armorcore
 # Unpack `v8\libraries\win32\release\v8_monolith.7z` using 7-Zip - Extract Here (exceeds 100MB)
 git apply patch/window_handling.diff --directory=Kinc
-node Kinc/make -g direct3d11
+Kinc/make -g direct3d11
 # Open generated Visual Studio project at `build\ArmorLab.sln`
 # Build and run for x64 & release
 ```
@@ -30,7 +30,7 @@ node Kinc/make -g direct3d11
 ```bash
 node armorcore/make -g opengl
 cd armorcore
-node Kinc/make -g opengl --compiler clang --compile
+Kinc/make -g opengl --compiler clang --compile
 cd Deployment
 strip ArmorLab
 ./ArmorLab ../../build/krom
@@ -42,7 +42,7 @@ node armorcore/make -g metal
 cp -a build/krom/ armorcore/Deployment
 cd armorcore
 git apply patch/metal_depth.diff --directory=Kinc
-node Kinc/make -g metal
+Kinc/make -g metal
 # Open generated Xcode project at `build/ArmorLab.xcodeproj`
 # Build and run
 ```
@@ -63,7 +63,7 @@ cd armorcore
 git apply patch/window_handling.diff --directory=Kinc
 git apply patch/d3d12_raytrace.diff --directory=Kinc
 git apply patch/d3d12_wrap_sampler.diff --directory=Kinc
-node Kinc/make -g direct3d12
+Kinc/make -g direct3d12
 # Open generated Visual Studio project at `build\ArmorLab.sln`
 # Build and run for x64 & release
 ```
@@ -74,7 +74,7 @@ node armorcore/make -g vulkan
 cd armorcore
 git apply patch/vulkan_raytrace.diff --directory=Kinc
 git clone --recursive https://github.com/armory3d/glsl_to_spirv Libraries/glsl_to_spirv
-node Kinc/make -g vulkan --compiler clang --compile
+Kinc/make -g vulkan --compiler clang --compile
 cd Deployment
 strip ArmorLab
 ./ArmorLab ../../build/krom
