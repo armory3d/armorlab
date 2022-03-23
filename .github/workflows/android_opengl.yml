@@ -1,4 +1,4 @@
-name: Android (Vulkan)
+name: Android (OpenGL)
 
 on:
   push:
@@ -14,8 +14,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - name: Get Submodules
       run: git submodule update --init --recursive
     - name: Compile
-      run: armorcore/Kinc/make android --from armorcore -g vulkan
+      run: armorcore/Kinc/make --from armorcore android -g opengl

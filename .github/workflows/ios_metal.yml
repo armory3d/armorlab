@@ -14,8 +14,10 @@ jobs:
     runs-on: macOS-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - name: Get Submodules
       run: git submodule update --init --recursive
+    - name: Clone plugins
+      run: git clone https://github.com/armory3d/armorlab_plugins armorcore/Libraries/plugins
     - name: Compile
-      run: armorcore/Kinc/make ios --from armorcore -g metal
+      run: armorcore/Kinc/make --from armorcore ios -g metal
