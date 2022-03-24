@@ -36,7 +36,9 @@ typedef TConfig = {
 	@:optional var pressure_radius: Null<Bool>; // Pen pressure controls
 	@:optional var pressure_sensitivity: Null<Float>;
 	@:optional var wrap_mouse: Null<Bool>;
-	@:optional var camera_speed: Null<Float>;
+	@:optional var camera_pan_speed: Null<Float>;
+	@:optional var camera_zoom_speed: Null<Float>;
+	@:optional var camera_rotation_speed: Null<Float>;
 	@:optional var zoom_direction: Null<Int>;
 	@:optional var displace_strength: Null<Float>;
 	@:optional var layout: Array<Int>;

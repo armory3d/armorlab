@@ -102,7 +102,7 @@ class Project {
 			#elseif krom_android
 			filepath = Krom.savePath() + "/" + kha.Window.get(0).title + ".arm";
 			#else
-			projectSaveAs();
+			projectSaveAs(saveAndQuit);
 			return;
 			#end
 		}
@@ -119,13 +119,13 @@ class Project {
 		iron.App.notifyOnInit(_init);
 	}
 
-	public static function projectSaveAs() {
+	public static function projectSaveAs(saveAndQuit = false) {
 		UIFiles.show("arm", true, false, function(path: String) {
 			var f = UIFiles.filename;
 			if (f == "") f = tr("untitled");
 			filepath = path + Path.sep + f;
 			if (!filepath.endsWith(".arm")) filepath += ".arm";
-			projectSave();
+			projectSave(saveAndQuit);
 		});
 	}
 
@@ -141,8 +141,8 @@ class Project {
 		// 		}
 
 		// 		ui.row([0.5, 0.5]);
-		// 		Context.projectType = ui.combo(Id.handle({position: Context.projectType}), meshList, tr("Template"), true);
-		// 		Context.projectAspectRatio = ui.combo(Id.handle({position: Context.projectAspectRatio}), ["1:1", "2:1", "1:2"], tr("Aspect Ratio"), true);
+		// 		Context.projectType = ui.combo(Id.handle({ position: Context.projectType }), meshList, tr("Template"), true);
+		// 		Context.projectAspectRatio = ui.combo(Id.handle({ position: Context.projectAspectRatio }), ["1:1", "2:1", "1:2"], tr("Aspect Ratio"), true);
 
 		// 		@:privateAccess ui.endElement();
 		// 		ui.row([0.5, 0.5]);
@@ -248,6 +248,8 @@ class Project {
 			Project.setDefaultSwatches();
 			Context.swatch = Project.raw.swatches[0];
 
+			Context.pickedColor = Project.makeSwatch();
+			Context.colorPickerCallback = null;
 			History.reset();
 
 			MakeMaterial.parsePaintMaterial();
@@ -346,6 +348,10 @@ class Project {
 
 	public static function makeSwatch(base = 0xffffffff): TSwatchColor {
 		return { base: base, opacity: 1.0, occlusion: 1.0, roughness: 0.0, metallic: 0.0, normal: 0xff8080ff, emission: 0.0, height: 0.0, subsurface: 0.0 };
+	}
+
+	public static function cloneSwatch(swatch: TSwatchColor): TSwatchColor {
+		return { base: swatch.base, opacity: swatch.opacity, occlusion: swatch.occlusion, roughness: swatch.roughness, metallic: swatch.metallic, normal: swatch.normal, emission: swatch.emission, height: swatch.height, subsurface: swatch.subsurface };
 	}
 
 	public static function setDefaultSwatches() {

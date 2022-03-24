@@ -39,7 +39,7 @@ class BoxPreferences {
 					locales = Translator.getSupportedLocales();
 				}
 
-				var localeHandle = Id.handle({position: locales.indexOf(Config.raw.locale)});
+				var localeHandle = Id.handle({ position: locales.indexOf(Config.raw.locale) });
 				ui.combo(localeHandle, locales, tr("Language"), true);
 				if (localeHandle.changed) {
 					var localeCode = locales[localeHandle.position];
@@ -48,7 +48,7 @@ class BoxPreferences {
 					UISidebar.inst.tagUIRedraw();
 				}
 
-				var hscale = Id.handle({value: Config.raw.window_scale});
+				var hscale = Id.handle({ value: Config.raw.window_scale });
 				ui.slider(hscale, tr("UI Scale"), 1.0, 4.0, true, 10);
 				if (!hscale.changed && Context.hscaleWasChanged) {
 					if (hscale.value == null || Math.isNaN(hscale.value)) hscale.value = 1.0;
@@ -57,20 +57,26 @@ class BoxPreferences {
 				}
 				Context.hscaleWasChanged = hscale.changed;
 
-				var hspeed = Id.handle({value: Config.raw.camera_speed});
-				Config.raw.camera_speed = ui.slider(hspeed, tr("Camera Speed"), 0.1, 4.0, true);
+				var hspeed = Id.handle({ value: Config.raw.camera_zoom_speed });
+				Config.raw.camera_zoom_speed = ui.slider(hspeed, tr("Camera Zoom Speed"), 0.1, 4.0, true);
 
-				var zoomDirectionHandle = Id.handle({position: Config.raw.zoom_direction});
+				hspeed = Id.handle({ value: Config.raw.camera_rotation_speed });
+				Config.raw.camera_rotation_speed = ui.slider(hspeed, tr("Camera Rotation Speed"), 0.1, 4.0, true);
+
+				hspeed = Id.handle({ value: Config.raw.camera_pan_speed });
+				Config.raw.camera_pan_speed = ui.slider(hspeed, tr("Camera Pan Speed"), 0.1, 4.0, true);
+
+				var zoomDirectionHandle = Id.handle({ position: Config.raw.zoom_direction });
 				ui.combo(zoomDirectionHandle, [tr("Vertical"), tr("Vertical Inverted"), tr("Horizontal"), tr("Horizontal Inverted"), tr("Vertical and Horizontal"), tr("Vertical and Horizontal Inverted")], tr("Direction to Zoom"), true);
 				if (zoomDirectionHandle.changed) {
 					Config.raw.zoom_direction = zoomDirectionHandle.position;
 				}
 
-				Config.raw.wrap_mouse = ui.check(Id.handle({selected: Config.raw.wrap_mouse}), tr("Wrap Mouse"));
+				Config.raw.wrap_mouse = ui.check(Id.handle({ selected: Config.raw.wrap_mouse }), tr("Wrap Mouse"));
 				if (ui.isHovered) ui.tooltip(tr("Wrap mouse around view boundaries during camera control"));
 
 				// ui.text("Node Editor");
-				// var gridSnap = ui.check(Id.handle({selected: false}), "Grid Snap");
+				// var gridSnap = ui.check(Id.handle({ selected: false }), "Grid Snap");
 
 				ui.endElement();
 				ui.row([0.5, 0.5]);
@@ -121,7 +127,7 @@ class BoxPreferences {
 				if (themes == null) {
 					fetchThemes();
 				}
-				themeHandle = Id.handle({position: getThemeIndex()});
+				themeHandle = Id.handle({ position: getThemeIndex() });
 
 				ui.beginSticky();
 				ui.row([1 / 4, 1 / 4, 1 / 4, 1 / 4]);
@@ -136,7 +142,7 @@ class BoxPreferences {
 					UIBox.showCustom(function(ui: Zui) {
 						if (ui.tab(Id.handle(), tr("New Theme"))) {
 							ui.row([0.5, 0.5]);
-							var themeName = ui.textInput(Id.handle({text: "new_theme"}), tr("Name"));
+							var themeName = ui.textInput(Id.handle({ text: "new_theme" }), tr("Name"));
 							if (ui.button(tr("OK")) || ui.isReturnDown) {
 								var template = Json.stringify(arm.App.theme);
 								if (!themeName.endsWith(".json")) themeName += ".json";
@@ -181,9 +187,9 @@ class BoxPreferences {
 				if (ui.isHovered && ui.inputReleased) {
 					UIMenu.draw(function(ui) {
 						ui.changed = false;
-						zui.Ext.colorWheel(ui, h, false, null, false);
+						zui.Ext.colorWheel(ui, h, false, null, 11 * ui.t.ELEMENT_H * ui.SCALE(), true);
 						if (ui.changed) UIMenu.keepOpen = true;
-					}, 10);
+					}, 11);
 				}
 				var val = untyped h.color;
 				if (val < 0) val += untyped 4294967296;
@@ -221,9 +227,9 @@ class BoxPreferences {
 							h.color = untyped theme[key];
 							UIMenu.draw(function(ui) {
 								ui.changed = false;
-								untyped theme[key] = zui.Ext.colorWheel(ui, h, false, null, false);
+								untyped theme[key] = zui.Ext.colorWheel(ui, h, false, null, 11 * ui.t.ELEMENT_H * ui.SCALE(), true);
 								if (ui.changed) UIMenu.keepOpen = true;
-							}, 10);
+							}, 11);
 						}
 					}
 
@@ -246,7 +252,7 @@ class BoxPreferences {
 			}
 
 			if (ui.tab(htab, tr("Usage"), true)) {
-				Context.undoHandle = Id.handle({value: Config.raw.undo_steps});
+				Context.undoHandle = Id.handle({ value: Config.raw.undo_steps });
 				Config.raw.undo_steps = Std.int(ui.slider(Context.undoHandle, tr("Undo Steps"), 1, 64, false, 1));
 				if (Config.raw.undo_steps < 1) Config.raw.undo_steps = Std.int(Context.undoHandle.value = 1);
 				if (Context.undoHandle.changed) {
@@ -255,13 +261,13 @@ class BoxPreferences {
 					ui.g.begin(false);
 				}
 
-				var workspaceHandle = Id.handle({position: Config.raw.workspace});
+				var workspaceHandle = Id.handle({ position: Config.raw.workspace });
 				ui.combo(workspaceHandle, [tr("3D"), tr("2D")], tr("Default Workspace"), true);
 				if (workspaceHandle.changed) {
 					Config.raw.workspace = workspaceHandle.position;
 				}
 
-				var layerResHandle = Id.handle({position: Config.raw.layer_res});
+				var layerResHandle = Id.handle({ position: Config.raw.layer_res });
 				#if (krom_android || krom_ios)
 				ui.combo(layerResHandle, ["128", "256", "512", "1K", "2K", "4K"], tr("Default Layer Resolution"), true);
 				#else
@@ -271,7 +277,7 @@ class BoxPreferences {
 					Config.raw.layer_res = layerResHandle.position;
 				}
 
-				var serverHandle = Id.handle({text: Config.raw.server});
+				var serverHandle = Id.handle({ text: Config.raw.server });
 				Config.raw.server = ui.textInput(serverHandle, tr("Cloud Server"));
 			}
 
@@ -281,8 +287,8 @@ class BoxPreferences {
 			if (ui.tab(htab, tr("Pen"), true)) {
 			#end
 				ui.text(tr("Pressure controls"));
-				Config.raw.pressure_radius = ui.check(Id.handle({selected: Config.raw.pressure_radius}), tr("Brush Radius"));
-				Config.raw.pressure_sensitivity = ui.slider(Id.handle({value: Config.raw.pressure_sensitivity}), tr("Sensitivity"), 0.0, 2.0, true);
+				Config.raw.pressure_radius = ui.check(Id.handle({ selected: Config.raw.pressure_radius }), tr("Brush Radius"));
+				Config.raw.pressure_sensitivity = ui.slider(Id.handle({ value: Config.raw.pressure_sensitivity }), tr("Sensitivity"), 0.0, 2.0, true);
 
 				ui.endElement();
 				ui.row([0.5]);
@@ -291,17 +297,17 @@ class BoxPreferences {
 				}
 			}
 
-			Context.hssgi = Id.handle({selected: Config.raw.rp_ssgi});
-			Context.hssr = Id.handle({selected: Config.raw.rp_ssr});
-			Context.hbloom = Id.handle({selected: Config.raw.rp_bloom});
-			Context.hsupersample = Id.handle({position: Config.getSuperSampleQuality(Config.raw.rp_supersample)});
-			Context.hvxao = Id.handle({selected: Config.raw.rp_gi});
+			Context.hssgi = Id.handle({ selected: Config.raw.rp_ssgi });
+			Context.hssr = Id.handle({ selected: Config.raw.rp_ssr });
+			Context.hbloom = Id.handle({ selected: Config.raw.rp_bloom });
+			Context.hsupersample = Id.handle({ position: Config.getSuperSampleQuality(Config.raw.rp_supersample) });
+			Context.hvxao = Id.handle({ selected: Config.raw.rp_gi });
 			if (ui.tab(htab, tr("Viewport"), true)) {
 				#if (!arm_vr)
 
 				#if (kha_direct3d12 || kha_vulkan)
 
-				var hpathtracemode = Id.handle({position: Context.pathTraceMode});
+				var hpathtracemode = Id.handle({ position: Context.pathTraceMode });
 				Context.pathTraceMode = ui.combo(hpathtracemode, [tr("Core"), tr("Full")], tr("Path Tracer"), true);
 				if (hpathtracemode.changed) {
 					arm.render.RenderPathRaytrace.ready = false;
@@ -309,7 +315,7 @@ class BoxPreferences {
 
 				#else
 
-				var hrendermode = Id.handle({position: Context.renderMode});
+				var hrendermode = Id.handle({ position: Context.renderMode });
 				Context.renderMode = ui.combo(hrendermode, [tr("Full"), tr("Mobile")], tr("Renderer"), true);
 				if (hrendermode.changed) {
 					Context.setRenderPath();
@@ -323,7 +329,7 @@ class BoxPreferences {
 				if (Context.hsupersample.changed) Config.applyConfig();
 
 				#if arm_debug
-				var vsyncHandle = Id.handle({selected: Config.raw.window_vsync});
+				var vsyncHandle = Id.handle({ selected: Config.raw.window_vsync });
 				Config.raw.window_vsync = ui.check(vsyncHandle, tr("VSync"));
 				#end
 
@@ -336,10 +342,10 @@ class BoxPreferences {
 					}
 
 					ui.enabled = Context.hvxao.selected;
-					var h = Id.handle({value: Context.vxaoOffset});
+					var h = Id.handle({ value: Context.vxaoOffset });
 					Context.vxaoOffset = ui.slider(h, tr("Cone Offset"), 1.0, 4.0, true);
 					if (h.changed) Context.ddirty = 2;
-					var h = Id.handle({value: Context.vxaoAperture});
+					var h = Id.handle({ value: Context.vxaoAperture });
 					Context.vxaoAperture = ui.slider(h, tr("Aperture"), 1.0, 4.0, true);
 					if (h.changed) Context.ddirty = 2;
 					ui.enabled = true;
@@ -352,11 +358,11 @@ class BoxPreferences {
 					if (Context.hbloom.changed) Config.applyConfig();
 				}
 
-				var h = Id.handle({value: Config.raw.rp_vignette});
+				var h = Id.handle({ value: Config.raw.rp_vignette });
 				Config.raw.rp_vignette = ui.slider(h, tr("Vignette"), 0.0, 1.0, true);
 				if (h.changed) Context.ddirty = 2;
 
-				// var h = Id.handle({value: Context.autoExposureStrength});
+				// var h = Id.handle({ value: Context.autoExposureStrength });
 				// Context.autoExposureStrength = ui.slider(h, "Auto Exposure", 0.0, 2.0, true);
 				// if (h.changed) Context.ddirty = 2;
 
@@ -372,7 +378,7 @@ class BoxPreferences {
 					cam.buildProjection();
 				}
 
-				var dispHandle = Id.handle({value: Config.raw.displace_strength});
+				var dispHandle = Id.handle({ value: Config.raw.displace_strength });
 				Config.raw.displace_strength = ui.slider(dispHandle, tr("Displacement Strength"), 0.0, 10.0, true);
 				if (dispHandle.changed) {
 					Context.ddirty = 2;
@@ -388,7 +394,7 @@ class BoxPreferences {
 				ui.beginSticky();
 				ui.row([1 / 2, 1 / 4, 1 / 4]);
 
-				presetHandle = Id.handle({position: getPresetIndex()});
+				presetHandle = Id.handle({ position: getPresetIndex() });
 				ui.combo(presetHandle, filesKeymap, tr("Preset"));
 				if (presetHandle.changed) {
 					Config.raw.keymap = filesKeymap[presetHandle.position] + ".json";
@@ -433,7 +439,7 @@ class BoxPreferences {
 					UIBox.showCustom(function(ui: Zui) {
 						if (ui.tab(Id.handle(), tr("New Plugin"))) {
 							ui.row([0.5, 0.5]);
-							var pluginName = ui.textInput(Id.handle({text: "new_plugin"}), tr("Name"));
+							var pluginName = ui.textInput(Id.handle({ text: "new_plugin" }), tr("Name"));
 							if (ui.button(tr("OK")) || ui.isReturnDown) {
 								var template =
 "let plugin = new arm.Plugin();
@@ -470,7 +476,7 @@ plugin.drawUI = function(ui) {
 				}
 
 				if (Config.raw.plugins == null) Config.raw.plugins = [];
-				var h = Id.handle({selected: false});
+				var h = Id.handle({ selected: false });
 				for (f in filesPlugin) {
 					var isJs = f.endsWith(".js");
 					var isWasm = false; //f.endsWith(".wasm");

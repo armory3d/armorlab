@@ -16,8 +16,8 @@ class UIMenubar {
 
 	public static var inst: UIMenubar;
 	public static inline var defaultMenubarW = 330;
-	public var workspaceHandle = new Handle({layout: Horizontal});
-	public var menuHandle = new Handle({layout: Horizontal});
+	public var workspaceHandle = new Handle({ layout: Horizontal });
+	public var menuHandle = new Handle({ layout: Horizontal });
 	public var menubarw = defaultMenubarW;
 
 	static var _meshes: Array<MeshObject> = null;

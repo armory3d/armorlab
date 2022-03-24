@@ -51,10 +51,10 @@ class BoxExport {
 			}
 
 			ui.row([0.5, 0.5]);
-			Context.formatType = ui.combo(Id.handle({position: Context.formatType}), ["png", "jpg"], tr("Format"), true);
+			Context.formatType = ui.combo(Id.handle({ position: Context.formatType }), ["png", "jpg"], tr("Format"), true);
 
 			ui.enabled = Context.formatType == FormatJpg;
-			Context.formatQuality = ui.slider(Id.handle({value: Context.formatQuality}), tr("Quality"), 0.0, 100.0, true, 1);
+			Context.formatQuality = ui.slider(Id.handle({ value: Context.formatQuality }), tr("Quality"), 0.0, 100.0, true, 1);
 			ui.enabled = true;
 			ui.combo(hpreset, files, tr("Preset"), true);
 			if (hpreset.changed) preset = null;
@@ -114,7 +114,7 @@ class BoxExport {
 				UIBox.showCustom(function(ui: Zui) {
 					if (ui.tab(Id.handle(), tr("New Preset"))) {
 						ui.row([0.5, 0.5]);
-						var presetName = ui.textInput(Id.handle({text: "new_preset"}), tr("Name"));
+						var presetName = ui.textInput(Id.handle({ text: "new_preset" }), tr("Name"));
 						if (ui.button(tr("OK")) || ui.isReturnDown) {
 							newPreset(presetName);
 							fetchPresets();
@@ -206,7 +206,7 @@ class BoxExport {
 
 			ui.row([1 / 8]);
 			if (ui.button(tr("Add"))) {
-				preset.textures.push({name: "base", channels: ["base_r", "base_g", "base_b", "1.0"], color_space: "linear"});
+				preset.textures.push({ name: "base", channels: ["base_r", "base_g", "base_b", "1.0"], color_space: "linear" });
 				@:privateAccess hpreset.children = null;
 				savePreset();
 			}

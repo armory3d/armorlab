@@ -14,6 +14,7 @@ import arm.node.MakeMaterial;
 import arm.ui.UIHeader;
 import arm.Enums;
 import arm.Project;
+import arm.ProjectFormat.TSwatchColor;
 
 @:access(zui.Zui)
 @:access(zui.Nodes)
@@ -64,7 +65,7 @@ class UINodes {
 		Nodes.onCanvasControl = onCanvasControl;
 
 		var scale = Config.raw.window_scale;
-		ui = new Zui({theme: App.theme, font: App.font, color_wheel: App.colorWheel, scaleFactor: scale});
+		ui = new Zui({ theme: App.theme, font: App.font, color_wheel: App.colorWheel, black_white_gradient: App.blackWhiteGradient, scaleFactor: scale });
 		ui.scrollEnabled = false;
 	}
 
@@ -225,6 +226,9 @@ class UINodes {
 
 			// Node context menu
 			if (!Nodes.socketReleased) {
+				var numberOfEntries = 5;
+				if (selected != null && selected.type == "RGB") ++numberOfEntries;
+
 				UIMenu.draw(function(uiMenu: Zui) {
 					uiMenu._y += 1;
 					var protected = selected == null ||
@@ -270,8 +274,17 @@ class UINodes {
 							isNodeMenuOperation = true;
 						});
 					}
+					if (selected != null && selected.type == "RGB") {
+						if (menuButton(uiMenu, tr("Add Swatch"))) {
+							var color = selected.outputs[0].default_value;
+							var newSwatch = Project.makeSwatch(Color.fromFloats(color[0], color[1], color[2], color[3]));
+							Context.setSwatch(newSwatch);
+							Project.raw.swatches.push(newSwatch);
+							UIStatus.inst.statusHandle.redraws = 1;
+						}
+					}
 					uiMenu.enabled = true;
-				}, 5);
+				}, numberOfEntries);
 			}
 		}
 	}
@@ -589,6 +602,19 @@ class UINodes {
 				Zui.isCopy = Zui.isCut = Zui.isPaste = ui.isDeleteDown = false;
 			}
 
+			if (nodes.colorPickerCallback != null) {
+				Context.colorPickerPreviousTool = Context.tool;
+				Context.selectTool(ToolPicker);
+				var tmp = nodes.colorPickerCallback;
+				Context.colorPickerCallback = function(color: TSwatchColor) {
+					tmp(color.base);
+					UINodes.inst.hwnd.redraws = 2;
+					if (Config.raw.material_live)
+						UINodes.inst.canvasChanged();
+				};
+				nodes.colorPickerCallback = null;
+			}
+
 			// Remove nodes with unknown id for this canvas type
 			if (Zui.isPaste) {
 				var nodeList = NodesBrush.list;
@@ -870,12 +896,11 @@ class UINodes {
 		getNodes().nodesSelected = [n];
 	}
 
-	public function acceptSwatchDrag(index: Int) {
+	public function acceptSwatchDrag(swatch: TSwatchColor) {
 		// pushUndo();
 		// var g = groupStack.length > 0 ? groupStack[groupStack.length - 1] : null;
 		// var n = NodesMaterial.createNode("RGB", g);
-		// var color = Project.raw.swatches[index].base;
-		// n.outputs[0].default_value = [color.R, color.G, color.B, color.A];
+		// n.outputs[0].default_value = [swatch.base.R, swatch.base.G, swatch.base.B, swatch.base.A];
 		// getNodes().nodesSelected = [n];
 	}
 

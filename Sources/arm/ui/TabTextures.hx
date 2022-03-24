@@ -121,13 +121,21 @@ class TabTextures {
 								if (ui.button(tr("Reimport"), Left)) {
 									Project.reimportTexture(asset);
 								}
-								if (ui.button(tr("Delete"), Left)) {
+								if (ui.button(tr("Set as Envmap"), Left)) {
+									App.notifyOnNextFrame(function() {
+										arm.io.ImportEnvmap.run(asset.file, img);
+									});
+								}
+								if (ui.button(tr("Delete"), Left, "delete")) {
 									deleteTexture(asset);
 								}
 								if (!isPacked && ui.button(tr("Open Containing Directory..."), Left)) {
 									File.start(asset.file.substr(0, asset.file.lastIndexOf(Path.sep)));
 								}
-							}, isPacked ? 4 : 5);
+								if (!isPacked && ui.button(tr("Open in Browser"), Left)) {
+									TabBrowser.showDirectory(asset.file.substr(0, asset.file.lastIndexOf(Path.sep)));
+								}
+							}, isPacked ? 5 : 7);
 						}
 					}
 				}

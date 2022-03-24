@@ -34,7 +34,7 @@ class MakeMaterial {
 			}
 		}
 
-		var con = MakeMesh.run(new NodeShaderData({name: "Material", canvas: null}));
+		var con = MakeMesh.run(new NodeShaderData({ name: "Material", canvas: null }));
 		var scon = new ShaderContext(con.data, function(scon: ShaderContext){});
 		scon.overrideContext = {};
 		if (con.frag.sharedSamplers.length > 0) {

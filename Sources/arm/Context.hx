@@ -37,6 +37,9 @@ class Context {
 	public static var viewIndexLast = -1;
 
 	public static var swatch: TSwatchColor;
+	public static var pickedColor: TSwatchColor = Project.makeSwatch();
+	public static var colorPickerCallback: TSwatchColor->Void = null;
+	public static var colorPickerPreviousTool = ToolBrush;
 
 	public static var defaultIrradiance: kha.arrays.Float32Array = null;
 	public static var defaultRadiance: Image = null;
@@ -46,10 +49,11 @@ class Context {
 	public static var previewEnvmap: Image = null;
 	public static var envmapLoaded = false;
 	public static var showEnvmap = false;
-	public static var showEnvmapHandle = new Handle({selected: false});
+	public static var showEnvmapHandle = new Handle({ selected: false });
 	public static var showEnvmapBlur = false;
-	public static var showEnvmapBlurHandle = new Handle({selected: false});
+	public static var showEnvmapBlurHandle = new Handle({ selected: false });
 	public static var envmapAngle = 0.0;
+	public static var lightAngle = 0.0;
 	public static var cullBackfaces = true;
 	public static var textureFilter = true;
 
@@ -87,7 +91,7 @@ class Context {
 	public static var cloneDeltaY = 0.0;
 
 	public static var brushRadius = 0.5;
-	public static var brushRadiusHandle = new Handle({value: 0.5});
+	public static var brushRadiusHandle = new Handle({ value: 0.5 });
 	public static var brushScale = 1.0;
 
 	public static var blurDirectional = false;
