@@ -153,8 +153,8 @@ class App {
 					blackWhiteGradient = imageBlackWhiteGradient;
 					Nodes.enumTexts = enumTexts;
 					Nodes.tr = tr;
-					uiBox = new Zui({ theme: App.theme, font: f, scaleFactor: Config.raw.window_scale, color_wheel: colorWheel, black_white_gradient: blackWhiteGradien });
-					uiMenu = new Zui({ theme: App.theme, font: f, scaleFactor: Config.raw.window_scale, color_wheel: colorWheel, black_white_gradient: blackWhiteGradien });
+					uiBox = new Zui({ theme: App.theme, font: f, scaleFactor: Config.raw.window_scale, color_wheel: colorWheel, black_white_gradient: blackWhiteGradient });
+					uiMenu = new Zui({ theme: App.theme, font: f, scaleFactor: Config.raw.window_scale, color_wheel: colorWheel, black_white_gradient: blackWhiteGradient });
 					defaultElementH = uiMenu.t.ELEMENT_H;
 
 					// Init plugins
@@ -331,7 +331,7 @@ class App {
 						  mx > UINodes.inst.wx && mx < UINodes.inst.wx + UINodes.inst.ww &&
 						  my > UINodes.inst.wy && my < UINodes.inst.wy + UINodes.inst.wh;
 			var inSwatches = UIStatus.inst.statustab.position == 4 &&
-						  mx > iron.App.x() && mx < iron.App.x() + System.windowWidth() - UIToolbar.inst.toolbarw - Config.raw.layout[LayoutSidebarW] &&
+						  mx > iron.App.x() && mx < iron.App.x() + System.windowWidth() &&
 						  my > System.windowHeight() - Config.raw.layout[LayoutStatusH];
 			if (dragAsset != null) {
 				if (inNodes) { // Create image texture

@@ -3,6 +3,7 @@ package arm.ui;
 import haxe.Json;
 import kha.Image;
 import kha.System;
+import kha.Color;
 import zui.Zui;
 import zui.Id;
 import zui.Nodes;
@@ -609,8 +610,7 @@ class UINodes {
 				Context.colorPickerCallback = function(color: TSwatchColor) {
 					tmp(color.base);
 					UINodes.inst.hwnd.redraws = 2;
-					if (Config.raw.material_live)
-						UINodes.inst.canvasChanged();
+					UINodes.inst.canvasChanged();
 				};
 				nodes.colorPickerCallback = null;
 			}

@@ -39,7 +39,7 @@ class Context {
 	public static var swatch: TSwatchColor;
 	public static var pickedColor: TSwatchColor = Project.makeSwatch();
 	public static var colorPickerCallback: TSwatchColor->Void = null;
-	public static var colorPickerPreviousTool = ToolBrush;
+	public static var colorPickerPreviousTool = ToolEraser;
 
 	public static var defaultIrradiance: kha.arrays.Float32Array = null;
 	public static var defaultRadiance: Image = null;
