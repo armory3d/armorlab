@@ -40,6 +40,7 @@ typedef TKeymap = {
 	public var view_zoom_in: String;
 	public var view_zoom_out: String;
 	public var view_distract_free: String;
+	public var viewport_mode: String;
 	public var toggle_node_editor: String;
 	public var toggle_browser: String;
 	public var node_search: String;

@@ -69,7 +69,7 @@ class UIMenu {
 						ImportAsset.run(path);
 					});
 				}
-				if (menuButton(ui, tr("Import Swatches..."))) Project.importAsset("arm");
+				if (menuButton(ui, tr("Import Swatches..."))) Project.importSwatches();
 				if (menuButton(ui, tr("Reimport Textures"), Config.keymap.file_reimport_textures)) Project.reimportTextures();
 				menuSeparator(ui);
 				if (menuButton(ui, tr("Export Textures..."), Config.keymap.file_export_textures_as)) {
@@ -246,33 +246,17 @@ class UIMenu {
 					tr("Opacity"),
 					tr("Height")
 				];
+				var shortcuts = ["l", "b", "n", "o", "r", "m", "a", "h", "t", "1", "2", "3", "4"];
 				#if (kha_direct3d12 || kha_vulkan)
 				modes.push(tr("Path Traced"));
+				shortcuts.push("p");
 				#end
 				for (i in 0...modes.length) {
 					menuFill(ui);
-					ui.radio(modeHandle, i, modes[i]);
+					ui.radio(modeHandle, i, modes[i], Config.keymap.viewport_mode + ", " + shortcuts[i]);
 				}
 
-				Context.viewportMode = modeHandle.position;
-				if (modeHandle.changed) {
-					var deferred = Context.renderMode != RenderForward && (Context.viewportMode == ViewLit || Context.viewportMode == ViewPathTrace);
-					if (deferred) {
-						RenderPath.active.commands = RenderPathDeferred.commands;
-					}
-					// else if (Context.viewportMode == ViewPathTrace) {
-					// }
-					else {
-						if (RenderPathForward.path == null) {
-							RenderPathForward.init(RenderPath.active);
-						}
-						RenderPath.active.commands = RenderPathForward.commands;
-					}
-					var _workspace = UIHeader.inst.worktab.position;
-					UIHeader.inst.worktab.position = Space3D;
-					MakeMaterial.parseMeshMaterial();
-					UIHeader.inst.worktab.position = _workspace;
-				}
+				if (modeHandle.changed) Context.setViewportMode(modeHandle.position);
 			}
 			else if (menuCategory == MenuCamera) {
 				if (menuButton(ui, tr("Reset"), Config.keymap.view_reset)) {

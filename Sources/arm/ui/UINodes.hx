@@ -42,7 +42,6 @@ class UINodes {
 	var recompileMatFinal = false;
 	var nodeSearchSpawn: TNode = null;
 	var nodeSearchOffset = 0;
-	var nodeSearchLast = "";
 	var lastCanvas: TNodeCanvas = null;
 	var lastNodeSelected: TNode = null;
 	var releaseLink = false;
@@ -89,7 +88,16 @@ class UINodes {
 					var n = nodes.nodesSelected[0];
 					if (linkDrag.to_id == -1 && n.inputs.length > 0) {
 						linkDrag.to_id = n.id;
+						var fromType = node.outputs[linkDrag.from_socket].type;
+						// 1. step: Connect to the first socket.
 						linkDrag.to_socket = 0;
+						// 2. step: Try to find the first type-matching socket and use it if present.
+						for (socket in n.inputs) {
+							if (socket.type == fromType) {
+								linkDrag.to_socket = n.inputs.indexOf(socket);
+								break;
+							}
+						}
 						getCanvas(true).links.push(linkDrag);
 					}
 					else if (linkDrag.from_id == -1 && n.outputs.length > 0) {
@@ -438,22 +446,16 @@ class UINodes {
 		var first = true;
 		UIMenu.draw(function(ui: Zui) {
 			ui.fill(0, 0, ui._w / ui.SCALE(), ui.t.ELEMENT_H * 8, ui.t.SEPARATOR_COL);
-			ui.textInput(searchHandle, "");
+			var search = ui.textInput(searchHandle, "", Left, true, true);
 			ui.changed = false;
 			if (first) {
 				first = false;
-				ui.startTextEdit(searchHandle); // Focus search bar
-				ui.textSelected = searchHandle.text;
 				searchHandle.text = "";
-				nodeSearchLast = "";
+				ui.startTextEdit(searchHandle); // Focus search bar
 			}
-			var search = searchHandle.text;
-			if (ui.textSelected != "") search = ui.textSelected;
 
-			if (search != nodeSearchLast) {
-				nodeSearchOffset = 0;
-				nodeSearchLast = search;
-			}
+			if (searchHandle.changed) nodeSearchOffset = 0;
+
 			if (ui.isKeyPressed) { // Move selection
 				if (ui.key == kha.input.KeyCode.Down && nodeSearchOffset < 6) nodeSearchOffset++;
 				if (ui.key == kha.input.KeyCode.Up && nodeSearchOffset > 0) nodeSearchOffset--;

@@ -42,6 +42,9 @@ class ImportAsset {
 		else if (Path.isPlugin(path)) {
 			ImportPlugin.run(path);
 		}
+		else if (Path.isGimpColorPalette(path)) {
+			ImportGpl.run(path, false);
+		}
 		else {
 			if (Context.enableImportPlugin(path)) {
 				run(path, dropX, dropY, showBox);

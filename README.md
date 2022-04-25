@@ -21,6 +21,7 @@ cd armorlab
 armorcore\Kinc\make --from armorcore -g direct3d11
 # Open generated Visual Studio project at `build\ArmorLab.sln`
 # Build and run for x64 & release
+# Copy build\x64\Release\ArmorLab.exe to build\krom to run ArmorLab.exe directly
 ```
 
 **Linux**
@@ -55,6 +56,7 @@ git apply armorcore/patch/d3d12_raytrace.diff --directory=armorcore/Kinc
 armorcore\Kinc\make --from armorcore -g direct3d12
 # Open generated Visual Studio project at `build\ArmorLab.sln`
 # Build and run for x64 & release
+# Copy build\x64\Release\ArmorLab.exe to build\krom to run ArmorLab.exe directly
 ```
 
 **Linux VKRT** *wip*
@@ -69,7 +71,7 @@ strip ArmorLab
 
 **Updating cloned repository**
 ```bash
-git pull origin master
+git pull origin main
 git submodule update --init --recursive
 # Delete `armorlab/build` directory if present
 ```

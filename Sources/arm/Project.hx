@@ -23,8 +23,10 @@ import arm.ui.UIHeader;
 import arm.node.MakeMaterial;
 import arm.io.ImportAsset;
 import arm.io.ImportArm;
+import arm.io.ImportGpl;
 import arm.io.ImportTexture;
 import arm.io.ExportArm;
+import arm.io.ExportGpl;
 import arm.node.NodesBrush;
 import arm.ProjectFormat;
 import arm.Enums;
@@ -291,8 +293,9 @@ class Project {
 	}
 
 	public static function importSwatches(replaceExisting = false) {
-		UIFiles.show("arm", false, false, function(path: String) {
-			ImportArm.runSwatches(path, replaceExisting);
+		UIFiles.show("arm,gpl", false, false, function(path: String) {
+			if (Path.isGimpColorPalette(path)) ImportGpl.run(path, replaceExisting);
+			else ImportArm.runSwatches(path, replaceExisting);
 		});
 	}
 
@@ -339,10 +342,11 @@ class Project {
 	}
 
 	public static function exportSwatches() {
-		UIFiles.show("arm", true, false, function(path: String) {
+		UIFiles.show("arm,gpl", true, false, function(path: String) {
 			var f = UIFiles.filename;
 			if (f == "") f = tr("untitled");
-			ExportArm.runSwatches(path + Path.sep + f);
+			if (Path.isGimpColorPalette(f)) ExportGpl.run(path + Path.sep + f, f.substring(0, f.lastIndexOf(".")), Project.raw.swatches);
+			else ExportArm.runSwatches(path + Path.sep + f);
 		});
 	}
 

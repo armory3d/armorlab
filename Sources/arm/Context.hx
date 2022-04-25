@@ -142,6 +142,28 @@ class Context {
 	static var lockStartY = 0.0;
 	static var registered = false;
 
+	public static function setViewportMode(mode: ViewportMode) {
+		if (mode == viewportMode) return;
+
+		viewportMode = mode;
+		var deferred = Context.renderMode != RenderForward && (Context.viewportMode == ViewLit || Context.viewportMode == ViewPathTrace);
+		if (deferred) {
+			RenderPath.active.commands = RenderPathDeferred.commands;
+		}
+		// else if (Context.viewportMode == ViewPathTrace) {
+		// }
+		else {
+			if (RenderPathForward.path == null) {
+				RenderPathForward.init(RenderPath.active);
+			}
+			RenderPath.active.commands = RenderPathForward.commands;
+		}
+		var _workspace = UIHeader.inst.worktab.position;
+		UIHeader.inst.worktab.position = Space3D;
+		MakeMaterial.parseMeshMaterial();
+		UIHeader.inst.worktab.position = _workspace;
+	}
+
 	public static function layerFilterUsed(): Bool { return true; } ////
 
 	public static function setSwatch(s: TSwatchColor) {

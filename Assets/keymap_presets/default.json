@@ -38,6 +38,7 @@
 	"view_zoom_in": "",
 	"view_zoom_out": "",
 	"view_distract_free": "f11",
+	"viewport_mode": "ctrl+m",
 	"toggle_node_editor": "tab",
 	"toggle_browser": "`",
 	"node_search": "space"
