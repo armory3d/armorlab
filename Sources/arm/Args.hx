@@ -22,24 +22,29 @@ class Args {
 		if (Krom.getArgCount() > 1) {
 			useArgs = true;
 
-			for (v in 0...Krom.getArgCount()) {
+			var i = 0;
+			while (i < Krom.getArgCount()) {
 				// Process each arg
-				var currentArg = Krom.getArg(v);
+				var currentArg = Krom.getArg(i);
 				if (Path.isProject(currentArg)) {
 					Project.filepath = currentArg;
 				}
 				else if (Path.isTexture(currentArg)) {
 					assetPath = currentArg;
 				}
-				else if (currentArg == "--export-textures" && (v + 3) <= Krom.getArgCount()) {
+				else if (currentArg == "--export-textures" && (i + 3) <= Krom.getArgCount()) {
 					exportTextures = true;
-					exportTexturesType = Krom.getArg(v + 1);
-					exportTexturesPreset = Krom.getArg(v + 2);
-					exportTexturesPath = Krom.getArg(v + 3);
+					++i;
+					exportTexturesType = Krom.getArg(i);
+					++i;
+					exportTexturesPreset = Krom.getArg(i);
+					++i;
+					exportTexturesPath = Krom.getArg(i);
 				}
 				else if (currentArg == "--b" || currentArg == "--background") {
 					background = true;
 				}
+				++i;
 			}
 		}
 	}
