@@ -65,7 +65,7 @@ class NodesBrush {
 			},
 			{
 				id: 0,
-				name: _tr("Inpaint"),
+				name: _tr("Inpaint (CPU)"),
 				type: "InpaintNode",
 				x: 0,
 				y: 0,
@@ -164,7 +164,7 @@ class NodesBrush {
 
 			{
 				id: 0,
-				name: _tr("Tiling"),
+				name: _tr("Tiling (CPU)"),
 				type: "TilingNode",
 				x: 0,
 				y: 0,
