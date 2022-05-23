@@ -24,21 +24,21 @@ class InpaintNode extends LogicNode {
 		image.g2.drawScaledImage(source, 0, 0, 2048, 2048);
 		image.g2.end();
 
-		result = texsynthInpaint(image, false);
+		result = texsynthInpaint(image, false, mask);
 		return result;
 	}
 
 	override public function getImage(): kha.Image {
-		return image;
+		// return image;
+		return mask;
 	}
 
-	public static function texsynthInpaint(image: kha.Image, tiling: Bool): kha.Image {
+	public static function texsynthInpaint(image: kha.Image, tiling: Bool, mask: kha.Image = null): kha.Image {
 		var w = arm.Config.getTextureResX();
 		var h = arm.Config.getTextureResY();
 
 		var bytes_img = untyped image.getPixels().b.buffer;
-		// var bytes_mask = l.texpaint_mask != null ? untyped l.texpaint_mask.getPixels().b.buffer : new js.lib.ArrayBuffer(w * h);
-		var bytes_mask = new js.lib.ArrayBuffer(w * h);
+		var bytes_mask = mask != null ? untyped mask.getPixels().b.buffer : new js.lib.ArrayBuffer(w * h);
 		var bytes_out = haxe.io.Bytes.ofData(new js.lib.ArrayBuffer(w * h * 4));
 		Krom.texsynthInpaint(w, h, untyped bytes_out.b.buffer, bytes_img, bytes_mask, tiling);
 

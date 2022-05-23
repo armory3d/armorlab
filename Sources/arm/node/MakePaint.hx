@@ -256,6 +256,7 @@ class MakePaint {
 			}
 		}
 
+		frag.write('float opacity = 1.0;');
 		frag.write('if (opacity == 0.0) discard;');
 
 		frag.write('float str = clamp((brushRadius - dist) * brushHardness * 400.0, 0.0, 1.0) * opacity;');
