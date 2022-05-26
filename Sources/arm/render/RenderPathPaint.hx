@@ -287,15 +287,13 @@ class RenderPathPaint {
 			}
 			path.renderTargets.get("texpaint_node").image = image;
 			path.bindTarget("texpaint_node", "texpaint");
-			path.bindTarget("texpaint_nor", "texpaint_nor");
-			path.bindTarget("texpaint_pack", "texpaint_pack");
 		}
 		else {
 			// var l = arm.node.brush.BrushOutputNode.inst;
 			path.bindTarget("texpaint", "texpaint");
-			path.bindTarget("texpaint_nor", "texpaint_nor");
-			path.bindTarget("texpaint_pack", "texpaint_pack");
 		}
+		path.bindTarget("texpaint_nor", "texpaint_nor");
+		path.bindTarget("texpaint_pack", "texpaint_pack");
 	}
 
 	public static function unbindLayers() {

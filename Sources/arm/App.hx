@@ -429,7 +429,7 @@ class App {
 			Context.ddirty = 0;
 		}
 		else if (Context.frame == 3) {
-			Context.ddirty = 1;
+			Context.ddirty = 2;
 		}
 		Context.frame++;
 

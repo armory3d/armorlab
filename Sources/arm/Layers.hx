@@ -45,11 +45,19 @@ class Layers {
 	public static var cursorTex: TextureUnit;
 	public static var cursorGbufferD: TextureUnit;
 
-	public static inline var defaultBase = 0.5;
-	public static inline var defaultRough = 0.4;
-
 	public static function initLayers() {
-
+		var texpaint = iron.RenderPath.active.renderTargets.get("texpaint").image;
+		var texpaint_nor = iron.RenderPath.active.renderTargets.get("texpaint_nor").image;
+		var texpaint_pack = iron.RenderPath.active.renderTargets.get("texpaint_pack").image;
+		texpaint.g4.begin();
+		texpaint.g4.clear(kha.Color.fromFloats(0.5, 0.5, 0.5, 0.0)); // Base
+		texpaint.g4.end();
+		texpaint_nor.g4.begin();
+		texpaint_nor.g4.clear(kha.Color.fromFloats(0.5, 0.5, 1.0, 0.0)); // Nor
+		texpaint_nor.g4.end();
+		texpaint_pack.g4.begin();
+		texpaint_pack.g4.clear(kha.Color.fromFloats(1.0, 0.4, 0.0, 0.0)); // Occ, rough, met
+		texpaint_pack.g4.end();
 	}
 
 	public static function makePipe() {
