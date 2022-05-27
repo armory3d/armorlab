@@ -262,14 +262,9 @@ class UISidebar {
 							tr("Roughness"),
 							tr("Metallic"),
 							tr("Opacity"),
-							tr("Height"),
-							tr("TexCoord"),
-							tr("Object Normal"),
-							tr("Material ID"),
-							tr("Object ID"),
-							tr("Mask")
+							tr("Height")
 						];
-						var shortcuts = [ "l", "b", "n", "o", "r", "m", "a", "h", "t", "1", "2", "3", "4" ];
+						var shortcuts = ["l", "b", "n", "o", "r", "m", "a", "h"];
 						#if (kha_direct3d12 || kha_vulkan)
 						modes.push(tr("Path Traced"));
 						shortcuts.push("p");
