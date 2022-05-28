@@ -247,8 +247,11 @@ class Context {
 			Context.lastPaintVecY = Context.paintVec.y;
 		}
 
+		var inpaint = UINodes.inst.getNodes().nodesSelected.length > 0 && UINodes.inst.getNodes().nodesSelected[0].type == "InpaintNode";
+
 		// Paint bounds
-		if (Context.paintVec.x > left &&
+		if (inpaint &&
+			Context.paintVec.x > left &&
 			Context.paintVec.x < right &&
 			Context.paintVec.y > 0 &&
 			Context.paintVec.y < 1 &&
