@@ -476,6 +476,7 @@ class UINodes {
 							canvas.nodes.push(nodeSearchSpawn);
 							nodes.nodesSelected = [nodeSearchSpawn];
 							nodes.nodesDrag = true;
+							arm.node.Brush.parse(canvas, false);
 							hwnd.redraws = 2;
 							if (enter) {
 								ui.changed = true;
@@ -677,6 +678,7 @@ class UINodes {
 
 						arm.node.Brush.parse(Project.canvas, false);
 
+						arm.node.brush.PhotoToPBRNode.cachedSource = null;
 						var texbase = @:privateAccess arm.node.brush.BrushOutputNode.inst.get(ChannelBaseColor);
 						var texocc = @:privateAccess arm.node.brush.BrushOutputNode.inst.get(ChannelOcclusion);
 						var texrough = @:privateAccess arm.node.brush.BrushOutputNode.inst.get(ChannelRoughness);
@@ -810,6 +812,7 @@ class UINodes {
 					canvas.nodes.push(node);
 					nodes.nodesSelected = [node];
 					nodes.nodesDrag = true;
+					arm.node.Brush.parse(canvas, false);
 				}
 				// Next column
 				if (ui._y - wy + ui.ELEMENT_H() / 2 > wh) {
@@ -896,6 +899,7 @@ class UINodes {
 		var n = NodesBrush.createNode("ImageTextureNode");
 		n.buttons[0].default_value = index;
 		getNodes().nodesSelected = [n];
+		arm.node.Brush.parse(Project.canvas, false);
 	}
 
 	public function acceptSwatchDrag(swatch: TSwatchColor) {

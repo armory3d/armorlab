@@ -58,6 +58,14 @@ class Layers {
 		texpaint_pack.g4.begin();
 		texpaint_pack.g4.clear(kha.Color.fromFloats(1.0, 0.4, 0.0, 0.0)); // Occ, rough, met
 		texpaint_pack.g4.end();
+		var texpaint_nor_empty = iron.RenderPath.active.renderTargets.get("texpaint_nor_empty").image;
+		var texpaint_pack_empty = iron.RenderPath.active.renderTargets.get("texpaint_pack_empty").image;
+		texpaint_nor_empty.g4.begin();
+		texpaint_nor_empty.g4.clear(kha.Color.fromFloats(0.5, 0.5, 1.0, 0.0)); // Nor
+		texpaint_nor_empty.g4.end();
+		texpaint_pack_empty.g4.begin();
+		texpaint_pack_empty.g4.clear(kha.Color.fromFloats(1.0, 0.4, 0.0, 0.0)); // Occ, rough, met
+		texpaint_pack_empty.g4.end();
 	}
 
 	public static function makePipe() {

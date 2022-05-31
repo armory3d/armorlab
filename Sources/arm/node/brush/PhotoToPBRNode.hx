@@ -9,6 +9,8 @@ class PhotoToPBRNode extends LogicNode {
 	static var images: Array<kha.Image> = null;
 	static var modelNames = ["base", "occlusion", "roughness", "metallic", "normal", "height"];
 
+	public static var cachedSource: Dynamic = null;
+
 	public function new(tree: LogicTree) {
 		super(tree);
 
@@ -24,7 +26,8 @@ class PhotoToPBRNode extends LogicNode {
 	}
 
 	override function get(from: Int): Dynamic {
-		var source = inputs[0].get();
+		var source = cachedSource != null ? cachedSource : inputs[0].get();
+		cachedSource = source;
 		if (!Std.isOfType(source, kha.Image)) return null;
 
 		temp.g2.begin(false);

@@ -4,8 +4,8 @@ package arm.node.brush;
 class InpaintNode extends LogicNode {
 
 	static var image: kha.Image = null;
+	static var mask: kha.Image = null;
 	var result: kha.Image = null;
-	var mask: kha.Image = null;
 
 	public function new(tree: LogicTree) {
 		super(tree);
@@ -13,7 +13,15 @@ class InpaintNode extends LogicNode {
 		if (image == null) {
 			image = kha.Image.createRenderTarget(2048, 2048);
 		}
-		mask = kha.Image.createRenderTarget(2048, 2048, kha.graphics4.TextureFormat.L8);
+
+		if (mask == null) {
+			mask = kha.Image.createRenderTarget(2048, 2048, kha.graphics4.TextureFormat.L8);
+			App.notifyOnNextFrame(function() {
+				mask.g4.begin();
+				mask.g4.clear(kha.Color.fromFloats(1.0, 1.0, 1.0, 1.0));
+				mask.g4.end();
+			});
+		}
 	}
 
 	override function get(from: Int): Dynamic {

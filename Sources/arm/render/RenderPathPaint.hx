@@ -148,7 +148,7 @@ class RenderPathPaint {
 					// #end
 			}
 			else {
-				var texpaint = "texpaint" + tid;
+				var texpaint = "texpaint_node";
 
 				path.setTarget("texpaint_blend1");
 				path.bindTarget("texpaint_blend0", "tex");
@@ -180,7 +180,9 @@ class RenderPathPaint {
 			return;
 		}
 
-		if (!App.uiEnabled || App.isDragging) {
+		var inpaint = UINodes.inst.getNodes().nodesSelected.length > 0 && UINodes.inst.getNodes().nodesSelected[0].type == "InpaintNode";
+
+		if (!App.uiEnabled || App.isDragging || !inpaint) {
 			return;
 		}
 
@@ -287,13 +289,14 @@ class RenderPathPaint {
 			}
 			path.renderTargets.get("texpaint_node").image = image;
 			path.bindTarget("texpaint_node", "texpaint");
+			path.bindTarget("texpaint_nor_empty", "texpaint_nor");
+			path.bindTarget("texpaint_pack_empty", "texpaint_pack");
 		}
 		else {
-			// var l = arm.node.brush.BrushOutputNode.inst;
 			path.bindTarget("texpaint", "texpaint");
+			path.bindTarget("texpaint_nor", "texpaint_nor");
+			path.bindTarget("texpaint_pack", "texpaint_pack");
 		}
-		path.bindTarget("texpaint_nor", "texpaint_nor");
-		path.bindTarget("texpaint_pack", "texpaint_pack");
 	}
 
 	public static function unbindLayers() {

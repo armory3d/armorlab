@@ -11,6 +11,8 @@ class BrushOutputNode extends LogicNode {
 	public var texpaint: Image = null;
 	public var texpaint_nor: Image = null;
 	public var texpaint_pack: Image = null;
+	public var texpaint_nor_empty: Image = null;
+	public var texpaint_pack_empty: Image = null;
 
 	public static var inst: BrushOutputNode = null;
 
@@ -42,6 +44,22 @@ class BrushOutputNode extends LogicNode {
 				t.height = Config.getTextureResY();
 				t.format = "RGBA32";
 				texpaint_pack = RenderPath.active.createRenderTarget(t).image;
+			}
+			{
+				var t = new RenderTargetRaw();
+				t.name = "texpaint_nor_empty";
+				t.width = 1;
+				t.height = 1;
+				t.format = "RGBA32";
+				texpaint_nor_empty = RenderPath.active.createRenderTarget(t).image;
+			}
+			{
+				var t = new RenderTargetRaw();
+				t.name = "texpaint_pack_empty";
+				t.width = 1;
+				t.height = 1;
+				t.format = "RGBA32";
+				texpaint_pack_empty = RenderPath.active.createRenderTarget(t).image;
 			}
 		}
 		else {

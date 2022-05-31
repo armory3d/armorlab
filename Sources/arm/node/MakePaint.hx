@@ -275,7 +275,8 @@ class MakePaint {
 		frag.write('vec4 sample_undo = textureLod(texpaint_undo, sample_tc, 0.0);');
 
 		if (Context.tool == ToolEraser) {
-			frag.write('fragColor[0] = vec4(mix(sample_undo.rgb, vec3(0.0, 0.0, 0.0), str), sample_undo.a - str);');
+			// frag.write('fragColor[0] = vec4(mix(sample_undo.rgb, vec3(0.0, 0.0, 0.0), str), sample_undo.a - str);');
+			frag.write('fragColor[0] = vec4(0.0, 0.0, 0.0, 0.0);');
 			frag.write('fragColor[1] = vec4(0.5, 0.5, 1.0, 0.0);');
 			frag.write('fragColor[2] = vec4(1.0, 0.0, 0.0, 0.0);');
 		}

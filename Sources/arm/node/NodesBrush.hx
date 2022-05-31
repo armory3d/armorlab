@@ -464,7 +464,6 @@ class NodesBrush {
 					var nodes = Project.nodes;
 					var node = arm.ui.UINodes.makeNode(n, nodes, canvas);
 					canvas.nodes.push(node);
-					arm.node.Brush.parse(canvas, false);
 					return node;
 				}
 			}
