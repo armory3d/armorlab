@@ -30,6 +30,9 @@ class Layers {
 	public static var pipeCopy128: PipelineState;
 	public static var pipeCopyBGRA: PipelineState;
 	public static var pipeCopyRGB: PipelineState = null;
+	public static var pipeApplyMask: PipelineState;
+	public static var tex0Mask: TextureUnit;
+	public static var texaMask: TextureUnit;
 	public static var tempImage: Image = null;
 	public static var expa: Image = null;
 	public static var expb: Image = null;
@@ -156,6 +159,16 @@ class Layers {
 		pipeCopyB.colorWriteMasksGreen = [false];
 		pipeCopyB.colorWriteMasksAlpha = [false];
 		pipeCopyB.compile();
+
+		pipeApplyMask = new PipelineState();
+		pipeApplyMask.vertexShader = kha.Shaders.getVertex("layer_copy_rrrr.vert");
+		pipeApplyMask.fragmentShader = kha.Shaders.getFragment("mask_apply.frag");
+		var vs = new VertexStructure();
+		vs.add("pos", VertexData.Float2);
+		pipeApplyMask.inputLayout = [vs];
+		pipeApplyMask.compile();
+		tex0Mask = pipeApplyMask.getTextureUnit("tex0");
+		texaMask = pipeApplyMask.getTextureUnit("texa");
 	}
 
 	public static function makePipeCopyRGB() {

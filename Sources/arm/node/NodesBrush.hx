@@ -77,7 +77,7 @@ class NodesBrush {
 						name: _tr("Color"),
 						type: "RGBA",
 						color: 0xffc7c729,
-						default_value: f32([0.0, 0.0, 0.0, 1.0])
+						default_value: f32([1.0, 1.0, 1.0, 1.0])
 					}
 				],
 				outputs: [

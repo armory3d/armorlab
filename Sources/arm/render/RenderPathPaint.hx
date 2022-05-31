@@ -148,7 +148,7 @@ class RenderPathPaint {
 					// #end
 			}
 			else {
-				var texpaint = "texpaint_node";
+				var texpaint = "texpaint_node_target";
 
 				path.setTarget("texpaint_blend1");
 				path.bindTarget("texpaint_blend0", "tex");
@@ -287,10 +287,26 @@ class RenderPathPaint {
 				var rt = new RenderTarget(t);
 				path.renderTargets.set(t.name, rt);
 			}
+			if (path.renderTargets.get("texpaint_node_target") == null) {
+				var t = new RenderTargetRaw();
+				t.name = "texpaint_node_target";
+				t.width = 2048;
+				t.height = 2048;
+				t.format = "RGBA32";
+				var rt = new RenderTarget(t);
+				path.renderTargets.set(t.name, rt);
+			}
 			path.renderTargets.get("texpaint_node").image = image;
 			path.bindTarget("texpaint_node", "texpaint");
 			path.bindTarget("texpaint_nor_empty", "texpaint_nor");
 			path.bindTarget("texpaint_pack_empty", "texpaint_pack");
+
+			var node = UINodes.inst.getNodes().nodesSelected[0];
+			var inpaint = node.type == "InpaintNode";
+			if (inpaint) {
+				var brushNode = arm.node.Brush.getBrushNode(node);
+				path.renderTargets.get("texpaint_node_target").image = cast(brushNode, arm.node.brush.InpaintNode).getTarget();
+			}
 		}
 		else {
 			path.bindTarget("texpaint", "texpaint");

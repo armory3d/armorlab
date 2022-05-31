@@ -37,7 +37,23 @@ class InpaintNode extends LogicNode {
 	}
 
 	override public function getImage(): kha.Image {
-		// return image;
+		App.notifyOnNextFrame(function() {
+			var source = inputs[0].get();
+			if (Layers.pipeCopy == null) Layers.makePipe();
+			if (iron.data.ConstData.screenAlignedVB == null) iron.data.ConstData.createScreenAlignedData();
+			image.g4.begin();
+			image.g4.setPipeline(Layers.pipeApplyMask);
+			image.g4.setTexture(Layers.tex0Mask, source);
+			image.g4.setTexture(Layers.texaMask, mask);
+			image.g4.setVertexBuffer(iron.data.ConstData.screenAlignedVB);
+			image.g4.setIndexBuffer(iron.data.ConstData.screenAlignedIB);
+			image.g4.drawIndexedVertices();
+			image.g4.end();
+		});
+		return image;
+	}
+
+	public function getTarget(): kha.Image {
 		return mask;
 	}
 
