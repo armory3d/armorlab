@@ -102,7 +102,7 @@ class UISidebar {
 		Zui.onBorderHover = onBorderHover;
 		Zui.onTextHover = onTextHover;
 
-		var resources = ["cursor.k", "icons.k"];
+		var resources = ["cursor.k", "icons.k", "placeholder.k"];
 		Res.load(resources, done);
 
 		Context.projectObjects = [];

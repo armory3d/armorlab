@@ -62,6 +62,7 @@ class Main {
 			"cursor.k",
 			"icons.k",
 			"icons2x.k",
+			"placeholder.k",
 			"noise256.k",
 			"smaa_search.k",
 			"smaa_area.k"
