@@ -91,13 +91,10 @@ class UIHeader {
 					 Context.tool == ToolClone ||
 					 Context.tool == ToolBlur) {
 
-				Context.brushRadius = ui.slider(Context.brushRadiusHandle, tr("Radius"), 0.01, 2.0, true);
-				if (ui.isHovered) ui.tooltip(tr("Hold {brush_radius} and move mouse to the left or press {brush_radius_decrease} to decrease the radius\nHold {brush_radius} and move mouse to the right or press {brush_radius_increase} to increase the radius", ["brush_radius" => Config.keymap.brush_radius, "brush_radius_decrease" => Config.keymap.brush_radius_decrease, "brush_radius_increase" => Config.keymap.brush_radius_increase]));
-
-				var brushScaleHandle = Id.handle({ value: Context.brushScale });
-				Context.brushScale = ui.slider(brushScaleHandle, tr("UV Scale"), 0.01, 5.0, true);
-				if (brushScaleHandle.changed) {
-					MakeMaterial.parseMeshMaterial();
+				var inpaint = UINodes.inst.getNodes().nodesSelected.length > 0 && UINodes.inst.getNodes().nodesSelected[0].type == "InpaintNode";
+				if (inpaint) {
+					Context.brushRadius = ui.slider(Context.brushRadiusHandle, tr("Radius"), 0.01, 2.0, true);
+					if (ui.isHovered) ui.tooltip(tr("Hold {brush_radius} and move mouse to the left or press {brush_radius_decrease} to decrease the radius\nHold {brush_radius} and move mouse to the right or press {brush_radius_increase} to increase the radius", ["brush_radius" => Config.keymap.brush_radius, "brush_radius_decrease" => Config.keymap.brush_radius_decrease, "brush_radius_increase" => Config.keymap.brush_radius_increase]));
 				}
 
 				// if (Context.tool != ToolEraser) {

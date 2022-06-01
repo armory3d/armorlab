@@ -173,6 +173,14 @@ class UIMenu {
 				}
 
 				menuFill(ui);
+				var brushScaleHandle = Id.handle({ value: Context.brushScale });
+				menuAlign(ui);
+				Context.brushScale = ui.slider(brushScaleHandle, tr("UV Scale"), 0.01, 5.0, true);
+				if (brushScaleHandle.changed) {
+					MakeMaterial.parseMeshMaterial();
+				}
+
+				menuFill(ui);
 				var cullHandle = Id.handle({ selected: Context.cullBackfaces });
 				Context.cullBackfaces = ui.check(cullHandle, " " + tr("Cull Backfaces"));
 				if (cullHandle.changed) {

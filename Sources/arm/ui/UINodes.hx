@@ -550,6 +550,7 @@ class UINodes {
 			lastNodeSelected = nodes.nodesSelected[0];
 			Context.nodePreviewSocket = 0;
 			Context.ddirty = 2; // Show selected node texture in viewport
+			UIHeader.inst.headerHandle.redraws = 2;
 		}
 		else if (lastNodeSelected != null) {
 			lastNodeSelected = null;
