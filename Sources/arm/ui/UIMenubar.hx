@@ -96,6 +96,7 @@ class UIMenubar {
 					if (_meshes != null) {
 						Scene.active.meshes = _meshes;
 						Scene.active.camera.transform.setMatrix(_savedCamera);
+						_meshes = null;
 					}
 				}
 				else { // Space2D
@@ -104,10 +105,11 @@ class UIMenubar {
 					plane.transform.rot.fromEuler(-Math.PI / 2, 0, 0);
 					plane.transform.buildMatrix();
 					plane.visible = true;
-					_meshes = Scene.active.meshes;
+					if (_meshes == null) {
+						_meshes = Scene.active.meshes;
+						_savedCamera.setFrom(Scene.active.camera.transform.local);
+					}
 					Scene.active.meshes = [plane];
-
-					_savedCamera.setFrom(Scene.active.camera.transform.local);
 					var m = iron.math.Mat4.identity();
 					m.translate(0, 0, 1.5);
 					Scene.active.camera.transform.setMatrix(m);
