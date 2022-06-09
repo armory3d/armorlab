@@ -20,11 +20,14 @@ import arm.ui.UIFiles;
 import arm.ui.UIBox;
 import arm.ui.UINodes;
 import arm.ui.UIHeader;
+import arm.ui.BoxPreferences;
+import arm.util.MeshUtil;
 import arm.node.MakeMaterial;
 import arm.io.ImportAsset;
 import arm.io.ImportArm;
 import arm.io.ImportGpl;
 import arm.io.ImportTexture;
+import arm.io.ImportMesh;
 import arm.io.ExportArm;
 import arm.io.ExportGpl;
 import arm.node.NodesBrush;
@@ -38,6 +41,7 @@ class Project {
 	public static var assets: Array<TAsset> = [];
 	public static var assetNames: Array<String> = [];
 	public static var assetId = 0;
+	public static var meshAssets: Array<String> = [];
 	public static var materialData: iron.data.MaterialData = null; ////
 	public static var materials: Array<Dynamic> = null; ////
 	public static var materialGroups: Array<TNodeGroup> = [];
@@ -283,6 +287,127 @@ class Project {
 		#if (kha_direct3d12 || kha_vulkan)
 		arm.render.RenderPathRaytrace.ready = false;
 		#end
+	}
+
+	public static function importMesh(replaceExisting = true) {
+		UIFiles.show(Path.meshFormats.join(","), false, false, function(path: String) {
+			importMeshBox(path, replaceExisting);
+		});
+	}
+
+	public static function importMeshBox(path: String, replaceExisting = true, clearLayers = true) {
+
+		#if krom_ios
+		// Import immediately while access to resource is unlocked
+		// Data.getBlob(path, function(b: kha.Blob) {});
+		#end
+
+		UIBox.showCustom(function(ui: Zui) {
+			if (ui.tab(Id.handle(), tr("Import Mesh"))) {
+
+				if (path.toLowerCase().endsWith(".obj")) {
+					Context.splitBy = ui.combo(Id.handle(), [
+						tr("Object"),
+						tr("Group"),
+						tr("Material"),
+						tr("UDIM Tile"),
+					], tr("Split By"), true);
+					if (ui.isHovered) ui.tooltip(tr("Split .obj mesh into objects"));
+				}
+
+				if (path.toLowerCase().endsWith(".fbx")) {
+					Context.parseTransform = ui.check(Id.handle({ selected: Context.parseTransform }), tr("Parse Transforms"));
+					if (ui.isHovered) ui.tooltip(tr("Load per-object transforms from .fbx"));
+				}
+
+				// if (path.toLowerCase().endsWith(".fbx") || path.toLowerCase().endsWith(".blend")) {
+				// 	Context.parseVCols = ui.check(Id.handle({ selected: Context.parseVCols }), tr("Parse Vertex Colors"));
+				// 	if (ui.isHovered) ui.tooltip(tr("Import vertex color data"));
+				// }
+
+				ui.row([0.45, 0.45, 0.1]);
+				if (ui.button(tr("Cancel"))) {
+					UIBox.show = false;
+				}
+				if (ui.button(tr("Import")) || ui.isReturnDown) {
+					UIBox.show = false;
+					App.redrawUI();
+					function doImport() {
+						ImportMesh.run(path, replaceExisting);
+					}
+					#if (krom_android || krom_ios)
+					arm.App.notifyOnNextFrame(function() {
+						Console.toast(tr("Importing mesh"));
+						arm.App.notifyOnNextFrame(doImport);
+					});
+					#else
+					doImport();
+					#end
+				}
+				if (ui.button(tr("?"))) {
+					File.loadUrl("https://github.com/armory3d/armorpaint_docs/blob/master/faq.md");
+				}
+			}
+		});
+		UIBox.clickToHide = false; // Prevent closing when going back to window from file browser
+	}
+
+	public static function reimportMesh() {
+		if (Project.meshAssets != null && Project.meshAssets.length > 0 && File.exists(Project.meshAssets[0])) {
+			importMeshBox(Project.meshAssets[0], true, false);
+		}
+		else importAsset();
+	}
+
+	public static function unwrapMeshBox(mesh: Dynamic, done: Void->Void) {
+		UIBox.showCustom(function(ui: Zui) {
+			if (ui.tab(Id.handle(), tr("Unwrap Mesh"))) {
+
+				var unwrapPlugins = [];
+				if (BoxPreferences.filesPlugin == null) {
+					BoxPreferences.fetchPlugins();
+				}
+				for (f in BoxPreferences.filesPlugin) {
+					if (f.indexOf("uv_unwrap") >= 0 && f.endsWith(".js")) {
+						unwrapPlugins.push(f);
+					}
+				}
+				unwrapPlugins.push("equirect");
+
+				var unwrapBy = ui.combo(Id.handle(), unwrapPlugins, tr("Plugin"), true);
+
+				ui.row([0.5, 0.5]);
+				if (ui.button(tr("Cancel"))) {
+					UIBox.show = false;
+				}
+				if (ui.button(tr("Unwrap")) || ui.isReturnDown) {
+					UIBox.show = false;
+					App.redrawUI();
+					function doImport() {
+						if (unwrapBy == unwrapPlugins.length - 1) {
+							MeshUtil.equirectUnwrap(mesh);
+						}
+						else {
+							var f = unwrapPlugins[unwrapBy];
+							if (Config.raw.plugins.indexOf(f) == -1) {
+								Config.enablePlugin(f);
+								Console.info(f + " " + tr("plugin enabled"));
+							}
+							MeshUtil.unwrappers.get(f)(mesh);
+						}
+						done();
+					}
+					#if (krom_android || krom_ios)
+					arm.App.notifyOnNextFrame(function() {
+						Console.toast(tr("Unwrapping mesh"));
+						arm.App.notifyOnNextFrame(doImport);
+					});
+					#else
+					doImport();
+					#end
+				}
+			}
+		});
 	}
 
 	public static function importAsset(filters: String = null, hdrAsEnvmap = true) {

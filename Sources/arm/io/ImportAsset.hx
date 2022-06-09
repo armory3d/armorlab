@@ -18,7 +18,11 @@ class ImportAsset {
 			return;
 		}
 
-		if (Path.isTexture(path)) {
+		if (Path.isMesh(path)) {
+			showBox ? Project.importMeshBox(path) : ImportMesh.run(path);
+			if (dropX > 0) UIBox.clickToHide = false; // Prevent closing when going back to window after drag and drop
+		}
+		else if (Path.isTexture(path)) {
 			ImportTexture.run(path, hdrAsEnvmap);
 			// Place image node
 			var x0 = UINodes.inst.wx;

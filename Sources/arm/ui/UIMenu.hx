@@ -70,12 +70,18 @@ class UIMenu {
 					});
 				}
 				if (menuButton(ui, tr("Import Swatches..."))) Project.importSwatches();
+				if (menuButton(ui, tr("Import Mesh..."))) Project.importMesh();
+				if (menuButton(ui, tr("Reimport Mesh"), Config.keymap.file_reimport_mesh)) Project.reimportMesh();
 				if (menuButton(ui, tr("Reimport Textures"), Config.keymap.file_reimport_textures)) Project.reimportTextures();
 				menuSeparator(ui);
 				if (menuButton(ui, tr("Export Textures..."), Config.keymap.file_export_textures_as)) {
 					BoxExport.showTextures();
 				}
 				if (menuButton(ui, tr("Export Swatches..."))) Project.exportSwatches();
+				if (menuButton(ui, tr("Export Mesh..."))) {
+					Context.exportMeshIndex = 0; // All
+					BoxExport.showMesh();
+				}
 
 				menuSeparator(ui);
 				if (menuButton(ui, tr("Exit"))) System.stop();

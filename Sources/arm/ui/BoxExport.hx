@@ -5,6 +5,7 @@ import zui.Zui;
 import zui.Id;
 import arm.io.ExportTexture;
 import arm.io.ExportArm;
+import arm.io.ExportMesh;
 import arm.sys.Path;
 import arm.sys.File;
 import arm.Enums;
@@ -17,6 +18,7 @@ class BoxExport {
 	public static var preset: TExportPreset = null;
 	static var channels = ["base_r", "base_g", "base_b", "height", "metal", "nor_r", "nor_g", "nor_g_directx", "nor_b", "occ", "opac", "rough", "smooth", "0.0", "1.0"];
 	static var colorSpaces = ["linear", "srgb"];
+	static var exportMeshHandle = Id.handle();
 
 	public static function showTextures() {
 		UIBox.showCustom(function(ui: Zui) {
@@ -209,6 +211,66 @@ class BoxExport {
 				preset.textures.push({ name: "base", channels: ["base_r", "base_g", "base_b", "1.0"], color_space: "linear" });
 				@:privateAccess hpreset.children = null;
 				savePreset();
+			}
+		}
+	}
+
+	public static function showMesh() {
+		exportMeshHandle.position = Context.exportMeshIndex;
+		UIBox.showCustom(function(ui: Zui) {
+			var htab = Id.handle();
+			tabExportMesh(ui, htab);
+		});
+	}
+
+	static function tabExportMesh(ui: Zui, htab: zui.Zui.Handle) {
+		if (ui.tab(htab, tr("Export Mesh"))) {
+
+			ui.row([1 / 2, 1 / 2]);
+
+			Context.exportMeshFormat = ui.combo(Id.handle({ position: Context.exportMeshFormat }), ["obj", "arm"], tr("Format"), true);
+
+			var ar = [tr("All")];
+			for (p in Project.paintObjects) ar.push(p.name);
+			ui.combo(exportMeshHandle, ar, tr("Meshes"), true);
+
+			var applyDisplacement = ui.check(Id.handle(), tr("Apply Displacement"));
+
+			var tris = 0;
+			var pos = exportMeshHandle.position;
+			var paintObjects = pos == 0 ? Project.paintObjects : [Project.paintObjects[pos - 1]];
+			for (po in paintObjects) {
+				for (inda in po.data.raw.index_arrays) {
+					tris += Std.int(inda.values.length / 3);
+				}
+			}
+			ui.text(tris + " " + tr("triangles"));
+
+			ui.row([0.5, 0.5]);
+			if (ui.button(tr("Cancel"))) {
+				UIBox.show = false;
+			}
+			if (ui.button(tr("Export"))) {
+				UIBox.show = false;
+				UIFiles.show(Context.exportMeshFormat == FormatObj ? "obj" : "arm", true, false, function(path: String) {
+					#if (krom_android || krom_ios)
+					var f = kha.Window.get(0).title;
+					#else
+					var f = UIFiles.filename;
+					#end
+					if (f == "") f = tr("untitled");
+					function doExport() {
+						ExportMesh.run(path + Path.sep + f, exportMeshHandle.position == 0 ? null : [Project.paintObjects[exportMeshHandle.position - 1]], applyDisplacement);
+					}
+					#if (krom_android || krom_ios)
+					arm.App.notifyOnNextFrame(function() {
+						Console.toast(tr("Exporting mesh"));
+						arm.App.notifyOnNextFrame(doExport);
+					});
+					#else
+					doExport();
+					#end
+				});
 			}
 		}
 	}

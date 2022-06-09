@@ -60,6 +60,9 @@ class Context {
 	public static var formatType = FormatPng;
 	public static var formatQuality = 100.0;
 	public static var layersDestination = DestinationDisk;
+	public static var splitBy = SplitObject;
+	public static var parseTransform = true;
+	public static var parseVCols = false;
 
 	public static var selectTime = 0.0;
 	#if (kha_direct3d12 || kha_vulkan)
@@ -77,6 +80,8 @@ class Context {
 	#end
 	public static var viewportShader: NodeShader->String = null;
 	public static var hscaleWasChanged = false;
+	public static var exportMeshFormat = FormatObj;
+	public static var exportMeshIndex = 0;
 	public static var packAssetsOnExport = true;
 
 	public static var paintVec = new Vec4();

@@ -17,6 +17,7 @@ typedef TKeymap = {
 	public var file_open_recent: String;
 	public var file_save: String;
 	public var file_save_as: String;
+	public var file_reimport_mesh: String;
 	public var file_reimport_textures: String;
 	public var file_import_assets: String;
 	public var file_export_textures: String;

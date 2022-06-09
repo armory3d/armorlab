@@ -12,6 +12,13 @@ package arm;
 	var Space2D = 1;
 }
 
+@:enum abstract SplitType(Int) from Int to Int {
+	var SplitObject = 0;
+	var SplitGroup = 1;
+	var SplitMaterial = 2;
+	var SplitUdim = 3;
+}
+
 @:enum abstract ViewportMode(Int) from Int to Int {
 	var ViewLit = 0;
 	var ViewBaseColor = 1;
@@ -76,6 +83,11 @@ package arm;
 @:enum abstract TextureFormatLdr(Int) from Int to Int {
 	var FormatPng = 0;
 	var FormatJpg = 1;
+}
+
+@:enum abstract MeshFormat(Int) from Int to Int {
+	var FormatObj = 0;
+	var FormatArm = 1;
 }
 
 @:enum abstract MenuCategory(Int) from Int to Int {
