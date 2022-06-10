@@ -184,6 +184,10 @@ class UIMenu {
 				Context.brushScale = ui.slider(brushScaleHandle, tr("UV Scale"), 0.01, 5.0, true);
 				if (brushScaleHandle.changed) {
 					MakeMaterial.parseMeshMaterial();
+					#if (kha_direct3d12 || kha_vulkan)
+					arm.render.RenderPathRaytrace.uvScale = Context.brushScale;
+					arm.render.RenderPathRaytrace.ready = false;
+					#end
 				}
 
 				menuFill(ui);
@@ -221,28 +225,6 @@ class UIMenu {
 				}
 				else {
 					Scene.active.world.envmap = Context.emptyEnvmap;
-				}
-
-				menuSeparator(ui);
-
-				var modeHandle = Id.handle();
-				// modeHandle.position = Context.viewportObject;
-				var modes = [
-					tr("Cube"),
-					tr("Plane"),
-					tr("Sphere"),
-					tr("Cylinder")
-				];
-				for (i in 0...modes.length) {
-					menuFill(ui);
-					ui.radio(modeHandle, i, modes[i]);
-					if (modeHandle.changed) {
-						var meshes = [".Cube", ".Plane", ".Sphere", ".Cylinder"];
-						var mo: MeshObject = cast Scene.active.getChild(meshes[modeHandle.position]);
-						mo.visible = true;
-						Scene.active.meshes = [mo];
-						Context.ddirty = 2;
-					}
 				}
 
 				if (ui.changed) keepOpen = true;

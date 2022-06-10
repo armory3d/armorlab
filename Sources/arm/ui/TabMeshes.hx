@@ -16,9 +16,9 @@ class TabMeshes {
 
 			ui.beginSticky();
 			#if arm_touchui
-			ui.row([1 / 8, 1 / 8, 1 / 8, 1 / 8, 1 / 8, 1 / 8, 1 / 8, 1 / 8]);
+			ui.row([1 / 8, 1 / 8, 1 / 8, 1 / 8, 1 / 8, 1 / 8, 1 / 8, 1 / 8, 1 / 8]);
 			#else
-			ui.row([1 / 14, 1 / 9, 1 / 9, 1 / 9, 1 / 9, 1 / 14, 1 / 14, 1 / 14]);
+			ui.row([1 / 14, 1 / 14, 1 / 9, 1 / 9, 1 / 9, 1 / 9, 1 / 14, 1 / 14, 1 / 14]);
 			#end
 
 			if (ui.button(tr("Import"))) {
@@ -33,6 +33,16 @@ class TabMeshes {
 				}, 3);
 			}
 			if (ui.isHovered) ui.tooltip(tr("Import mesh file"));
+
+			if (ui.button(tr("Set Default"))) {
+				UIMenu.draw(function(ui: Zui) {
+					ui.text(tr("Meshes"), Right, ui.t.HIGHLIGHT_COL);
+					if (ui.button(tr("Cube"), Left)) setDefaultMesh(".Cube");
+					if (ui.button(tr("Plane"), Left)) setDefaultMesh(".Plane");
+					if (ui.button(tr("Sphere"), Left)) setDefaultMesh(".Sphere");
+					if (ui.button(tr("Cylinder"), Left)) setDefaultMesh(".Cylinder");
+				}, 5);
+			}
 
 			if (ui.button(tr("Flip Normals"))) {
 				MeshUtil.flipNormals();
@@ -108,10 +118,21 @@ class TabMeshes {
 				if (h.changed) {
 					var visibles: Array<MeshObject> = [];
 					for (p in Project.paintObjects) if (p.visible) visibles.push(p);
-					// MeshUtil.mergeMesh(visibles);
+					MeshUtil.mergeMesh(visibles);
 					Context.ddirty = 2;
 				}
 			}
 		}
+	}
+
+	static function setDefaultMesh(name: String) {
+		var mo: MeshObject = cast iron.Scene.active.getChild(name);
+		mo.visible = true;
+		iron.Scene.active.meshes = [mo];
+		Context.ddirty = 2;
+		Context.paintObject = mo;
+		#if (kha_direct3d12 || kha_vulkan)
+		arm.render.RenderPathRaytrace.ready = false;
+		#end
 	}
 }
