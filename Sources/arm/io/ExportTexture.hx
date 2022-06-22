@@ -21,9 +21,9 @@ class ExportTexture {
 	public static function run(path: String) {
 		runLayers(path, [arm.node.brush.BrushOutputNode.inst]);
 		#if krom_ios
-		Console.info(tr("Textures exported.") + " ('Files/On My iPad/" + Main.title + "')");
+		Console.info(tr("Textures exported") + " ('Files/On My iPad/" + Main.title + "')");
 		#else
-		Console.info(tr("Textures exported."));
+		Console.info(tr("Textures exported"));
 		#end
 		@:privateAccess UIFiles.lastPath = "";
 	}
