@@ -70,14 +70,14 @@ package arm;
 }
 
 @:enum abstract TextureRes(Int) from Int to Int {
-	var Res128 = 0;
-	var Res256 = 1;
-	var Res512 = 2;
-	var Res1024 = 3;
-	var Res2048 = 4;
-	var Res4096 = 5;
-	var Res8192 = 6;
-	var Res16384 = 7;
+	var Res2048 = 0;
+	var Res4096 = 1;
+	var Res8192 = 2;
+	var Res16384 = 3;
+	var Res128 = 4; // Unused
+	var Res256 = 5;
+	var Res512 = 6;
+	var Res1024 = 7;
 }
 
 @:enum abstract TextureFormatLdr(Int) from Int to Int {

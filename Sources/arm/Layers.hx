@@ -56,7 +56,7 @@ class Layers {
 		// texpaint.g4.clear(kha.Color.fromFloats(0.5, 0.5, 0.5, 0.0)); // Base
 		// texpaint.g4.end();
 		texpaint.g2.begin(false);
-		texpaint.g2.drawScaledImage(Res.get("placeholder.k"), 0, 0, 2048, 2048); // Base
+		texpaint.g2.drawScaledImage(Res.get("placeholder.k"), 0, 0, Config.getTextureResX(), Config.getTextureResY()); // Base
 		texpaint.g2.end();
 		texpaint_nor.g4.begin();
 		texpaint_nor.g4.clear(kha.Color.fromFloats(0.5, 0.5, 1.0, 0.0)); // Nor
@@ -301,5 +301,54 @@ class Layers {
 		var texpaint_nor = arm.node.brush.BrushOutputNode.inst.texpaint_nor;
 		var texpaint_pack = arm.node.brush.BrushOutputNode.inst.texpaint_pack;
 		return { texpaint: texpaint, texpaint_nor: texpaint_nor, texpaint_pack: texpaint_pack };
+	}
+
+	public static function onLayersResized() {
+		arm.node.brush.BrushOutputNode.inst.texpaint.unload();
+		arm.node.brush.BrushOutputNode.inst.texpaint = iron.RenderPath.active.renderTargets.get("texpaint").image = Image.createRenderTarget(Config.getTextureResX(), Config.getTextureResY());
+		arm.node.brush.BrushOutputNode.inst.texpaint_nor.unload();
+		arm.node.brush.BrushOutputNode.inst.texpaint_nor = iron.RenderPath.active.renderTargets.get("texpaint_nor").image = Image.createRenderTarget(Config.getTextureResX(), Config.getTextureResY());
+		arm.node.brush.BrushOutputNode.inst.texpaint_pack.unload();
+		arm.node.brush.BrushOutputNode.inst.texpaint_pack = iron.RenderPath.active.renderTargets.get("texpaint_pack").image = Image.createRenderTarget(Config.getTextureResX(), Config.getTextureResY());
+
+		if (@:privateAccess arm.node.brush.InpaintNode.image != null) {
+			@:privateAccess arm.node.brush.InpaintNode.image.unload();
+			@:privateAccess arm.node.brush.InpaintNode.image = null;
+			@:privateAccess arm.node.brush.InpaintNode.mask.unload();
+			@:privateAccess arm.node.brush.InpaintNode.mask = null;
+			arm.node.brush.InpaintNode.init();
+		}
+
+		if (@:privateAccess arm.node.brush.PhotoToPBRNode.images != null) {
+			for (image in @:privateAccess arm.node.brush.PhotoToPBRNode.images) image.unload();
+			@:privateAccess arm.node.brush.PhotoToPBRNode.images = null;
+			arm.node.brush.PhotoToPBRNode.init();
+		}
+
+		if (@:privateAccess arm.node.brush.TilingNode.image != null) {
+			@:privateAccess arm.node.brush.TilingNode.image.unload();
+			@:privateAccess arm.node.brush.TilingNode.image = null;
+			arm.node.brush.TilingNode.init();
+		}
+
+		iron.RenderPath.active.renderTargets.get("texpaint_blend0").image.unload();
+		iron.RenderPath.active.renderTargets.get("texpaint_blend0").image = Image.createRenderTarget(Config.getTextureResX(), Config.getTextureResY(), TextureFormat.L8);
+		iron.RenderPath.active.renderTargets.get("texpaint_blend1").image.unload();
+		iron.RenderPath.active.renderTargets.get("texpaint_blend1").image = Image.createRenderTarget(Config.getTextureResX(), Config.getTextureResY(), TextureFormat.L8);
+
+		if (iron.RenderPath.active.renderTargets.get("texpaint_node") != null) {
+			iron.RenderPath.active.renderTargets.remove("texpaint_node");
+		}
+		if (iron.RenderPath.active.renderTargets.get("texpaint_node_target") != null) {
+			iron.RenderPath.active.renderTargets.remove("texpaint_node_target");
+		}
+
+		App.notifyOnNextFrame(function() {
+			initLayers();
+		});
+
+		#if (kha_direct3d12 || kha_vulkan)
+		arm.render.RenderPathRaytrace.ready = false;
+		#end
 	}
 }

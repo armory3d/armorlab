@@ -666,87 +666,6 @@ class UINodes {
 				ui._w = Std.int(ui.ELEMENT_W() * 1.4);
 				if (ui.button(tr("Close"))) groupStack.pop();
 			}
-			else {
-				ui._x = 5;
-				ui._y = wh - ui.ELEMENT_H() * 1.2;
-				ui._w = Std.int(ui.ELEMENT_W() * 1.4);
-				if (ui.button(tr("Run"))) {
-					Console.toast(tr("Processing"));
-					iron.App.notifyOnInit(function() {
-						#if arm_debug
-						var timer = iron.system.Time.realTime();
-						#end
-
-						arm.node.Brush.parse(Project.canvas, false);
-
-						arm.node.brush.PhotoToPBRNode.cachedSource = null;
-						var texbase = @:privateAccess arm.node.brush.BrushOutputNode.inst.get(ChannelBaseColor);
-						var texocc = @:privateAccess arm.node.brush.BrushOutputNode.inst.get(ChannelOcclusion);
-						var texrough = @:privateAccess arm.node.brush.BrushOutputNode.inst.get(ChannelRoughness);
-						var texnor = @:privateAccess arm.node.brush.BrushOutputNode.inst.get(ChannelNormalMap);
-						var texheight = @:privateAccess arm.node.brush.BrushOutputNode.inst.get(ChannelHeight);
-
-						if (texbase != null) {
-							var texpaint = iron.RenderPath.active.renderTargets.get("texpaint").image;
-							texpaint.g2.begin(false);
-							texpaint.g2.drawScaledImage(texbase, 0, 0, 2048, 2048);
-							texpaint.g2.end();
-						}
-
-						if (texnor != null) {
-							var texpaint_nor = iron.RenderPath.active.renderTargets.get("texpaint_nor").image;
-							texpaint_nor.g2.begin(false);
-							texpaint_nor.g2.drawScaledImage(texnor, 0, 0, 2048, 2048);
-							texpaint_nor.g2.end();
-						}
-
-						if (Layers.pipeCopy == null) Layers.makePipe();
-						if (Layers.pipeCopyA == null) Layers.makePipeCopyA();
-						if (iron.data.ConstData.screenAlignedVB == null) iron.data.ConstData.createScreenAlignedData();
-
-						var texpaint_pack = iron.RenderPath.active.renderTargets.get("texpaint_pack").image;
-
-						if (texocc != null) {
-							texpaint_pack.g2.begin(false);
-							texpaint_pack.g2.pipeline = Layers.pipeCopyR;
-							texpaint_pack.g2.drawScaledImage(texocc, 0, 0, 2048, 2048);
-							texpaint_pack.g2.pipeline = null;
-							texpaint_pack.g2.end();
-						}
-
-						if (texrough != null) {
-							texpaint_pack.g2.begin(false);
-							texpaint_pack.g2.pipeline = Layers.pipeCopyG;
-							texpaint_pack.g2.drawScaledImage(texrough, 0, 0, 2048, 2048);
-							texpaint_pack.g2.pipeline = null;
-							texpaint_pack.g2.end();
-						}
-
-						if (texheight != null) {
-							texpaint_pack.g4.begin();
-							texpaint_pack.g4.setPipeline(Layers.pipeCopyA);
-							texpaint_pack.g4.setTexture(Layers.pipeCopyATex, texheight);
-							texpaint_pack.g4.setVertexBuffer(iron.data.ConstData.screenAlignedVB);
-							texpaint_pack.g4.setIndexBuffer(iron.data.ConstData.screenAlignedIB);
-							texpaint_pack.g4.drawIndexedVertices();
-							texpaint_pack.g4.end();
-
-							// arm.util.MeshUtil.applyDisplacement();
-							// arm.util.MeshUtil.calcNormals();
-						}
-
-						Context.ddirty = 2;
-
-						#if (kha_direct3d12 || kha_vulkan)
-						arm.render.RenderPathRaytrace.ready = false;
-						#end
-
-						#if arm_debug
-						trace("Model run in " + (iron.system.Time.realTime() - timer));
-						#end
-					});
-				}
-			}
 
 			// Menu
 			ui.g.color = ui.t.SEPARATOR_COL;
@@ -756,6 +675,96 @@ class UINodes {
 			ui._x = 0;
 			ui._y = 0;
 			ui._w = ew;
+
+			if (ui.button(tr("Run"))) {
+				Console.toast(tr("Processing"));
+				iron.App.notifyOnInit(function() {
+					#if arm_debug
+					var timer = iron.system.Time.realTime();
+					#end
+
+					arm.node.Brush.parse(Project.canvas, false);
+
+					arm.node.brush.PhotoToPBRNode.cachedSource = null;
+					var texbase = @:privateAccess arm.node.brush.BrushOutputNode.inst.get(ChannelBaseColor);
+					var texocc = @:privateAccess arm.node.brush.BrushOutputNode.inst.get(ChannelOcclusion);
+					var texrough = @:privateAccess arm.node.brush.BrushOutputNode.inst.get(ChannelRoughness);
+					var texnor = @:privateAccess arm.node.brush.BrushOutputNode.inst.get(ChannelNormalMap);
+					var texheight = @:privateAccess arm.node.brush.BrushOutputNode.inst.get(ChannelHeight);
+
+					if (texbase != null) {
+						var texpaint = iron.RenderPath.active.renderTargets.get("texpaint").image;
+						texpaint.g2.begin(false);
+						texpaint.g2.drawScaledImage(texbase, 0, 0, Config.getTextureResX(), Config.getTextureResY());
+						texpaint.g2.end();
+					}
+
+					if (texnor != null) {
+						var texpaint_nor = iron.RenderPath.active.renderTargets.get("texpaint_nor").image;
+						texpaint_nor.g2.begin(false);
+						texpaint_nor.g2.drawScaledImage(texnor, 0, 0, Config.getTextureResX(), Config.getTextureResY());
+						texpaint_nor.g2.end();
+					}
+
+					if (Layers.pipeCopy == null) Layers.makePipe();
+					if (Layers.pipeCopyA == null) Layers.makePipeCopyA();
+					if (iron.data.ConstData.screenAlignedVB == null) iron.data.ConstData.createScreenAlignedData();
+
+					var texpaint_pack = iron.RenderPath.active.renderTargets.get("texpaint_pack").image;
+
+					if (texocc != null) {
+						texpaint_pack.g2.begin(false);
+						texpaint_pack.g2.pipeline = Layers.pipeCopyR;
+						texpaint_pack.g2.drawScaledImage(texocc, 0, 0, Config.getTextureResX(), Config.getTextureResY());
+						texpaint_pack.g2.pipeline = null;
+						texpaint_pack.g2.end();
+					}
+
+					if (texrough != null) {
+						texpaint_pack.g2.begin(false);
+						texpaint_pack.g2.pipeline = Layers.pipeCopyG;
+						texpaint_pack.g2.drawScaledImage(texrough, 0, 0, Config.getTextureResX(), Config.getTextureResY());
+						texpaint_pack.g2.pipeline = null;
+						texpaint_pack.g2.end();
+					}
+
+					if (texheight != null) {
+						texpaint_pack.g4.begin();
+						texpaint_pack.g4.setPipeline(Layers.pipeCopyA);
+						texpaint_pack.g4.setTexture(Layers.pipeCopyATex, texheight);
+						texpaint_pack.g4.setVertexBuffer(iron.data.ConstData.screenAlignedVB);
+						texpaint_pack.g4.setIndexBuffer(iron.data.ConstData.screenAlignedIB);
+						texpaint_pack.g4.drawIndexedVertices();
+						texpaint_pack.g4.end();
+
+						// arm.util.MeshUtil.applyDisplacement();
+						// arm.util.MeshUtil.calcNormals();
+					}
+
+					Context.ddirty = 2;
+
+					#if (kha_direct3d12 || kha_vulkan)
+					arm.render.RenderPathRaytrace.ready = false;
+					#end
+
+					#if arm_debug
+					trace("Model run in " + (iron.system.Time.realTime() - timer));
+					#end
+				});
+			}
+			ui._x += ew + 3;
+			ui._y = 0;
+
+			#if (krom_android || krom_ios)
+			ui.combo(App.resHandle, ["2K", "4K"], tr("Resolution"));
+			#else
+			ui.combo(App.resHandle, ["2K", "4K", "8K", "16K"], tr("Resolution"));
+			#end
+			if (App.resHandle.changed) {
+				Layers.onLayersResized();
+			}
+			ui._x += ew + 3;
+			ui._y = 0;
 
 			var _BUTTON_COL = ui.t.BUTTON_COL;
 			ui.t.BUTTON_COL = ui.t.SEPARATOR_COL;

@@ -9,8 +9,12 @@ class TilingNode extends LogicNode {
 	public function new(tree: LogicTree) {
 		super(tree);
 
+		init();
+	}
+
+	public static function init() {
 		if (image == null) {
-			image = kha.Image.createRenderTarget(2048, 2048);
+			image = kha.Image.createRenderTarget(Config.getTextureResX(), Config.getTextureResY());
 		}
 	}
 
@@ -19,7 +23,7 @@ class TilingNode extends LogicNode {
 		if (!Std.isOfType(source, kha.Image)) return null;
 
 		image.g2.begin(false);
-		image.g2.drawScaledImage(source, 0, 0, 2048, 2048);
+		image.g2.drawScaledImage(source, 0, 0, Config.getTextureResX(), Config.getTextureResY());
 		image.g2.end();
 
 		result = InpaintNode.texsynthInpaint(image, true);

@@ -281,8 +281,8 @@ class RenderPathPaint {
 			if (path.renderTargets.get("texpaint_node") == null) {
 				var t = new RenderTargetRaw();
 				t.name = "texpaint_node";
-				t.width = 2048;
-				t.height = 2048;
+				t.width = Config.getTextureResX();
+				t.height = Config.getTextureResY();
 				t.format = "RGBA32";
 				var rt = new RenderTarget(t);
 				path.renderTargets.set(t.name, rt);
@@ -290,8 +290,8 @@ class RenderPathPaint {
 			if (path.renderTargets.get("texpaint_node_target") == null) {
 				var t = new RenderTargetRaw();
 				t.name = "texpaint_node_target";
-				t.width = 2048;
-				t.height = 2048;
+				t.width = Config.getTextureResX();
+				t.height = Config.getTextureResY();
 				t.format = "RGBA32";
 				var rt = new RenderTarget(t);
 				path.renderTargets.set(t.name, rt);
