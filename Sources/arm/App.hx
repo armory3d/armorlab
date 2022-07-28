@@ -427,6 +427,12 @@ class App {
 			MakeMaterial.parseMeshMaterial();
 			MakeMaterial.parsePaintMaterial();
 			Context.ddirty = 0;
+			// Default workspace
+			if (Config.raw.workspace != 0) {
+				UIHeader.inst.worktab.position = Config.raw.workspace;
+				UIMenubar.inst.workspaceHandle.redraws = 2;
+				UIHeader.inst.worktab.changed = true;
+			}
 		}
 		else if (Context.frame == 3) {
 			Context.ddirty = 2;
@@ -562,7 +568,7 @@ class App {
 		raw.zoom_direction = ZoomVertical;
 		raw.displace_strength = 0.0;
 		raw.wrap_mouse = false;
-		raw.workspace = 0;
+		raw.workspace = Space3D;
 		raw.layer_res = Res2048;
 	}
 }
