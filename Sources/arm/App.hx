@@ -570,5 +570,6 @@ class App {
 		raw.wrap_mouse = false;
 		raw.workspace = Space3D;
 		raw.layer_res = Res2048;
+		raw.gpu_inference = true;
 	}
 }

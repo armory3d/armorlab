@@ -61,7 +61,7 @@ class PhotoToPBRNode extends LogicNode {
 			}
 
 			kha.Assets.loadBlobFromPath("data/models/photo_to_" + modelNames[from] + ".quant.onnx", function(model_blob: kha.Blob) {
-				var buf = Krom.mlInference(untyped model_blob.toBytes().b.buffer, f32.buffer);
+				var buf = Krom.mlInference(untyped model_blob.toBytes().b.buffer, f32.buffer, Config.raw.gpu_inference);
 				var ar = new js.lib.Float32Array(buf);
 				var bytes = haxe.io.Bytes.alloc(4 * 2048 * 2048);
 				var offsetG = (from == ChannelBaseColor || from == ChannelNormalMap) ? 2176 * 2176 : 0;
