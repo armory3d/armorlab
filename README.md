@@ -1,11 +1,11 @@
 ![](https://armorlab.org/img/git.jpg)
 
-armorlab (wip - issue reporting opening soon)
+armorlab
 ==============
 
 [ArmorLab](https://armorlab.org) is a software for AI-powered texture authoring - check out the [manual](https://armorlab.org/manual).
 
-*Note 1: This repository is aimed at developers and may not be stable. Distributed binaries are [paid](https://armorlab.org/download) to help with the project funding. All of the development is happening here in order to make it accessible to everyone. Thank you for support!*
+*Note 1: This repository is aimed at developers and may not be stable. Distributed binaries are [paid](https://armory.itch.io/armorlab) to help with the project funding. All of the development is happening here in order to make it accessible to everyone. Thank you for support!*
 
 *Note 2: If you are compiling git version of ArmorLab, then you need to have a compiler ([Visual Studio](https://visualstudio.microsoft.com/downloads/) - Windows, [clang](https://clang.llvm.org/get_started.html) + [deps](https://github.com/armory3d/armorpaint/wiki/Linux-Dependencies) - Linux, [Xcode](https://developer.apple.com/xcode/resources/) - macOS / iOS, [Android Studio](https://developer.android.com/studio) - Android) and [git](https://git-scm.com/downloads) installed.*
 
