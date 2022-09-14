@@ -68,7 +68,7 @@ class InpaintNode extends LogicNode {
 		var bytes_img = untyped image.getPixels().b.buffer;
 		var bytes_mask = mask != null ? untyped mask.getPixels().b.buffer : new js.lib.ArrayBuffer(w * h);
 		var bytes_out = haxe.io.Bytes.ofData(new js.lib.ArrayBuffer(w * h * 4));
-		Krom.texsynthInpaint(w, h, untyped bytes_out.b.buffer, bytes_img, bytes_mask, tiling);
+		untyped Krom_texsynth.inpaint(w, h, untyped bytes_out.b.buffer, bytes_img, bytes_mask, tiling);
 
 		return kha.Image.fromBytes(bytes_out, w, h);
 	}
