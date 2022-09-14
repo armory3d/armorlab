@@ -94,6 +94,35 @@ class NodesBrush {
 			},
 			{
 				id: 0,
+				name: _tr("Inpaint (GPU)"),
+				type: "InpaintNodeGpu",
+				x: 0,
+				y: 0,
+				color: 0xff4982a0,
+				inputs: [
+					{
+						id: 0,
+						node_id: 0,
+						name: _tr("Color"),
+						type: "RGBA",
+						color: 0xffc7c729,
+						default_value: f32([1.0, 1.0, 1.0, 1.0])
+					}
+				],
+				outputs: [
+					{
+						id: 0,
+						node_id: 0,
+						name: _tr("Color"),
+						type: "RGBA",
+						color: 0xffc7c729,
+						default_value: f32([0.0, 0.0, 0.0, 1.0])
+					}
+				],
+				buttons: []
+			},
+			{
+				id: 0,
 				name: _tr("Photo to PBR"),
 				type: "PhotoToPBRNode",
 				x: 0,
