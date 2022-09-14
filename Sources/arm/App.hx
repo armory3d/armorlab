@@ -568,7 +568,7 @@ class App {
 		raw.zoom_direction = ZoomVertical;
 		raw.displace_strength = 0.0;
 		raw.wrap_mouse = false;
-		raw.workspace = Space3D;
+		raw.workspace = Space2D;
 		raw.layer_res = Res2048;
 		raw.gpu_inference = true;
 	}
