@@ -69,7 +69,7 @@ class InpaintNodeGpu extends LogicNode {
 						f32[i + 256 * 256 * 2] = ((u8[i * 4 + 2] / 255) * 2.0 - 1.0) * (1.0 - f32m[i]);
 					}
 
-					var buf = Krom.mlInference(untyped model_blob.toBytes().b.buffer, [f32.buffer, f32m.buffer], Config.raw.gpu_inference);
+					var buf = Krom.mlInference(untyped model_blob.toBytes().b.buffer, [f32.buffer, f32m.buffer], null, null, Config.raw.gpu_inference);
 					var ar = new js.lib.Float32Array(buf);
 					var bytes = haxe.io.Bytes.alloc(4 * 256 * 256);
 					for (i in 0...(256 * 256)) {
