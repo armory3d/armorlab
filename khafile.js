@@ -31,6 +31,7 @@ project.addAssets("Assets/licenses/**", { destination: "data/licenses/{name}" })
 project.addAssets("Assets/plugins/*", { destination: "data/plugins/{name}" });
 project.addAssets("Assets/meshes/*", { destination: "data/meshes/{name}" });
 project.addAssets("Assets/models/*.onnx", { destination: "data/models/{name}" });
+project.addAssets("Assets/models/LICENSE.md", { destination: "data/models/LICENSE.md" });
 project.addAssets("Libraries/armorbase/Assets/licenses/**", { destination: "data/licenses/{name}" });
 project.addAssets("Libraries/armorbase/Assets/themes/*.json", { destination: "data/themes/{name}" });
 if (metal) {
