@@ -10,12 +10,6 @@ class TextToPhotoNode extends LogicNode {
 		super(tree);
 	}
 
-	public static function init() {
-		if (image == null) {
-			image = kha.Image.createRenderTarget(512, 512);
-		}
-	}
-
 	override function get(from: Int): Dynamic {
 		return image;
 	}
@@ -77,6 +71,7 @@ class TextToPhotoNode extends LogicNode {
 			// TODO: sleeps when out of focus
 			function _render2D(g) {
 				Console.toast(tr("Processing") + " " + (counter + 1) + "/50", g);
+				g.end();
 
 				var t = timesteps[counter];
 				for (i in 0...latents.length) latent_model_input[i] = latents[i];
@@ -175,9 +170,15 @@ class TextToPhotoNode extends LogicNode {
 						bytes.set(i * 4 + 2, Std.int(pyimage[i + 512 * 512 * 2] * 255));
 						bytes.set(i * 4 + 3, 255);
 					}
-
 					image = kha.Image.fromBytes(bytes, 512, 512);
+
+					while (image.width < Config.getTextureResX()) {
+						var lastImage = image;
+						image = UpscaleNode.esrgan(image);
+						lastImage.unload();
+					}
 				}
+				g.begin(false);
 			}
 			iron.App.notifyOnRender2D(_render2D);
 		});
