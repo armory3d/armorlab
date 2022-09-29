@@ -220,6 +220,35 @@ class NodesBrush {
 					}
 				],
 				buttons: []
+			},
+			{
+				id: 0,
+				name: _tr("Upscale"),
+				type: "UpscaleNode",
+				x: 0,
+				y: 0,
+				color: 0xff4982a0,
+				inputs: [
+					{
+						id: 0,
+						node_id: 0,
+						name: _tr("Color"),
+						type: "RGBA",
+						color: 0xffc7c729,
+						default_value: f32([0.0, 0.0, 0.0, 1.0])
+					}
+				],
+				outputs: [
+					{
+						id: 0,
+						node_id: 0,
+						name: _tr("Color"),
+						type: "RGBA",
+						color: 0xffc7c729,
+						default_value: f32([0.0, 0.0, 0.0, 1.0])
+					}
+				],
+				buttons: []
 			}
 
 			//,
