@@ -14,7 +14,7 @@ class FloatNode extends LogicNode {
 	override function get(from: Int): Dynamic {
 		if (inputs.length > 0) return inputs[0].get();
 		if (image != null) image.unload();
-		var b = haxe.io.Bytes.alloc(4);
+		var b = haxe.io.Bytes.alloc(16);
 		b.setFloat(0, value);
 		b.setFloat(4, value);
 		b.setFloat(8, value);
