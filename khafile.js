@@ -68,6 +68,7 @@ else if (process.platform === "win32") {
 else if (process.platform === "linux") {
 	project.addDefine("krom_linux");
 	project.addDefine("kha_linux");
+	project.addAssets("armorcore/Libraries/onnx/linux/*.so", { destination: "{name}" });
 }
 else if (process.platform === "darwin") {
 	project.addDefine("krom_darwin");
