@@ -11,6 +11,3 @@
 [submodule "Libraries/iron"]
 	path = Libraries/iron
 	url = https://github.com/armory3d/iron
-[submodule "Assets/models"]
-	path = Assets/models
-	url = https://github.com/armory3d/armorlab_models

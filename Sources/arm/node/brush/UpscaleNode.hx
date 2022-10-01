@@ -80,18 +80,20 @@ class UpscaleNode extends LogicNode {
 		var size1h = source.height;
 		var size2w = Std.int(size1w * 2);
 		var size2h = Std.int(size1h * 2);
+		var tileSize = 1024;
+		var tileSize2x = Std.int(tileSize * 2);
 
-		if (size1w >= 2048 || size1h >= 2048) { // Split into tiles
+		if (size1w >= tileSize2x || size1h >= tileSize2x) { // Split into tiles
 			result = kha.Image.createRenderTarget(size2w, size2h);
-			var tileSource = kha.Image.createRenderTarget(1024, 1024);
-			for (x in 0...Std.int(size1w / 1024)) {
-				for (y in 0...Std.int(size1h / 1024)) {
+			var tileSource = kha.Image.createRenderTarget(tileSize, tileSize);
+			for (x in 0...Std.int(size1w / tileSize)) {
+				for (y in 0...Std.int(size1h / tileSize)) {
 					tileSource.g2.begin(false);
-					tileSource.g2.drawImage(source, -x * 1024, -y * 1024);
+					tileSource.g2.drawImage(source, -x * tileSize, -y * tileSize);
 					tileSource.g2.end();
 					var tileResult = doTile(tileSource);
 					result.g2.begin(false);
-					result.g2.drawImage(tileResult, x * 2048, y * 2048);
+					result.g2.drawImage(tileResult, x * tileSize2x, y * tileSize2x);
 					result.g2.end();
 					tileResult.unload();
 				}
