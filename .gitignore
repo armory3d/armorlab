@@ -2,3 +2,5 @@ build*/
 .vscode
 *.DS_Store
 *.blend1
+Assets/models/*.onnx
+Assets/models/*.txt
