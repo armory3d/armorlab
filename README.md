@@ -12,7 +12,7 @@ armorlab
 ```bash
 git clone --recursive https://github.com/armory3d/armorlab
 cd armorlab
-# Unpack `models.zip` from https://github.com/armory3d/armorlab_models/releases into `Assets/models` using 7-Zip - Extract Here
+# Unpack `models.zip` from https://github.com/armory3d/armorai/releases into `Assets/models` using 7-Zip - Extract Here
 ```
 
 **Windows**
