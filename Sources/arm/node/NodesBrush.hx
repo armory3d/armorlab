@@ -249,7 +249,55 @@ class NodesBrush {
 					}
 				],
 				buttons: []
-			}
+			},
+			{
+				id: 0,
+				name: _tr("Variance"),
+				type: "VarianceNode",
+				x: 0,
+				y: 0,
+				color: 0xff4982a0,
+				inputs: [
+					{
+						id: 0,
+						node_id: 0,
+						name: _tr("Color"),
+						type: "RGBA",
+						color: 0xffc7c729,
+						default_value: f32([0.0, 0.0, 0.0, 1.0])
+					},
+					{
+						id: 0,
+						node_id: 0,
+						name: _tr("Strength"),
+						type: "VALUE",
+						color: 0xffa1a1a1,
+						default_value: 0.5
+					}
+				],
+				outputs: [
+					{
+						id: 0,
+						node_id: 0,
+						name: _tr("Color"),
+						type: "RGBA",
+						color: 0xffc7c729,
+						default_value: f32([0.0, 0.0, 0.0, 1.0])
+					}
+				],
+				buttons: [
+					{
+						name: _tr("prompt"),
+						type: "STRING",
+						default_value: "",
+					},
+					{
+						name: "arm.node.brush.VarianceNode.runButton",
+						type: "CUSTOM",
+						height: 1
+					}
+				]
+			},
 
 			//,
 			// {
