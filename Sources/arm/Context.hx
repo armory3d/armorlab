@@ -95,8 +95,8 @@ class Context {
 	public static var cloneDeltaX = 0.0;
 	public static var cloneDeltaY = 0.0;
 
-	public static var brushRadius = 0.5;
-	public static var brushRadiusHandle = new Handle({ value: 0.5 });
+	public static var brushRadius = 0.2;
+	public static var brushRadiusHandle = new Handle({ value: 0.2 });
 	public static var brushScale = 1.0;
 
 	public static var blurDirectional = false;
