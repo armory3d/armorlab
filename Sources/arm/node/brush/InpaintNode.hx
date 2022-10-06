@@ -59,7 +59,7 @@ class InpaintNode extends LogicNode {
 		image.g2.drawScaledImage(source, 0, 0, Config.getTextureResX(), Config.getTextureResY());
 		image.g2.end();
 
-		result = auto ? texsynthInpaint(image, false, mask) : sdInpaint();
+		result = auto ? texsynthInpaint(image, false, mask) : sdInpaint(image, mask);
 
 		return result;
 	}
@@ -97,7 +97,9 @@ class InpaintNode extends LogicNode {
 		return kha.Image.fromBytes(bytes_out, w, h);
 	}
 
-	function sdInpaint(): kha.Image {
+	public static function sdInpaint(image: kha.Image, mask: kha.Image): kha.Image {
+		init();
+
 		var bytes_img = untyped mask.getPixels().b.buffer;
 		var u8 = new js.lib.Uint8Array(untyped bytes_img);
 		var f32mask = new js.lib.Float32Array(4 * 64 * 64);
@@ -145,7 +147,7 @@ class InpaintNode extends LogicNode {
 					var latents_orig = latents.slice(0);
 
 					var noise = new js.lib.Float32Array(latents.length);
-					for (i in 0...noise.length) noise[i] = Math.cos(2.0 * 3.14 * Math.random()) * Math.sqrt(-2.0 * Math.log(Math.random()));
+					for (i in 0...noise.length) noise[i] = Math.cos(2.0 * 3.14 * RandomNode.getFloat()) * Math.sqrt(-2.0 * Math.log(RandomNode.getFloat()));
 
 					var num_inference_steps = 50;
 					var init_timestep = Std.int(num_inference_steps * strength);

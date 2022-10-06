@@ -170,6 +170,7 @@ class App {
 					new UISidebar();
 					new UINodes();
 					new Camera();
+					arm.node.brush.RandomNode.setSeed(Std.int(iron.system.Time.realTime() * 4294967295));
 					iron.App.notifyOnUpdate(UINodes.inst.update);
 					iron.App.notifyOnRender2D(UINodes.inst.render);
 					iron.App.notifyOnUpdate(UISidebar.inst.update);

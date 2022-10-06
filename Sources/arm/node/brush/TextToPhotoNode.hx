@@ -33,6 +33,8 @@ class TextToPhotoNode extends LogicNode {
 		kha.Assets.loadBlobFromPath("data/models/sd_unet.quant.onnx", function(unet_blob: kha.Blob) {
 		kha.Assets.loadBlobFromPath("data/models/sd_vae_decoder.quant.onnx", function(vae_decoder_blob: kha.Blob) {
 
+			var seed = RandomNode.getSeed();
+
 			var words = prompt.replace("\n", " ").replace(",", " , ").replace("  ", " ").trim().split(" ");
 			for (i in 0...words.length) {
 				text_input_ids[i + 1] = untyped vocab[words[i].toLowerCase() + "</w>"];
@@ -62,7 +64,7 @@ class TextToPhotoNode extends LogicNode {
 			var height = 512;
 			var latents = new js.lib.Float32Array(1 * 4 * Std.int(height / 8) * Std.int(width / 8));
 			if (inpaintLatents == null) {
-				for (i in 0...latents.length) latents[i] = Math.cos(2.0 * 3.14 * Math.random()) * Math.sqrt(-2.0 * Math.log(Math.random()));
+				for (i in 0...latents.length) latents[i] = Math.cos(2.0 * 3.14 * RandomNode.getFloat()) * Math.sqrt(-2.0 * Math.log(RandomNode.getFloat()));
 			}
 			else {
 				for (i in 0...latents.length) latents[i] = inpaintLatents[i];
@@ -154,7 +156,7 @@ class TextToPhotoNode extends LogicNode {
 
 				if (mask != null) {
 					var noise = new js.lib.Float32Array(latents.length);
-					for (i in 0...noise.length) noise[i] = Math.cos(2.0 * 3.14 * Math.random()) * Math.sqrt(-2.0 * Math.log(Math.random()));
+					for (i in 0...noise.length) noise[i] = Math.cos(2.0 * 3.14 * RandomNode.getFloat()) * Math.sqrt(-2.0 * Math.log(RandomNode.getFloat()));
 					var sqrt_alpha_prod = Math.pow(alphas_cumprod[timestep], 0.5);
 					var sqrt_one_minus_alpha_prod = Math.pow(1.0 - alphas_cumprod[timestep], 0.5);
 
@@ -193,15 +195,52 @@ class TextToPhotoNode extends LogicNode {
 					}
 					var image = kha.Image.fromBytes(bytes, 512, 512);
 
-					if (upscale) {
-						while (image.width < Config.getTextureResX()) {
-							var lastImage = image;
-							image = UpscaleNode.esrgan(image);
-							lastImage.unload();
-						}
-					}
+					if (tiling) {
+						tiling = false;
+						var tile = kha.Image.createRenderTarget(512, 512);
+						tile.g2.begin(false);
+						tile.g2.drawImage(image, -256, -256);
+						tile.g2.drawImage(image, 256, -256);
+						tile.g2.drawImage(image, -256, 256);
+						tile.g2.drawImage(image, 256, 256);
+						tile.g2.end();
 
-					if (done != null) done(image);
+						var bytes = haxe.io.Bytes.alloc(512 * 512);
+						for (i in 0...512 * 512) {
+							var x = i % 512;
+							var y = Std.int(i / 512);
+							var l = y < 256 ? y : (511 - y);
+							bytes.set(i, (x > 256 - l && x < 256 + l) ? 0 : 255);
+						}
+						// for (i in 0...512 * 512) bytes.set(i, 255);
+						// for (x in (256 - 32)...(256 + 32)) {
+						// 	for (y in 0...512) {
+						// 		bytes.set(y * 512 + x, 0);
+						// 	}
+						// }
+						// for (x in 0...512) {
+						// 	for (y in (256 - 32)...(256 + 32)) {
+						// 		bytes.set(y * 512 + x, 0);
+						// 	}
+						// }
+						var mask = kha.Image.fromBytes(bytes, 512, 512, kha.graphics4.TextureFormat.L8);
+
+						@:privateAccess InpaintNode.prompt = prompt;
+						@:privateAccess InpaintNode.strength = 1.0;
+						RandomNode.setSeed(seed);
+						image = InpaintNode.sdInpaint(tile, mask);
+						if (done != null) done(image);
+					}
+					else {
+						if (upscale) {
+							while (image.width < Config.getTextureResX()) {
+								var lastImage = image;
+								image = UpscaleNode.esrgan(image);
+								lastImage.unload();
+							}
+						}
+						if (done != null) done(image);
+					}
 				}
 				// g.begin(false);
 			}

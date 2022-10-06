@@ -52,7 +52,7 @@ class VarianceNode extends LogicNode {
 			}
 
 			var noise = new js.lib.Float32Array(latents.length);
-			for (i in 0...noise.length) noise[i] = Math.cos(2.0 * 3.14 * Math.random()) * Math.sqrt(-2.0 * Math.log(Math.random()));
+			for (i in 0...noise.length) noise[i] = Math.cos(2.0 * 3.14 * RandomNode.getFloat()) * Math.sqrt(-2.0 * Math.log(RandomNode.getFloat()));
 			var num_inference_steps = 50;
 			var init_timestep = Std.int(num_inference_steps * strength);
 			var timesteps = @:privateAccess TextToPhotoNode.timesteps[num_inference_steps - init_timestep];
