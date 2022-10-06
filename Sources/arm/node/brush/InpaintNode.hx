@@ -108,8 +108,6 @@ class InpaintNode extends LogicNode {
 					var x = 0;
 					var y = 0;
 
-					@:privateAccess TextToPhotoNode.prompt = prompt;
-
 					for (xx in 0...64) {
 						for (yy in 0...64) {
 							// var step = Std.int(512 / 64);
@@ -161,7 +159,7 @@ class InpaintNode extends LogicNode {
 
 					var start = num_inference_steps - init_timestep;
 
-					TextToPhotoNode.stableDiffusion(function(img: kha.Image) {
+					TextToPhotoNode.stableDiffusion(prompt, function(img: kha.Image) {
 						// result.g2.begin(false);
 						// result.g2.drawImage(img, x * 512, y * 512);
 						// result.g2.end();

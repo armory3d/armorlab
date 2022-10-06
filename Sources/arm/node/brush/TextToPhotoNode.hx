@@ -5,12 +5,16 @@ class TextToPhotoNode extends LogicNode {
 
 	static var prompt = "";
 	static var image: kha.Image = null;
+	static var tiling = false;
 
 	public function new(tree: LogicTree) {
 		super(tree);
 	}
 
 	override function get(from: Int): Dynamic {
+		stableDiffusion(prompt, function(img: kha.Image) {
+			image = img;
+		});
 		return image;
 	}
 
@@ -19,21 +23,12 @@ class TextToPhotoNode extends LogicNode {
 	}
 
 	public static function buttons(ui: zui.Zui, nodes: zui.Nodes, node: zui.Nodes.TNode) {
-
-		var tiling = node.buttons[0].default_value;
-		var _prompt = zui.Ext.textArea(ui, zui.Id.handle());
-		node.buttons[1].height = 1 + _prompt.split("\n").length;
-
-		if (ui.button(tr("Run"))) {
-			Console.toast(tr("Processing"));
-			App.notifyOnNextFrame(function() {
-				prompt = _prompt;
-				stableDiffusion();
-			});
-		}
+		tiling = node.buttons[0].default_value;
+		prompt = zui.Ext.textArea(ui, zui.Id.handle());
+		node.buttons[1].height = prompt.split("\n").length;
 	}
 
-	public static function stableDiffusion(done: kha.Image->Void = null, inpaintLatents: js.lib.Float32Array = null, offset = 0, upscale = true, mask: js.lib.Float32Array = null, latents_orig: js.lib.Float32Array = null) {
+	public static function stableDiffusion(prompt: String, done: kha.Image->Void = null, inpaintLatents: js.lib.Float32Array = null, offset = 0, upscale = true, mask: js.lib.Float32Array = null, latents_orig: js.lib.Float32Array = null) {
 		kha.Assets.loadBlobFromPath("data/models/sd_text_encoder.quant.onnx", function(text_encoder_blob: kha.Blob) {
 		kha.Assets.loadBlobFromPath("data/models/sd_unet.quant.onnx", function(unet_blob: kha.Blob) {
 		kha.Assets.loadBlobFromPath("data/models/sd_vae_decoder.quant.onnx", function(vae_decoder_blob: kha.Blob) {
@@ -196,7 +191,7 @@ class TextToPhotoNode extends LogicNode {
 						bytes.set(i * 4 + 2, Std.int(pyimage[i + 512 * 512 * 2] * 255));
 						bytes.set(i * 4 + 3, 255);
 					}
-					image = kha.Image.fromBytes(bytes, 512, 512);
+					var image = kha.Image.fromBytes(bytes, 512, 512);
 
 					if (upscale) {
 						while (image.width < Config.getTextureResX()) {

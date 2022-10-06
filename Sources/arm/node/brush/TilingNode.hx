@@ -39,11 +39,15 @@ class TilingNode extends LogicNode {
 		image.g2.drawScaledImage(source, 0, 0, Config.getTextureResX(), Config.getTextureResY());
 		image.g2.end();
 
-		result = InpaintNode.texsynthInpaint(image, true);
+		result = auto ? InpaintNode.texsynthInpaint(image, true) : sdTiling();
 		return result;
 	}
 
 	override public function getImage(): kha.Image {
 		return result;
+	}
+
+	function sdTiling(): kha.Image {
+		return null;
 	}
 }
