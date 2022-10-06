@@ -18,11 +18,16 @@ class TextToPhotoNode extends LogicNode {
 		return image;
 	}
 
-	public static function textToPhotoButtons(ui: zui.Zui, nodes: zui.Nodes, node: zui.Nodes.TNode) {
+	public static function buttons(ui: zui.Zui, nodes: zui.Nodes, node: zui.Nodes.TNode) {
+
+		var tiling = node.buttons[0].default_value;
+		var _prompt = zui.Ext.textArea(ui, zui.Id.handle());
+		node.buttons[1].height = 1 + _prompt.split("\n").length;
+
 		if (ui.button(tr("Run"))) {
 			Console.toast(tr("Processing"));
 			App.notifyOnNextFrame(function() {
-				prompt = node.buttons[0].default_value;
+				prompt = _prompt;
 				stableDiffusion();
 			});
 		}
@@ -33,7 +38,7 @@ class TextToPhotoNode extends LogicNode {
 		kha.Assets.loadBlobFromPath("data/models/sd_unet.quant.onnx", function(unet_blob: kha.Blob) {
 		kha.Assets.loadBlobFromPath("data/models/sd_vae_decoder.quant.onnx", function(vae_decoder_blob: kha.Blob) {
 
-			var words = prompt.split(" ");
+			var words = prompt.replace("\n", " ").replace(",", " , ").replace("  ", " ").trim().split(" ");
 			for (i in 0...words.length) {
 				text_input_ids[i + 1] = untyped vocab[words[i].toLowerCase() + "</w>"];
 			}

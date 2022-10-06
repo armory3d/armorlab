@@ -98,7 +98,7 @@ class NodesBrush {
 						output: 0
 					},
 					{
-						name: "arm.node.brush.InpaintNode.inpaintButtons",
+						name: "arm.node.brush.InpaintNode.buttons",
 						type: "CUSTOM",
 						height: 0
 					}
@@ -193,20 +193,15 @@ class NodesBrush {
 				],
 				buttons: [
 					{
-						name: _tr("prompt"),
-						type: "STRING",
-						default_value: "",
-					},
-					{
 						name: _tr("tiling"),
 						type: "BOOL",
 						default_value: false,
 						output: 0
 					},
 					{
-						name: "arm.node.brush.TextToPhotoNode.textToPhotoButtons",
+						name: "arm.node.brush.TextToPhotoNode.buttons",
 						type: "CUSTOM",
-						height: 1
+						height: 2
 					}
 				]
 			},
@@ -245,7 +240,7 @@ class NodesBrush {
 						output: 0
 					},
 					{
-						name: "arm.node.brush.TilingNode.tilingButtons",
+						name: "arm.node.brush.TilingNode.buttons",
 						type: "CUSTOM",
 						height: 0
 					}
@@ -317,14 +312,9 @@ class NodesBrush {
 				],
 				buttons: [
 					{
-						name: _tr("prompt"),
-						type: "STRING",
-						default_value: "",
-					},
-					{
-						name: "arm.node.brush.VarianceNode.varianceButtons",
+						name: "arm.node.brush.VarianceNode.buttons",
 						type: "CUSTOM",
-						height: 1
+						height: 2
 					}
 				]
 			},

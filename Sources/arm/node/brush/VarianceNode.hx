@@ -21,11 +21,15 @@ class VarianceNode extends LogicNode {
 		}
 	}
 
-	public static function varianceButtons(ui: zui.Zui, nodes: zui.Nodes, node: zui.Nodes.TNode) {
+	public static function buttons(ui: zui.Zui, nodes: zui.Nodes, node: zui.Nodes.TNode) {
+
+		var _prompt = zui.Ext.textArea(ui, zui.Id.handle());
+		node.buttons[0].height = 1 + _prompt.split("\n").length;
+
 		if (ui.button(tr("Run"))) {
 			Console.toast(tr("Processing"));
 			App.notifyOnNextFrame(function() {
-				@:privateAccess TextToPhotoNode.prompt = node.buttons[0].default_value;
+				@:privateAccess TextToPhotoNode.prompt = _prompt;
 				var strength = untyped inst.inputs[1].node.value;
 
 				var source = inst.inputs[0].get();

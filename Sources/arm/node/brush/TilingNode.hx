@@ -6,6 +6,7 @@ class TilingNode extends LogicNode {
 	static var image: kha.Image = null;
 	var result: kha.Image = null;
 	static var prompt = "";
+	static var strength = 0.5;
 	static var auto = true;
 
 	public function new(tree: LogicTree) {
@@ -20,11 +21,12 @@ class TilingNode extends LogicNode {
 		}
 	}
 
-	public static function tilingButtons(ui: zui.Zui, nodes: zui.Nodes, node: zui.Nodes.TNode) {
+	public static function buttons(ui: zui.Zui, nodes: zui.Nodes, node: zui.Nodes.TNode) {
 		auto = node.buttons[0].default_value;
 		if (!auto) {
-			prompt = ui.textInput(zui.Id.handle(), tr("prompt"));
-			node.buttons[1].height = 1;
+			strength = ui.slider(zui.Id.handle({value: strength}), tr("strength"), 0, 1, true);
+			prompt = zui.Ext.textArea(ui, zui.Id.handle());
+			node.buttons[1].height = 1 + prompt.split("\n").length;
 		}
 		else node.buttons[1].height = 0;
 	}
