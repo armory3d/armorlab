@@ -283,7 +283,7 @@ class UISidebar {
 							Context.setViewportMode(modeHandle.position);
 							ui.changed = true;
 						}
-					}, 14 #if (kha_direct3d12 || kha_vulkan) + 1 #end );
+					}, 9 #if (kha_direct3d12 || kha_vulkan) + 1 #end );
 				}
 			}
 		}
