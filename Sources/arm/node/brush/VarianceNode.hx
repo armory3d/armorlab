@@ -21,7 +21,7 @@ class VarianceNode extends LogicNode {
 		}
 	}
 
-	public static function runButton(ui: zui.Zui, nodes: zui.Nodes, node: zui.Nodes.TNode) {
+	public static function varianceButtons(ui: zui.Zui, nodes: zui.Nodes, node: zui.Nodes.TNode) {
 		if (ui.button(tr("Run"))) {
 			Console.toast(tr("Processing"));
 			App.notifyOnNextFrame(function() {

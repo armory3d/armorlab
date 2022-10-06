@@ -5,6 +5,8 @@ class TilingNode extends LogicNode {
 
 	static var image: kha.Image = null;
 	var result: kha.Image = null;
+	static var prompt = "";
+	static var auto = true;
 
 	public function new(tree: LogicTree) {
 		super(tree);
@@ -16,6 +18,15 @@ class TilingNode extends LogicNode {
 		if (image == null) {
 			image = kha.Image.createRenderTarget(Config.getTextureResX(), Config.getTextureResY());
 		}
+	}
+
+	public static function tilingButtons(ui: zui.Zui, nodes: zui.Nodes, node: zui.Nodes.TNode) {
+		auto = node.buttons[0].default_value;
+		if (!auto) {
+			prompt = ui.textInput(zui.Id.handle(), tr("prompt"));
+			node.buttons[1].height = 1;
+		}
+		else node.buttons[1].height = 0;
 	}
 
 	override function get(from: Int): Dynamic {

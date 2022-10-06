@@ -5,7 +5,11 @@ class InpaintNode extends LogicNode {
 
 	static var image: kha.Image = null;
 	static var mask: kha.Image = null;
-	var result: kha.Image = null;
+	static var result: kha.Image = null;
+
+	static var temp: kha.Image = null;
+	static var prompt = "";
+	static var auto = true;
 
 	public function new(tree: LogicTree) {
 		super(tree);
@@ -26,6 +30,23 @@ class InpaintNode extends LogicNode {
 				mask.g4.end();
 			});
 		}
+
+		if (temp == null) {
+			temp = kha.Image.createRenderTarget(512, 512);
+		}
+
+		if (result == null) {
+			result = kha.Image.createRenderTarget(Config.getTextureResX(), Config.getTextureResY());
+		}
+	}
+
+	public static function inpaintButtons(ui: zui.Zui, nodes: zui.Nodes, node: zui.Nodes.TNode) {
+		auto = node.buttons[0].default_value;
+		if (!auto) {
+			prompt = ui.textInput(zui.Id.handle(), tr("prompt"));
+			node.buttons[1].height = 1;
+		}
+		else node.buttons[1].height = 0;
 	}
 
 	override function get(from: Int): Dynamic {
@@ -36,7 +57,8 @@ class InpaintNode extends LogicNode {
 		image.g2.drawScaledImage(source, 0, 0, Config.getTextureResX(), Config.getTextureResY());
 		image.g2.end();
 
-		result = texsynthInpaint(image, false, mask);
+		result = auto ? texsynthInpaint(image, false, mask) : sdInpaint();
+
 		return result;
 	}
 
@@ -71,5 +93,83 @@ class InpaintNode extends LogicNode {
 		untyped Krom_texsynth.inpaint(w, h, untyped bytes_out.b.buffer, bytes_img, bytes_mask, tiling);
 
 		return kha.Image.fromBytes(bytes_out, w, h);
+	}
+
+	function sdInpaint(): kha.Image {
+		var bytes_img = untyped mask.getPixels().b.buffer;
+		var u8 = new js.lib.Uint8Array(untyped bytes_img);
+		var f32mask = new js.lib.Float32Array(4 * 64 * 64);
+
+		kha.Assets.loadBlobFromPath("data/models/sd_vae_encoder.quant.onnx", function(vae_encoder_blob: kha.Blob) {
+			// for (x in 0...Std.int(image.width / 512)) {
+				// for (y in 0...Std.int(image.height / 512)) {
+					var x = 0;
+					var y = 0;
+
+					@:privateAccess TextToPhotoNode.prompt = prompt;
+					var strength = 0.5;
+
+					for (xx in 0...64) {
+						for (yy in 0...64) {
+							// var step = Std.int(512 / 64);
+							// var j = (yy * step * mask.width + xx * step) + (y * 512 * mask.width + x * 512);
+							var step = Std.int(mask.width / 64);
+							var j = (yy * step * mask.width + xx * step);
+							var f = u8[j] / 255.0;
+							var i = yy * 64 + xx;
+							f32mask[i              ] = f;
+							f32mask[i + 64 * 64    ] = f;
+							f32mask[i + 64 * 64 * 2] = f;
+							f32mask[i + 64 * 64 * 3] = f;
+						}
+					}
+
+					temp.g2.begin(false);
+					// temp.g2.drawImage(image, -x * 512, -y * 512);
+					temp.g2.drawScaledImage(image, 0, 0, 512, 512);
+					temp.g2.end();
+
+					var bytes_img = untyped temp.getPixels().b.buffer;
+					var u8 = new js.lib.Uint8Array(untyped bytes_img);
+					var f32 = new js.lib.Float32Array(3 * 512 * 512);
+					for (i in 0...(512 * 512)) {
+						f32[i                ] = (u8[i * 4    ] / 255.0) * 2.0 - 1.0;
+						f32[i + 512 * 512    ] = (u8[i * 4 + 1] / 255.0) * 2.0 - 1.0;
+						f32[i + 512 * 512 * 2] = (u8[i * 4 + 2] / 255.0) * 2.0 - 1.0;
+					}
+
+					var latents_buf = Krom.mlInference(untyped vae_encoder_blob.toBytes().b.buffer, [f32.buffer], [[1, 3, 512, 512]], [1, 4, 64, 64], Config.raw.gpu_inference);
+					var latents = new js.lib.Float32Array(latents_buf);
+					for (i in 0...latents.length) {
+						latents[i] = 0.18215 * latents[i];
+					}
+					var latents_orig = latents.slice(0);
+
+					var noise = new js.lib.Float32Array(latents.length);
+					for (i in 0...noise.length) noise[i] = Math.cos(2.0 * 3.14 * Math.random()) * Math.sqrt(-2.0 * Math.log(Math.random()));
+
+					var num_inference_steps = 50;
+					var init_timestep = Std.int(num_inference_steps * strength);
+					var timestep = @:privateAccess TextToPhotoNode.timesteps[num_inference_steps - init_timestep];
+					var alphas_cumprod = @:privateAccess TextToPhotoNode.alphas_cumprod;
+					var sqrt_alpha_prod = Math.pow(alphas_cumprod[timestep], 0.5);
+					var sqrt_one_minus_alpha_prod = Math.pow(1.0 - alphas_cumprod[timestep], 0.5);
+					for (i in 0...latents.length) {
+						latents[i] = sqrt_alpha_prod * latents[i] + sqrt_one_minus_alpha_prod * noise[i];
+					}
+
+					var start = num_inference_steps - init_timestep;
+
+					TextToPhotoNode.stableDiffusion(function(img: kha.Image) {
+						// result.g2.begin(false);
+						// result.g2.drawImage(img, x * 512, y * 512);
+						// result.g2.end();
+						result = img;
+					}, latents, start, true, f32mask, latents_orig);
+				// }
+			// }
+		});
+
+		return result;
 	}
 }

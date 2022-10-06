@@ -80,7 +80,8 @@ class UpscaleNode extends LogicNode {
 		var size1h = source.height;
 		var size2w = Std.int(size1w * 2);
 		var size2h = Std.int(size1h * 2);
-		var tileSize = 1024;
+		var tileSize = 512;
+		// var tileSize = 1024;
 		var tileSize2x = Std.int(tileSize * 2);
 
 		if (size1w >= tileSize2x || size1h >= tileSize2x) { // Split into tiles

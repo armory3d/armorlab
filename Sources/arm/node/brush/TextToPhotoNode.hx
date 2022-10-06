@@ -18,9 +18,9 @@ class TextToPhotoNode extends LogicNode {
 		return image;
 	}
 
-	public static function runButton(ui: zui.Zui, nodes: zui.Nodes, node: zui.Nodes.TNode) {
+	public static function textToPhotoButtons(ui: zui.Zui, nodes: zui.Nodes, node: zui.Nodes.TNode) {
 		if (ui.button(tr("Run"))) {
-			Console.toast(tr("Processing") + " 0/50");
+			Console.toast(tr("Processing"));
 			App.notifyOnNextFrame(function() {
 				prompt = node.buttons[0].default_value;
 				stableDiffusion();
@@ -28,7 +28,7 @@ class TextToPhotoNode extends LogicNode {
 		}
 	}
 
-	public static function stableDiffusion(done: kha.Image->Void = null, inpaintLatents: js.lib.Float32Array = null, offset = 0) {
+	public static function stableDiffusion(done: kha.Image->Void = null, inpaintLatents: js.lib.Float32Array = null, offset = 0, upscale = true, mask: js.lib.Float32Array = null, latents_orig: js.lib.Float32Array = null) {
 		kha.Assets.loadBlobFromPath("data/models/sd_text_encoder.quant.onnx", function(text_encoder_blob: kha.Blob) {
 		kha.Assets.loadBlobFromPath("data/models/sd_unet.quant.onnx", function(unet_blob: kha.Blob) {
 		kha.Assets.loadBlobFromPath("data/models/sd_vae_decoder.quant.onnx", function(vae_decoder_blob: kha.Blob) {
@@ -147,14 +147,28 @@ class TextToPhotoNode extends LogicNode {
 				var beta_prod_t_prev = 1 - alpha_prod_t_prev;
 				var latents_coeff = Math.pow(alpha_prod_t_prev / alpha_prod_t, (0.5));
 				var noise_pred_denom_coeff = alpha_prod_t * Math.pow(beta_prod_t_prev, (0.5)) + Math.pow(alpha_prod_t * beta_prod_t * alpha_prod_t_prev, (0.5));
-				var _latents = new js.lib.Float32Array(latents.length);
 				for (i in 0...latents.length) {
-					_latents[i] = (latents_coeff * latents[i] - (alpha_prod_t_prev - alpha_prod_t) * noise_pred[i] / noise_pred_denom_coeff);
+					latents[i] = (latents_coeff * latents[i] - (alpha_prod_t_prev - alpha_prod_t) * noise_pred[i] / noise_pred_denom_coeff);
 				}
-				latents = _latents;
 				counter += 1;
 
-				if (counter >= (51 - offset)) {
+				if (mask != null) {
+					var noise = new js.lib.Float32Array(latents.length);
+					for (i in 0...noise.length) noise[i] = Math.cos(2.0 * 3.14 * Math.random()) * Math.sqrt(-2.0 * Math.log(Math.random()));
+					var sqrt_alpha_prod = Math.pow(alphas_cumprod[timestep], 0.5);
+					var sqrt_one_minus_alpha_prod = Math.pow(1.0 - alphas_cumprod[timestep], 0.5);
+
+					var init_latents_proper = new js.lib.Float32Array(latents.length);
+					for (i in 0...init_latents_proper.length) {
+						init_latents_proper[i] = sqrt_alpha_prod * latents_orig[i] + sqrt_one_minus_alpha_prod * noise[i];
+					}
+
+					for (i in 0...latents.length) {
+						latents[i] = (init_latents_proper[i] * mask[i]) + (latents[i] * (1.0 - mask[i]));
+					}
+				}
+
+				if (counter == (51 - offset)) {
 					// iron.App.removeRender2D(_render2D);
 
 					for (i in 0...latents.length) {
@@ -179,10 +193,12 @@ class TextToPhotoNode extends LogicNode {
 					}
 					image = kha.Image.fromBytes(bytes, 512, 512);
 
-					while (image.width < Config.getTextureResX()) {
-						var lastImage = image;
-						image = UpscaleNode.esrgan(image);
-						lastImage.unload();
+					if (upscale) {
+						while (image.width < Config.getTextureResX()) {
+							var lastImage = image;
+							image = UpscaleNode.esrgan(image);
+							lastImage.unload();
+						}
 					}
 
 					if (done != null) done(image);
