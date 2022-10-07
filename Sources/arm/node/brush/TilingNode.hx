@@ -39,7 +39,7 @@ class TilingNode extends LogicNode {
 		image.g2.drawScaledImage(source, 0, 0, Config.getTextureResX(), Config.getTextureResY());
 		image.g2.end();
 
-		result = auto ? InpaintNode.texsynthInpaint(image, true) : sdTiling();
+		result = auto ? InpaintNode.texsynthInpaint(image, true) : sdTiling(image);
 		return result;
 	}
 
@@ -47,7 +47,39 @@ class TilingNode extends LogicNode {
 		return result;
 	}
 
-	function sdTiling(): kha.Image {
-		return null;
+	public static function sdTiling(image: kha.Image, seed = -1): kha.Image {
+		@:privateAccess TextToPhotoNode.tiling = false;
+		var tile = kha.Image.createRenderTarget(512, 512);
+		tile.g2.begin(false);
+		tile.g2.drawScaledImage(image, -256, -256, 512, 512);
+		tile.g2.drawScaledImage(image, 256, -256, 512, 512);
+		tile.g2.drawScaledImage(image, -256, 256, 512, 512);
+		tile.g2.drawScaledImage(image, 256, 256, 512, 512);
+		tile.g2.end();
+
+		var bytes = haxe.io.Bytes.alloc(512 * 512);
+		for (i in 0...512 * 512) {
+			var x = i % 512;
+			var y = Std.int(i / 512);
+			var l = y < 256 ? y : (511 - y);
+			bytes.set(i, (x > 256 - l && x < 256 + l) ? 0 : 255);
+		}
+		// for (i in 0...512 * 512) bytes.set(i, 255);
+		// for (x in (256 - 32)...(256 + 32)) {
+		// 	for (y in 0...512) {
+		// 		bytes.set(y * 512 + x, 0);
+		// 	}
+		// }
+		// for (x in 0...512) {
+		// 	for (y in (256 - 32)...(256 + 32)) {
+		// 		bytes.set(y * 512 + x, 0);
+		// 	}
+		// }
+		var mask = kha.Image.fromBytes(bytes, 512, 512, kha.graphics4.TextureFormat.L8);
+
+		@:privateAccess InpaintNode.prompt = prompt;
+		@:privateAccess InpaintNode.strength = strength;
+		if (seed >= 0) RandomNode.setSeed(seed);
+		return InpaintNode.sdInpaint(tile, mask);
 	}
 }
