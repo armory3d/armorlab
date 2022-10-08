@@ -23,7 +23,7 @@ class VarianceNode extends LogicNode {
 	}
 
 	public static function buttons(ui: zui.Zui, nodes: zui.Nodes, node: zui.Nodes.TNode) {
-		prompt = zui.Ext.textArea(ui, zui.Id.handle());
+		prompt = zui.Ext.textArea(ui, zui.Id.handle(), true, tr("prompt"), true);
 		node.buttons[0].height = prompt.split("\n").length;
 	}
 

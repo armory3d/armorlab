@@ -25,7 +25,7 @@ class TilingNode extends LogicNode {
 		auto = node.buttons[0].default_value;
 		if (!auto) {
 			strength = ui.slider(zui.Id.handle({value: strength}), tr("strength"), 0, 1, true);
-			prompt = zui.Ext.textArea(ui, zui.Id.handle());
+			prompt = zui.Ext.textArea(ui, zui.Id.handle(), true, tr("prompt"), true);
 			node.buttons[1].height = 1 + prompt.split("\n").length;
 		}
 		else node.buttons[1].height = 0;

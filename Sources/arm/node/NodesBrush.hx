@@ -201,7 +201,7 @@ class NodesBrush {
 					{
 						name: "arm.node.brush.TextToPhotoNode.buttons",
 						type: "CUSTOM",
-						height: 2
+						height: 1
 					}
 				]
 			},
