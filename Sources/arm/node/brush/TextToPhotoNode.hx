@@ -39,7 +39,9 @@ class TextToPhotoNode extends LogicNode {
 			for (i in 0...words.length) {
 				text_input_ids[i + 1] = untyped vocab[words[i].toLowerCase() + "</w>"];
 			}
-			text_input_ids[words.length + 1] = 49407; // <|endoftext|>
+			for (i in words.length...(text_input_ids.length - 1)) {
+				text_input_ids[i + 1] = 49407; // <|endoftext|>
+			}
 
 			var f32 = new js.lib.Int32Array(text_input_ids);
 			var text_embeddings_buf = Krom.mlInference(untyped text_encoder_blob.toBytes().b.buffer, [f32.buffer], [[1, 77]], [1, 77, 768], Config.raw.gpu_inference, true);
