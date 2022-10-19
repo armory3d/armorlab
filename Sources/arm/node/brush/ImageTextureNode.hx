@@ -10,13 +10,15 @@ class ImageTextureNode extends LogicNode {
 		super(tree);
 	}
 
-	override function get(from: Int): Dynamic {
+	override function get(from: Int, done: Dynamic->Void) {
 		var index = Project.assetNames.indexOf(file);
 		var asset = Project.assets[index];
-		return Project.getImage(asset);
+		done(Project.getImage(asset));
 	}
 
 	override public function getImage(): kha.Image {
-		return get(0);
+		var image: kha.Image;
+		get(0, function(img: kha.Image) { image = img; });
+		return image;
 	}
 }

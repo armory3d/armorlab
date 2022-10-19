@@ -31,16 +31,17 @@ class TilingNode extends LogicNode {
 		else node.buttons[1].height = 0;
 	}
 
-	override function get(from: Int): Dynamic {
-		var source = inputs[0].get();
-		if (!Std.isOfType(source, kha.Image)) return null;
+	override function get(from: Int, done: Dynamic->Void) {
+		inputs[0].get(function(source: Dynamic) {
+			if (!Std.isOfType(source, kha.Image)) { done(null); return; }
 
-		image.g2.begin(false);
-		image.g2.drawScaledImage(source, 0, 0, Config.getTextureResX(), Config.getTextureResY());
-		image.g2.end();
+			image.g2.begin(false);
+			image.g2.drawScaledImage(source, 0, 0, Config.getTextureResX(), Config.getTextureResY());
+			image.g2.end();
 
-		result = auto ? InpaintNode.texsynthInpaint(image, true) : sdTiling(image);
-		return result;
+			result = auto ? InpaintNode.texsynthInpaint(image, true) : sdTiling(image);
+			done(result);
+		});
 	}
 
 	override public function getImage(): kha.Image {

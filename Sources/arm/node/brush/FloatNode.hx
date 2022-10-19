@@ -11,8 +11,8 @@ class FloatNode extends LogicNode {
 		this.value = value;
 	}
 
-	override function get(from: Int): Dynamic {
-		if (inputs.length > 0) return inputs[0].get();
+	override function get(from: Int, done: Dynamic->Void) {
+		if (inputs.length > 0) { inputs[0].get(done); return; }
 		if (image != null) image.unload();
 		var b = haxe.io.Bytes.alloc(16);
 		b.setFloat(0, value);
@@ -20,7 +20,7 @@ class FloatNode extends LogicNode {
 		b.setFloat(8, value);
 		b.setFloat(12, 1.0);
 		image = kha.Image.fromBytes(b, 1, 1, kha.graphics4.TextureFormat.RGBA128);
-		return image;
+		done(image);
 	}
 
 	override function set(value: Dynamic) {

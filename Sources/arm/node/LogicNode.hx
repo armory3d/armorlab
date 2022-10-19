@@ -18,32 +18,9 @@ class LogicNode {
 		outputs.push(nodes);
 	}
 
-	/**
-	  Called when this node is activated.
-	  @param from impulse index
-	**/
-	function run(from: Int) {}
-
-	/**
-	  Call to activate node connected to the output.
-	  @param i output index
-	**/
-	function runOutput(i: Int) {
-		if (i >= outputs.length) return;
-		for (o in outputs[i]) {
-			// Check which input activated the node
-			for (j in 0...o.inputs.length) {
-				if (o.inputs[j].node == this) {
-					o.run(j);
-					break;
-				}
-			}
-		}
-	}
-
 	@:allow(arm.node.LogicNodeInput)
-	function get(from: Int): Dynamic {
-		return this;
+	function get(from: Int, done: Dynamic->Void) {
+		done(this);
 	}
 
 	@:allow(arm.node.LogicNodeInput)
@@ -66,8 +43,8 @@ class LogicNodeInput {
 	}
 
 	@:allow(arm.node.LogicNode)
-	function get(): Dynamic {
-		return node.get(from);
+	function get(done: Dynamic->Void) {
+		node.get(from, done);
 	}
 
 	@:allow(arm.node.LogicNode)

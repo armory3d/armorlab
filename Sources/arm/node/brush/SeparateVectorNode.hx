@@ -9,11 +9,11 @@ class SeparateVectorNode extends LogicNode {
 		super(tree);
 	}
 
-	override function get(from: Int): Dynamic {
-		var vector: Vec4 = inputs[0].get();
-
-		if (from == 0) return vector.x;
-		else if (from == 1) return vector.y;
-		else return vector.z;
+	override function get(from: Int, done: Dynamic->Void) {
+		inputs[0].get(function(vector: Vec4) {
+			if (from == 0) done(vector.x);
+			else if (from == 1) done(vector.y);
+			else done(vector.z);
+		});
 	}
 }

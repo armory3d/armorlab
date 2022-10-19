@@ -51,32 +51,34 @@ class InpaintNode extends LogicNode {
 		else node.buttons[1].height = 0;
 	}
 
-	override function get(from: Int): Dynamic {
-		var source = inputs[0].get();
-		if (!Std.isOfType(source, kha.Image)) return null;
+	override function get(from: Int, done: Dynamic->Void) {
+		inputs[0].get(function(source: Dynamic) {
+			if (!Std.isOfType(source, kha.Image)) { done(null); return; }
 
-		image.g2.begin(false);
-		image.g2.drawScaledImage(source, 0, 0, Config.getTextureResX(), Config.getTextureResY());
-		image.g2.end();
+			image.g2.begin(false);
+			image.g2.drawScaledImage(source, 0, 0, Config.getTextureResX(), Config.getTextureResY());
+			image.g2.end();
 
-		result = auto ? texsynthInpaint(image, false, mask) : sdInpaint(image, mask);
+			result = auto ? texsynthInpaint(image, false, mask) : sdInpaint(image, mask);
 
-		return result;
+			done(result);
+		});
 	}
 
 	override public function getImage(): kha.Image {
 		App.notifyOnNextFrame(function() {
-			var source = inputs[0].get();
-			if (Layers.pipeCopy == null) Layers.makePipe();
-			if (iron.data.ConstData.screenAlignedVB == null) iron.data.ConstData.createScreenAlignedData();
-			image.g4.begin();
-			image.g4.setPipeline(Layers.pipeApplyMask);
-			image.g4.setTexture(Layers.tex0Mask, source);
-			image.g4.setTexture(Layers.texaMask, mask);
-			image.g4.setVertexBuffer(iron.data.ConstData.screenAlignedVB);
-			image.g4.setIndexBuffer(iron.data.ConstData.screenAlignedIB);
-			image.g4.drawIndexedVertices();
-			image.g4.end();
+			inputs[0].get(function(source: Dynamic) {
+				if (Layers.pipeCopy == null) Layers.makePipe();
+				if (iron.data.ConstData.screenAlignedVB == null) iron.data.ConstData.createScreenAlignedData();
+				image.g4.begin();
+				image.g4.setPipeline(Layers.pipeApplyMask);
+				image.g4.setTexture(Layers.tex0Mask, source);
+				image.g4.setTexture(Layers.texaMask, mask);
+				image.g4.setVertexBuffer(iron.data.ConstData.screenAlignedVB);
+				image.g4.setIndexBuffer(iron.data.ConstData.screenAlignedIB);
+				image.g4.drawIndexedVertices();
+				image.g4.end();
+			});
 		});
 		return image;
 	}

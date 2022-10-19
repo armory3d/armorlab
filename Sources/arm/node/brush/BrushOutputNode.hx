@@ -71,7 +71,7 @@ class BrushOutputNode extends LogicNode {
 		inst = this;
 	}
 
-	override function get(from: Int): Dynamic {
-		return inputs[from].get();
+	override function get(from: Int, done: Dynamic->Void) {
+		inputs[from].get(done);
 	}
 }

@@ -7,10 +7,12 @@ class RandomNode extends LogicNode {
 		super(tree);
 	}
 
-	override function get(from: Int): Dynamic {
-		var min = inputs[0].get();
-		var max = inputs[1].get();
-		return min + getFloat() * (max - min);
+	override function get(from: Int, done: Dynamic->Void) {
+		inputs[0].get(function(min: Float) {
+			inputs[1].get(function(max: Float) {
+				done(min + getFloat() * (max - min));
+			});
+		});
 	}
 
 	static var a: Int;

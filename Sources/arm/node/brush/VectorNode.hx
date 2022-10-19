@@ -18,7 +18,7 @@ class VectorNode extends LogicNode {
 		}
 	}
 
-	override function get(from: Int): Dynamic {
+	override function get(from: Int, done: Dynamic->Void) {
 		if (image != null) image.unload();
 		var b = haxe.io.Bytes.alloc(16);
 		b.setFloat(0, untyped inputs[0].node.value);
@@ -26,7 +26,7 @@ class VectorNode extends LogicNode {
 		b.setFloat(8, untyped inputs[2].node.value);
 		b.setFloat(12, 1.0);
 		image = kha.Image.fromBytes(b, 1, 1, kha.graphics4.TextureFormat.RGBA128);
-		return image;
+		done(image);
 	}
 
 	override function set(value: Dynamic) {
