@@ -567,6 +567,7 @@ plugin.drawUI = function(ui) {
 
 	static function setScale() {
 		var scale = Config.raw.window_scale;
+		UISidebar.inst.ui.setScale(scale);
 		UIHeader.inst.headerh = Std.int(UIHeader.defaultHeaderH * scale);
 		Config.raw.layout[LayoutStatusH] = Std.int(UIStatus.defaultStatusH * scale);
 		UIMenubar.inst.menubarw = Std.int(UIMenubar.defaultMenubarW * scale);
