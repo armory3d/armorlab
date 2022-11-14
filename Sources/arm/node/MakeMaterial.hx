@@ -50,7 +50,7 @@ class MakeMaterial {
 
 		Context.ddirty = 2;
 
-		#if rp_voxelao
+		#if rp_voxels
 		makeVoxel(m);
 		#end
 
@@ -59,7 +59,7 @@ class MakeMaterial {
 		#end
 	}
 
-	#if rp_voxelao
+	#if rp_voxels
 	static function makeVoxel(m: MaterialData) {
 		// var rebuild = heightUsed;
 		// if (Config.raw.rp_gi != false && rebuild) {
