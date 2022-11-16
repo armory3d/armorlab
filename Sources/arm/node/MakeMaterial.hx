@@ -29,7 +29,7 @@ class MakeMaterial {
 			if (c.raw.name == "mesh") {
 				m.shader.raw.contexts.remove(c.raw);
 				m.shader.contexts.remove(c);
-				c.delete();
+				deleteContext(c);
 				break;
 			}
 		}
@@ -83,7 +83,7 @@ class MakeMaterial {
 			if (c.raw.name == "paint") {
 				m.shader.raw.contexts.remove(c.raw);
 				m.shader.contexts.remove(c);
-				if (c != defaultScon) c.delete();
+				if (c != defaultScon) deleteContext(c);
 				break;
 			}
 		}
@@ -125,5 +125,11 @@ class MakeMaterial {
 	public static inline function voxelgiHalfExtents():String {
 		var ext = Context.vxaoExt;
 		return 'const vec3 voxelgiHalfExtents = vec3($ext, $ext, $ext);';
+	}
+
+	static function deleteContext(c: ShaderContext) {
+		arm.App.notifyOnNextFrame(function() { // Ensure pipeline is no longer in use
+			c.delete();
+		});
 	}
 }
