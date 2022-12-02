@@ -81,6 +81,10 @@ class PhotoToPBRNode extends LogicNode {
 						bytes.set(i * 4 + 3, 255);
 					}
 
+					#if (kha_metal || kha_vulkan)
+					if (from == ChannelBaseColor) bgraSwap(bytes);
+					#end
+
 					var temp2 = kha.Image.fromBytes(bytes, 2048, 2048);
 					images[from].g2.begin(false);
 					images[from].g2.drawImage(temp2, x * 2048, y * 2048);
@@ -94,4 +98,15 @@ class PhotoToPBRNode extends LogicNode {
 			done(images[from]);
 		});
 	}
+
+	#if (kha_metal || kha_vulkan)
+	static function bgraSwap(bytes: haxe.io.Bytes) {
+		for (i in 0...Std.int(bytes.length / 4)) {
+			var r = bytes.get(i * 4);
+			bytes.set(i * 4, bytes.get(i * 4 + 2));
+			bytes.set(i * 4 + 2, r);
+		}
+		return bytes;
+	}
+	#end
 }
