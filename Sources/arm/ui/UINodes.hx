@@ -995,9 +995,9 @@ class UINodes {
 	}
 
 	static function menuButton(ui: Zui, text: String, label = ""): Bool {
-		#if arm_touchui
-		label = "";
-		#end
+		if (Config.raw.touch_ui) {
+			label = "";
+		}
 		return ui.button(Config.buttonSpacing + text, Config.buttonAlign, label);
 	}
 }

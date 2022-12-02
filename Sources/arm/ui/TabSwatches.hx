@@ -31,11 +31,12 @@ class TabSwatches {
 		if (ui.tab(UIStatus.inst.statustab, tr("Swatches"))) {
 
 			ui.beginSticky();
-			#if arm_touchui
-			ui.row([1 / 5, 1 / 5, 1 / 5, 1 / 5, 1 / 5]);
-			#else
-			ui.row([1 / 14, 1 / 14, 1 / 14, 1 / 14, 1 / 14]);
-			#end
+			if (Config.raw.touch_ui) {
+				ui.row([1 / 5, 1 / 5, 1 / 5, 1 / 5, 1 / 5]);
+			}
+			else {
+				ui.row([1 / 14, 1 / 14, 1 / 14, 1 / 14, 1 / 14]);
+			}
 
 			if (ui.button(tr("New"))) {
 				Context.setSwatch(Project.makeSwatch());

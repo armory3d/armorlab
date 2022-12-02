@@ -41,6 +41,7 @@ typedef TConfig = {
 	@:optional var camera_rotation_speed: Null<Float>;
 	@:optional var zoom_direction: Null<Int>;
 	@:optional var displace_strength: Null<Float>;
+	@:optional var touch_ui: Null<Bool>;
 	@:optional var layout: Array<Int>;
 	@:optional var workspace: Null<Int>;
 	@:optional var layer_res: Null<Int>;
