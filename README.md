@@ -24,12 +24,21 @@ armorcore\Kinc\make --from armorcore -g direct3d11
 # Copy build\x64\Release\ArmorLab.exe to build\krom to run ArmorLab.exe directly
 ```
 
-**Linux** *wip*
+**Linux** *wip - cpu only*
 ```bash
+armorcore/Kinc/make --from armorcore -g opengl --compiler clang --compile
+cd armorcore/Deployment
+strip ArmorLab
+./ArmorLab ../../build/krom
 ```
 
-**macOS** *wip*
+**macOS** *wip - apple silicon only*
 ```bash
+git apply armorcore/patch/metal_depth.diff --directory=armorcore/Kinc
+armorcore/Kinc/make --from armorcore -g metal
+cp -a build/krom/ armorcore/Deployment
+# Open generated Xcode project at `build/ArmorLab.xcodeproj`
+# Build and run
 ```
 
 **Android** *wip*
