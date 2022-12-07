@@ -22,10 +22,10 @@ class TabTextures {
 
 			ui.beginSticky();
 			if (Config.raw.touch_ui) {
-				ui.row([1 / 4, 1 / 4]);
+				ui.row([1 / 4]);
 			}
 			else {
-				ui.row([1 / 14, 1 / 14]);
+				ui.row([1 / 14]);
 			}
 
 			if (ui.button(tr("Import"))) {
