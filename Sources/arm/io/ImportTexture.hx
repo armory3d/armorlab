@@ -2,7 +2,7 @@ package arm.io;
 
 import kha.Image;
 import iron.data.Data;
-import arm.ui.UISidebar;
+import arm.ui.UIStatus;
 import arm.sys.Path;
 import arm.ProjectFormat;
 
@@ -43,8 +43,10 @@ class ImportTexture {
 			var name = ar[ar.length - 1];
 			var asset: TAsset = {name: name, file: path, id: Project.assetId++};
 			Project.assets.push(asset);
+			if (Context.texture == null) Context.texture = asset;
 			Project.assetNames.push(name);
 			Project.assetMap.set(asset.id, image);
+			UIStatus.inst.statusHandle.redraws = 2;
 			Console.info(tr("Texture imported:") + " " + name);
 
 			// Set as envmap
