@@ -11,6 +11,7 @@ import zui.Nodes;
 import iron.Scene;
 import iron.data.Data;
 import iron.system.Input;
+import iron.system.Time;
 import arm.ui.UISidebar;
 import arm.ui.UINodes;
 import arm.ui.UIMenu;
@@ -47,6 +48,7 @@ class App {
 	public static var dragRect: TRect = null;
 	public static var dragOffX = 0.0;
 	public static var dragOffY = 0.0;
+	public static var dragStart = 0.0;
 	public static var dropX = 0.0;
 	public static var dropY = 0.0;
 	public static var font: Font = null;
@@ -320,6 +322,29 @@ class App {
 		}
 
 		var hasDrag = dragAsset != null || dragFile != null || dragSwatch != null;
+
+		if (Config.raw.touch_ui) {
+			// Touch and hold to activate dragging
+			if (dragStart < 0.2) {
+				if (hasDrag && mouse.down()) dragStart += Time.realDelta;
+				else dragStart = 0;
+				hasDrag = false;
+			}
+			if (mouse.released()) {
+				dragStart = 0;
+			}
+			var moved = Math.abs(mouse.movementX) > 1 && Math.abs(mouse.movementY) > 1;
+			if ((mouse.released() || moved) && !hasDrag) {
+				dragAsset = null;
+				dragSwatch = null;
+				dragFile = null;
+				dragFileIcon = null;
+				isDragging = false;
+			}
+			// Disable touch scrolling while dragging is active
+			Zui.touchScroll = !isDragging;
+		}
+
 		if (hasDrag && (mouse.movementX != 0 || mouse.movementY != 0)) {
 			isDragging = true;
 		}
@@ -456,7 +481,7 @@ class App {
 		}
 
 		var usingMenu = UIMenu.show && mouse.y > UIHeader.inst.headerh;
-		uiEnabled = !UIBox.show && !usingMenu;
+		uiEnabled = !UIBox.show && !usingMenu && !isComboSelected();
 		if (UIBox.show) UIBox.render(g);
 		if (UIMenu.show) UIMenu.render(g);
 
@@ -572,7 +597,7 @@ class App {
 		raw.workspace = Space2D;
 		raw.layer_res = Res2048;
 		raw.gpu_inference = true;
-		#if arm_touchui
+		#if (krom_android || krom_ios)
 		raw.touch_ui = true;
 		#else
 		raw.touch_ui = false;

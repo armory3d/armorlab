@@ -781,6 +781,9 @@ class UINodes {
 					menuCategory = i;
 					popupX = wx + ui._x;
 					popupY = wy + ui._y;
+					if (Config.raw.touch_ui) {
+						showMenuFirst = true;
+					}
 				}
 				if (i < cats.length - 1) {
 					ui._x += ew + 3;
