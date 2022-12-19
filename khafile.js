@@ -34,10 +34,6 @@ project.addAssets("Assets/models/*.onnx", { destination: "data/models/{name}" })
 project.addAssets("Assets/models/LICENSE.txt", { destination: "data/models/LICENSE.txt" });
 project.addAssets("Libraries/armorbase/Assets/licenses/**", { destination: "data/licenses/{name}" });
 project.addAssets("Libraries/armorbase/Assets/themes/*.json", { destination: "data/themes/{name}" });
-if (metal) {
-	project.addShaders("Libraries/armorbase/Shaders/common/metal/*.glsl", { embed: snapshot});
-	project.addAssets("Libraries/armorbase/Assets/common/metal/*", { destination: "data/{name}" });
-}
 project.addDefine("js-es=6");
 project.addParameter("--macro include('arm.node.brush')");
 project.addDefine("kha_no_ogg");

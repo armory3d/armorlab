@@ -34,7 +34,6 @@ strip ArmorLab
 
 **macOS** *wip - apple silicon only*
 ```bash
-git apply armorcore/patch/metal_depth.diff --directory=armorcore/Kinc
 armorcore/Kinc/make --from armorcore -g metal
 cp -a build/krom/ armorcore/Deployment
 # Open generated Xcode project at `build/ArmorLab.xcodeproj`
