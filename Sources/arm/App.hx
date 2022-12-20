@@ -572,7 +572,11 @@ class App {
 		var show2d = (UINodes.inst != null && UINodes.inst.show);
 		var raw = Config.raw;
 		raw.layout = [
+			#if krom_ios
+			show2d ? Std.int((iron.App.w() + raw.layout[LayoutNodesW]) * 0.6) : Std.int(iron.App.w() * 0.6),
+			#else
 			show2d ? Std.int((iron.App.w() + raw.layout[LayoutNodesW]) / 2) : Std.int(iron.App.w() / 2),
+			#end
 			Std.int(UIStatus.defaultStatusH * raw.window_scale)
 		];
 	}

@@ -101,6 +101,7 @@ class UISidebar {
 		ui = new Zui({ theme: App.theme, font: App.font, scaleFactor: scale, color_wheel: App.colorWheel, black_white_gradient: App.blackWhiteGradient });
 		Zui.onBorderHover = onBorderHover;
 		Zui.onTextHover = onTextHover;
+		Zui.onDeselectText = onDeselectText;
 
 		var resources = ["cursor.k", "icons.k", "placeholder.k"];
 		Res.load(resources, done);
@@ -505,6 +506,13 @@ class UISidebar {
 
 	function onTextHover() {
 		Krom.setMouseCursor(2); // I-cursor
+	}
+
+	function onDeselectText() {
+		#if krom_ios
+		var kb = kha.input.Keyboard.get();
+		@:privateAccess kb.sendUpEvent(kha.input.KeyCode.Shift);
+		#end
 	}
 
 	public function tagUIRedraw() {

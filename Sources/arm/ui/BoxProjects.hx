@@ -27,8 +27,7 @@ class BoxProjects {
 				if (ui.button(tr("New"))) {
 					Project.projectNew();
 					Viewport.scaleToBounds();
-					UIBox.show = false;
-					App.redrawUI();
+					UIBox.hide();
 					// Pick unique name
 					var i = 0;
 					var j = 0;
@@ -100,7 +99,7 @@ class BoxProjects {
 								ui._x = _uix;
 								function doImport() {
 									iron.App.notifyOnInit(function() {
-										UIBox.show = false;
+										UIBox.hide();
 										ImportArm.runProject(path);
 									});
 								}

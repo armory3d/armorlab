@@ -13,7 +13,11 @@ class UIHeader {
 
 	public static var inst: UIHeader;
 
+	#if (krom_android || krom_ios)
+	public static inline var defaultHeaderH = 28 + 4;
+	#else
 	public static inline var defaultHeaderH = 28;
+	#end
 
 	public var headerHandle = new Handle({ layout: Horizontal });
 	public var headerh = defaultHeaderH;

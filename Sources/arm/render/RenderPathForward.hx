@@ -28,7 +28,7 @@ class RenderPathForward {
 		Scene.active.camera.buildMatrix();
 
 		RenderPathPaint.begin();
-		drawGbuffer();
+		RenderPathDeferred.drawGbuffer();
 		RenderPathPaint.draw();
 
 		#if (kha_direct3d12 || kha_vulkan)
@@ -42,22 +42,6 @@ class RenderPathForward {
 		RenderPathPaint.end();
 		Inc.end();
 		RenderPathDeferred.taaFrame++;
-	}
-
-	public static function drawGbuffer(gbuffer0 = "gbuffer0", gbuffer1 = "gbuffer1", gbuffer2 = "gbuffer2") {
-		path.setTarget(gbuffer0);
-		#if kha_metal
-		path.clearTarget(0x00000000, 1.0);
-		#else
-		path.clearTarget(null, 1.0);
-		#end
-		path.setTarget(gbuffer2);
-		path.clearTarget(0xff000000);
-		path.setTarget(gbuffer0, [gbuffer1, gbuffer2]);
-		var currentG = path.currentG;
-		RenderPathPaint.bindLayers();
-		path.drawMeshes("mesh");
-		RenderPathPaint.unbindLayers();
 	}
 
 	public static function drawForward(eye = false, output = "", gbuffer0 = "gbuffer0", gbuffer1 = "gbuffer1", gbuffer2 = "gbuffer2", buf = "buf", bufa = "bufa", taa = "taa", taa2 = "taa2") {

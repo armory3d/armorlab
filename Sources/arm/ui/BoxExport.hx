@@ -39,7 +39,8 @@ class BoxExport {
 	}
 
 	static function tabExportTextures(ui: Zui, title: String) {
-		if (ui.tab(htab, title)) {
+		var tabVertical = Config.raw.touch_ui;
+		if (ui.tab(htab, title, tabVertical)) {
 			#if (krom_android || krom_ios)
 			ui.combo(App.resHandle, ["2K", "4K"], tr("Resolution"), true);
 			#else
@@ -66,10 +67,10 @@ class BoxExport {
 
 			ui.row([0.5, 0.5]);
 			if (ui.button(tr("Cancel"))) {
-				UIBox.show = false;
+				UIBox.hide();
 			}
 			if (ui.button(tr("Export"))) {
-				UIBox.show = false;
+				UIBox.hide();
 				if (Context.layersDestination == DestinationPacked) {
 					Context.textureExportPath = "/";
 					function _init() {
@@ -103,7 +104,8 @@ class BoxExport {
 	}
 
 	static function tabPresets(ui: Zui) {
-		if (ui.tab(htab, tr("Presets"))) {
+		var tabVertical = Config.raw.touch_ui;
+		if (ui.tab(htab, tr("Presets"), tabVertical)) {
 			ui.row([3 / 5, 1 / 5, 1 / 5]);
 
 			ui.combo(hpreset, files, tr("Preset"));
@@ -111,7 +113,8 @@ class BoxExport {
 
 			if (ui.button(tr("New"))) {
 				UIBox.showCustom(function(ui: Zui) {
-					if (ui.tab(Id.handle(), tr("New Preset"))) {
+					var tabVertical = Config.raw.touch_ui;
+					if (ui.tab(Id.handle(), tr("New Preset"), tabVertical)) {
 						ui.row([0.5, 0.5]);
 						var presetName = ui.textInput(Id.handle({ text: "new_preset" }), tr("Name"));
 						if (ui.button(tr("OK")) || ui.isReturnDown) {
@@ -119,7 +122,7 @@ class BoxExport {
 							fetchPresets();
 							preset = null;
 							hpreset.position = files.indexOf(presetName);
-							UIBox.show = false;
+							UIBox.hide();
 							BoxExport.htab.position = 1; // Presets
 							BoxExport.showTextures();
 						}
@@ -221,7 +224,8 @@ class BoxExport {
 	}
 
 	static function tabExportMesh(ui: Zui, htab: zui.Zui.Handle) {
-		if (ui.tab(htab, tr("Export Mesh"))) {
+		var tabVertical = Config.raw.touch_ui;
+		if (ui.tab(htab, tr("Export Mesh"), tabVertical)) {
 
 			ui.row([1 / 2, 1 / 2]);
 
@@ -245,10 +249,10 @@ class BoxExport {
 
 			ui.row([0.5, 0.5]);
 			if (ui.button(tr("Cancel"))) {
-				UIBox.show = false;
+				UIBox.hide();
 			}
 			if (ui.button(tr("Export"))) {
-				UIBox.show = false;
+				UIBox.hide();
 				UIFiles.show(Context.exportMeshFormat == FormatObj ? "obj" : "arm", true, false, function(path: String) {
 					#if (krom_android || krom_ios)
 					var f = kha.Window.get(0).title;

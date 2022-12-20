@@ -87,7 +87,7 @@ class Project {
 						ImportArm.runProject(path);
 
 						if (current != null) current.begin(false);
-						UIBox.show = false;
+						UIBox.hide();
 					}
 					if (ui.isHovered) ui.tooltip(path);
 				}
@@ -153,13 +153,12 @@ class Project {
 		// 		@:privateAccess ui.endElement();
 		// 		ui.row([0.5, 0.5]);
 		// 		if (ui.button(tr("Cancel"))) {
-		// 			UIBox.show = false;
+		// 			UIBox.hide();
 		// 		}
 		// 		if (ui.button(tr("OK")) || ui.isReturnDown) {
 					Project.projectNew();
 					Viewport.scaleToBounds();
-		// 			UIBox.show = false;
-					App.redrawUI();
+		// 			UIBox.hide();
 		// 		}
 		// 	}
 		// });
@@ -303,7 +302,8 @@ class Project {
 		#end
 
 		UIBox.showCustom(function(ui: Zui) {
-			if (ui.tab(Id.handle(), tr("Import Mesh"))) {
+			var tabVertical = Config.raw.touch_ui;
+			if (ui.tab(Id.handle(), tr("Import Mesh"), tabVertical)) {
 
 				if (path.toLowerCase().endsWith(".obj")) {
 					Context.splitBy = ui.combo(Id.handle(), [
@@ -327,11 +327,10 @@ class Project {
 
 				ui.row([0.45, 0.45, 0.1]);
 				if (ui.button(tr("Cancel"))) {
-					UIBox.show = false;
+					UIBox.hide();
 				}
 				if (ui.button(tr("Import")) || ui.isReturnDown) {
-					UIBox.show = false;
-					App.redrawUI();
+					UIBox.hide();
 					function doImport() {
 						ImportMesh.run(path, replaceExisting);
 					}
@@ -378,11 +377,10 @@ class Project {
 
 				ui.row([0.5, 0.5]);
 				if (ui.button(tr("Cancel"))) {
-					UIBox.show = false;
+					UIBox.hide();
 				}
 				if (ui.button(tr("Unwrap")) || ui.isReturnDown) {
-					UIBox.show = false;
-					App.redrawUI();
+					UIBox.hide();
 					function doImport() {
 						if (unwrapBy == unwrapPlugins.length - 1) {
 							MeshUtil.equirectUnwrap(mesh);
